@@ -16,6 +16,7 @@ public class BackgroundCountdown extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
+        //Test text
 
         return super.onStartCommand(intent, flags, startId);
     }
