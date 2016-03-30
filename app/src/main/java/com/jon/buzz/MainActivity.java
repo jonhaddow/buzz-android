@@ -27,6 +27,8 @@ public class MainActivity extends AppCompatActivity implements SetTimer.AddTimer
 
     ViewPager mPager;
 
+    private NotificationManager notificationManager;
+
     /**
      * This method is called when the activity is created
      *
@@ -42,6 +44,11 @@ public class MainActivity extends AppCompatActivity implements SetTimer.AddTimer
         MyPagerAdapter mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
         if (mPager != null) {
             mPager.setAdapter(mPagerAdapter);
+        }
+
+        // Cancel notification
+        if (notificationManager != null) {
+            notificationManager.cancelAll();
         }
     }
 
@@ -95,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements SetTimer.AddTimer
     protected void showNotification(String title, String content, boolean autoCancel) {
 
         // Tell notification manager to notify user
-        final NotificationManager notificationManager =
+        notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         // TODO: 24/03/2016 Set delete intent when notification is cleared, to delete timer
@@ -119,17 +126,18 @@ public class MainActivity extends AppCompatActivity implements SetTimer.AddTimer
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
 
+        PendingIntent dismissIntent = NotificationActivity.getDismissIntent(0, this);
         final Notification.Builder notification = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_stat_name)
                 .setContentTitle(title)
                 .setContentText(content)
-                .setPriority(Notification.PRIORITY_HIGH)
+                .setPriority(Notification.PRIORITY_MAX)
                 .setVisibility(Notification.VISIBILITY_PUBLIC)
                 .setColor(getResources().getColor(R.color.colorPrimary, null))
                 .addAction(new Notification.Action.Builder(
                         Icon.createWithResource(this,R.drawable.ic_stop_timer),
                         "Stop timer",
-                        pendingIntent).build())
+                        dismissIntent))
                 .setAutoCancel(autoCancel)
                 .setOngoing(true);
 
