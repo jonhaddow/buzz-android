@@ -1,32 +1,34 @@
 package com.jon.buzz;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
 public class SetTimer extends Fragment implements View.OnClickListener, View.OnLongClickListener {
 
     AddTimerListener callBack;
 
-    /**
-     * This method is called when the fragment is first created
-     *
-     * @param inflater
-     * @param container
-     * @param savedInstanceState
-     * @return
-     */
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        // This makes sure that the container activity has implemented
+        // the callback interface. If not, it throws an exception
+        try {
+            callBack = (AddTimerListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -41,11 +43,6 @@ public class SetTimer extends Fragment implements View.OnClickListener, View.OnL
         return rootView;
     }
 
-    /**
-     * Handles on Click of delete and FAB button
-     *
-     * @param v
-     */
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.deleteButton) {
@@ -58,12 +55,6 @@ public class SetTimer extends Fragment implements View.OnClickListener, View.OnL
         }
     }
 
-    /**
-     * When the delete button is long clicked, clear display
-     *
-     * @param v delete button
-     * @return
-     */
     @Override
     public boolean onLongClick(View v) {
         clearDisplay(collectDisplayData(getView()));
@@ -137,34 +128,17 @@ public class SetTimer extends Fragment implements View.OnClickListener, View.OnL
                 + displayIntegers[1] * 6000
                 + displayIntegers[0] * 60000;
 
-        MyTimer myTimer = new MyTimer(overallSeconds);
+        // Pass seconds to main activity to create new timer
+        callBack.addTimerToList(overallSeconds);
 
-        callBack.addTimerToList(myTimer);
+        // Start a new countdown service
+        Intent countdownIntent = new Intent(getActivity(),BackgroundCountdown.class);
+        countdownIntent.putExtra("Seconds", overallSeconds);
+        getActivity().startService(countdownIntent);
 
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                ((MainActivity) getActivity()).showNotification("Buzz!", "The timer has run out", true);
-            }
-        }, overallSeconds * 1000); // Convert to milliseconds
     }
-
 
     public interface AddTimerListener {
-        void addTimerToList(MyTimer myTimer);
+        void addTimerToList(int myTimer);
     }
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-        // This makes sure that the container activity has implemented
-        // the callback interface. If not, it throws an exception
-        try {
-            callBack = (AddTimerListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(context.toString()
-                    + " must implement OnHeadlineSelectedListener");
-        }
-    }
-
 }
