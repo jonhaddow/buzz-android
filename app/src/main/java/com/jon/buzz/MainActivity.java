@@ -8,13 +8,19 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements SetTimer.AddTimerListener {
 
     /**
      * This array adapter holds the list of all timers
      */
     protected ArrayAdapter<String> mListAdapter;
-
+    protected ArrayList<String> mTimers = new ArrayList<>();
     ViewPager mPager;
 
     @Override
@@ -22,12 +28,27 @@ public class MainActivity extends AppCompatActivity implements SetTimer.AddTimer
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        readTimers();
+
         // Instantiate view pager and pager adapter
         mPager = (ViewPager) findViewById(R.id.pager);
         MyPagerAdapter mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
         if (mPager != null) {
             mPager.setAdapter(mPagerAdapter);
         }
+    }
+
+    @Override
+    protected void onStart() {
+
+        // If requested go straight to the timerList page in app
+        String page = getIntent().getStringExtra("setPage");
+        if (page != null) {
+            if (page.equals("timerList")) {
+                mPager.setCurrentItem(1);
+            }
+        }
+        super.onStart();
     }
 
     /**
@@ -74,6 +95,36 @@ public class MainActivity extends AppCompatActivity implements SetTimer.AddTimer
     @Override
     public void addTimerToList(int myTimer) {
         mPager.setCurrentItem(1, true);
-        mListAdapter.add(myTimer + " second timer");
+        mTimers.add(myTimer + " second timer");
+        mListAdapter.notifyDataSetChanged();
+        saveTimers();
+    }
+
+    public void saveTimers() {
+
+        // Go to app directory
+        File filesDir = getFilesDir();
+
+        // Go to timers file
+        File timers = new File(filesDir, "Timers.txt");
+        try {
+            // Write items to file
+            FileUtils.writeLines(timers, mTimers);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void readTimers() {
+        // Go to app directory
+        File filesDir = getFilesDir();
+
+        // Go to timers file
+        File timers = new File(filesDir, "Timers.txt");
+        try {
+            mTimers = new ArrayList<>(FileUtils.readLines(timers));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
