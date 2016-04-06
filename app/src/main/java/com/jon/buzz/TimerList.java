@@ -26,7 +26,8 @@ public class TimerList extends Fragment implements AdapterView.OnItemClickListen
         mainActivity = ((MainActivity) getActivity());
         mainActivity.mListAdapter = new ArrayAdapter<>(
                 getContext(),
-                android.R.layout.simple_list_item_1);
+                android.R.layout.simple_list_item_1,
+                mainActivity.mTimers);
         timer_list.setAdapter(mainActivity.mListAdapter);
         timer_list.setOnItemClickListener(this);
         return rootView;
@@ -34,6 +35,8 @@ public class TimerList extends Fragment implements AdapterView.OnItemClickListen
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        mainActivity.mListAdapter.remove(mainActivity.mListAdapter.getItem(position));
+        mainActivity.mTimers.remove(mainActivity.mListAdapter.getItem(position));
+        mainActivity.mListAdapter.notifyDataSetChanged();
+        mainActivity.saveTimers();
     }
 }
