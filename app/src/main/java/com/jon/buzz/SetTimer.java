@@ -132,7 +132,7 @@ public class SetTimer extends Fragment implements View.OnClickListener, View.OnL
         callBack.addTimerToList(overallSeconds);
 
         // Start a new countdown service
-        Intent countdownIntent = new Intent(getActivity(),BackgroundCountdown.class);
+        Intent countdownIntent = new Intent(getActivity(), BackgroundCountdown.class);
         countdownIntent.putExtra("Seconds", overallSeconds);
         getActivity().startService(countdownIntent);
 

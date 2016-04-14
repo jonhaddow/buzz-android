@@ -10,10 +10,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
-public class TimerList extends Fragment implements AdapterView.OnItemClickListener{
+public class TimerList extends Fragment implements AdapterView.OnItemLongClickListener {
 
     ListView timer_list;
     MainActivity mainActivity;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -29,14 +30,15 @@ public class TimerList extends Fragment implements AdapterView.OnItemClickListen
                 android.R.layout.simple_list_item_1,
                 mainActivity.mTimers);
         timer_list.setAdapter(mainActivity.mListAdapter);
-        timer_list.setOnItemClickListener(this);
+        timer_list.setOnItemLongClickListener(this);
         return rootView;
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         mainActivity.mTimers.remove(mainActivity.mListAdapter.getItem(position));
         mainActivity.mListAdapter.notifyDataSetChanged();
         mainActivity.saveTimers();
+        return true;
     }
 }

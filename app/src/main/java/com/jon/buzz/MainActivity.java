@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements SetTimer.AddTimer
         if (mPager != null) {
             mPager.setAdapter(mPagerAdapter);
         }
+
     }
 
     @Override
@@ -100,6 +101,9 @@ public class MainActivity extends AppCompatActivity implements SetTimer.AddTimer
         saveTimers();
     }
 
+    /**
+     * This method saves the current set of timers to a file
+     */
     public void saveTimers() {
 
         // Go to app directory
@@ -115,6 +119,9 @@ public class MainActivity extends AppCompatActivity implements SetTimer.AddTimer
         }
     }
 
+    /**
+     * This method reads the current set of timers from a file
+     */
     private void readTimers() {
         // Go to app directory
         File filesDir = getFilesDir();

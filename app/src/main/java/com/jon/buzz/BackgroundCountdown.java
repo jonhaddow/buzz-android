@@ -1,88 +1,84 @@
 package com.jon.buzz;
 
-import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Icon;
+import android.os.CountDownTimer;
+import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.v4.app.TaskStackBuilder;
 
 import static com.jon.buzz.R.drawable.ic_stat_name;
 
-public class BackgroundCountdown extends IntentService {
+public class BackgroundCountdown extends Service {
 
-    protected BroadcastReceiver stopServiceReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            stopSelf();
-        }
-    };
     private NotificationManager mNotificationManager;
+    private int mSeconds;
+    private PendingIntent onNotificationClickIntent;
 
-    /**
-     * Creates an IntentService.  Invoked by your subclass's constructor.
-     *
-     */
-    public BackgroundCountdown() {
-        super("BackgroundCountdown Service");
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 
     @Override
-    protected void onHandleIntent(Intent intent) {
-
+    public int onStartCommand(Intent intent, int flags, int startId) {
         // Get the length of the timer in seconds
-        int seconds = intent.getIntExtra("Seconds",0);
+        mSeconds = intent.getIntExtra("Seconds", 0);
 
         // Initialise Notification Manager
         mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        PendingIntent onNotificationClickIntent = createOnNotificationClickIntent();
+        onNotificationClickIntent = createOnNotificationClickIntent();
 
         PendingIntent onStopTimerClickIntent = createOnStopTimerClickIntent();
 
-        // Countdown from number of seconds to 0
-        for (int i = seconds; i > 0; i--) {
-            try {
+        new CountDownTimer(mSeconds * 1000, 1000) {
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+
                 // Create notification that shows while countdown is running
-                Notification.Builder runningNotification = new Notification.Builder(this)
+                Notification.Builder runningNotification = new Notification.Builder(getApplicationContext())
                         .setSmallIcon(ic_stat_name)
                         .setContentTitle("Buzz")
-                        .setContentText(i + " seconds remaining...")
+                        .setContentText(millisUntilFinished / 1000 + " seconds remaining...")
                         .setPriority(Notification.PRIORITY_MAX)
                         .setVisibility(Notification.VISIBILITY_PUBLIC)
                         .setAutoCancel(false)
                         .addAction(new Notification.Action.Builder(
-                                Icon.createWithResource(this, R.drawable.ic_action_stop_timer),
+                                Icon.createWithResource(getApplicationContext(), R.drawable.ic_action_stop_timer),
                                 "Stop Timer",
                                 onNotificationClickIntent).build()
                         )
                         .setOngoing(true);
                 startForeground(2, runningNotification.build());
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
             }
-        }
 
-        stopForeground(true);
+            @Override
+            public void onFinish() {
+                stopForeground(true);
 
-        // Show final notification to indicate that the countdown has finished.
-        final Notification.Builder endNotification = new Notification.Builder(this)
-                .setSmallIcon(ic_stat_name)
-                .setContentTitle("Buzz")
-                .setContentText(seconds + " second timer is complete")
-                .setPriority(Notification.PRIORITY_MAX)
-                .setVisibility(Notification.VISIBILITY_PUBLIC)
-                .setContentIntent(onNotificationClickIntent)
-                .setAutoCancel(true);
-        mNotificationManager.notify(1, endNotification.build());
-
-
-
+                // Show final notification to indicate that the countdown has finished.
+                final Notification.Builder endNotification = new Notification.Builder(getApplicationContext())
+                        .setSmallIcon(ic_stat_name)
+                        .setContentTitle("Buzz")
+                        .setContentText(mSeconds + " second timer is complete")
+                        .setPriority(Notification.PRIORITY_MAX)
+                        .setVisibility(Notification.VISIBILITY_PUBLIC)
+                        .setContentIntent(onNotificationClickIntent)
+                        .setAutoCancel(true);
+                mNotificationManager.notify(1, endNotification.build());
+                System.out.println("FINISH!");
+            }
+        }.start();
+        return super.onStartCommand(intent, flags, startId);
     }
 
     private PendingIntent createOnStopTimerClickIntent() {
