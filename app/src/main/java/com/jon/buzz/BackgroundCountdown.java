@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.graphics.drawable.Icon;
 import android.os.CountDownTimer;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.TaskStackBuilder;
 
@@ -19,6 +20,7 @@ public class BackgroundCountdown extends Service {
     private NotificationManager mNotificationManager;
     private int mSeconds;
     private PendingIntent onNotificationClickIntent;
+    private PowerManager.WakeLock wakeLock;
 
     @Nullable
     @Override
@@ -27,7 +29,23 @@ public class BackgroundCountdown extends Service {
     }
 
     @Override
+    public void onCreate() {
+        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+                "MyWakelockTag");
+        wakeLock.acquire();
+        super.onCreate();
+    }
+
+    @Override
+    public void onDestroy() {
+        wakeLock.release();
+        super.onDestroy();
+    }
+
+    @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         // Get the length of the timer in seconds
         mSeconds = intent.getIntExtra("Seconds", 0);
 
@@ -78,6 +96,7 @@ public class BackgroundCountdown extends Service {
                 System.out.println("FINISH!");
             }
         }.start();
+
         return super.onStartCommand(intent, flags, startId);
     }
 
