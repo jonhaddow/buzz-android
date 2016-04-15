@@ -1,12 +1,13 @@
 package com.jon.buzz;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.TextView;
 
 import org.apache.commons.io.FileUtils;
 
@@ -16,11 +17,12 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements SetTimer.AddTimerListener {
 
+    public static final String STOP_COUNTDOWN = "STOP_COUNTDOWN";
     /**
      * This array adapter holds the list of all timers
      */
-    protected ArrayAdapter<String> mListAdapter;
     protected ArrayList<String> mTimers = new ArrayList<>();
+    protected ArrayAdapter<String> mListAdapter;
     ViewPager mPager;
 
     @Override
@@ -39,53 +41,40 @@ public class MainActivity extends AppCompatActivity implements SetTimer.AddTimer
 
     }
 
+    /**
+     * This method reads the current set of timers from a file
+     */
+    private void readTimers() {
+        // Go to app directory
+        File filesDir = getFilesDir();
+
+        // Go to timers file
+        File timers = new File(filesDir, "Timers.txt");
+        try {
+            mTimers = new ArrayList<>(FileUtils.readLines(timers));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @Override
     protected void onStart() {
 
+
         // If requested go straight to the timerList page in app
-        String page = getIntent().getStringExtra("setPage");
-        if (page != null) {
-            if (page.equals("timerList")) {
+        String type = getIntent().getStringExtra("type");
+        if (type != null) {
+            if (type.equals("TimerList")) {
                 mPager.setCurrentItem(1);
+            } else {
+                int seconds = getIntent().getIntExtra("seconds", 0);
+                mTimers.remove(mTimers.size()-1);
+
+                this.sendBroadcast(new Intent(STOP_COUNTDOWN));
             }
         }
         super.onStart();
-    }
-
-    /**
-     * When a digit is selected, the value is added to the display
-     *
-     * @param view This is the digit selected
-     */
-    @SuppressWarnings("unused")
-    public void onDigitClick(View view) {
-
-        addNumberToDisplay(
-                String.valueOf(((Button) view).getText()),
-                SetTimer.collectDisplayData(findViewById(R.id.content)));
-    }
-
-    /**
-     * Add the given digit value to the array of display numbers
-     * and shift all number one to the left
-     *
-     * @param digitValue     Digit to be added to the display
-     * @param displayNumbers Current state of display
-     */
-    private void addNumberToDisplay(String digitValue, TextView[] displayNumbers) {
-
-        // If display is not full...
-        if (displayNumbers[0].getText().equals("0")) {
-            // Go through array and shift values to left one space
-            for (int i = 0; i < displayNumbers.length; i++) {
-                if (i == displayNumbers.length - 1) {
-                    // Add digit value to the end
-                    displayNumbers[i].setText(digitValue);
-                } else {
-                    displayNumbers[i].setText(displayNumbers[i + 1].getText());
-                }
-            }
-        }
     }
 
     /**
@@ -96,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements SetTimer.AddTimer
     @Override
     public void addTimerToList(int myTimer) {
         mPager.setCurrentItem(1, true);
-        mTimers.add(myTimer + " second timer");
+        mTimers.add("Timer " + +myTimer + " second timer");
         mListAdapter.notifyDataSetChanged();
         saveTimers();
     }
@@ -114,22 +103,6 @@ public class MainActivity extends AppCompatActivity implements SetTimer.AddTimer
         try {
             // Write items to file
             FileUtils.writeLines(timers, mTimers);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * This method reads the current set of timers from a file
-     */
-    private void readTimers() {
-        // Go to app directory
-        File filesDir = getFilesDir();
-
-        // Go to timers file
-        File timers = new File(filesDir, "Timers.txt");
-        try {
-            mTimers = new ArrayList<>(FileUtils.readLines(timers));
         } catch (IOException e) {
             e.printStackTrace();
         }

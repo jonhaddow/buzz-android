@@ -85,14 +85,17 @@
         <LinearLayout style="@style/digit_row">
 
             <Button
+                android:id="@+id/digit1"
                 style="@style/button_digit"
                 android:text="@string/digit_1" />
 
             <Button
+                android:id="@+id/digit2"
                 style="@style/button_digit"
                 android:text="@string/digit_2" />
 
             <Button
+                android:id="@+id/digit3"
                 style="@style/button_digit"
                 android:text="@string/digit_3" />
         </LinearLayout>
@@ -100,14 +103,17 @@
         <LinearLayout style="@style/digit_row">
 
             <Button
+                android:id="@+id/digit4"
                 style="@style/button_digit"
                 android:text="@string/digit_4" />
 
             <Button
+                android:id="@+id/digit5"
                 style="@style/button_digit"
                 android:text="@string/digit_5" />
 
             <Button
+                android:id="@+id/digit6"
                 style="@style/button_digit"
                 android:text="@string/digit_6" />
         </LinearLayout>
@@ -115,14 +121,17 @@
         <LinearLayout style="@style/digit_row">
 
             <Button
+                android:id="@+id/digit7"
                 style="@style/button_digit"
                 android:text="@string/digit_7" />
 
             <Button
+                android:id="@+id/digit8"
                 style="@style/button_digit"
                 android:text="@string/digit_8" />
 
             <Button
+                android:id="@+id/digit9"
                 style="@style/button_digit"
                 android:text="@string/digit_9" />
         </LinearLayout>
@@ -132,6 +141,7 @@
             <View style="@style/blank_view" />
 
             <Button
+                android:id="@+id/digit0"
                 style="@style/button_digit"
                 android:text="@string/digit_0" />
 

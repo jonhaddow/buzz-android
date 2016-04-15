@@ -22,4 +22,7 @@
     <string name="mins_text">m</string>
     <string name="hours_text">h</string>
     <string name="delete_description">Delete digit</string>
+    <string name="notification_message_running">" seconds remaining..."</string>
+    <string name="notification_message_finished">" second timer is complete"</string>
+    <string name="notification_header">Buzz</string>
 </resources>
