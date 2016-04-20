@@ -1,5 +1,6 @@
 package com.jon.buzz;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -9,45 +10,43 @@ import android.support.v4.app.FragmentPagerAdapter;
  */
 public class MyPagerAdapter extends FragmentPagerAdapter {
 
-    private static final int NUM_OF_PAGES = 2;
+	// Number of pages in Main Activity Pager
+	private static final int NUMBER_OF_PAGES = 2;
 
-    public MyPagerAdapter(FragmentManager fm) {
+	// Main activity context
+	private final Context mContext;
+
+	public MyPagerAdapter(FragmentManager fm, Context context) {
+
         super(fm);
-    }
+		mContext = context;
+	}
 
-    /**
-     * Get the right page dependant on the position number
-     *
-     * @param position
-     * @return
-     */
     @Override
     public Fragment getItem(int position) {
+
         switch (position) {
             case 0:
-                return new SetTimer();
-            default:
-                return new TimerList();
+	            return new FragmentSetTimer();
+	        default:
+	            return new FragmentTimerList();
         }
     }
 
-    /**
-     * Get the number of pages in the adapter
-     *
-     * @return
-     */
     @Override
     public int getCount() {
-        return NUM_OF_PAGES;
+
+	    return NUMBER_OF_PAGES;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
+
         switch (position) {
             case 0:
-                return "Set Timer";
-            default:
-                return "Timer List";
+	            return mContext.getString(R.string.page_0);
+	        default:
+	            return mContext.getString(R.string.page_1);
         }
     }
 }

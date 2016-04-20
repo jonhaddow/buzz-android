@@ -13,16 +13,14 @@
     <string name="digit_9">9</string>
     <string name="digit_0">0</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="page1">Timers</string>
-    <string name="page0">Set Timer</string>
+    <string name="page_0">Set Timer</string>
+    <string name="page_1">Timers</string>
     <string name="default_display_digit">0</string>
     <string name="secs_text">s</string>
     <string name="mins_text">m</string>
     <string name="hours_text">h</string>
-    <string name="delete_description">Delete digit</string>
-    <string name="notification_message_running">" seconds remaining..."</string>
+    <string name="notification_message_running">" seconds remaining…"</string>
     <string name="notification_message_finished">" second timer is complete"</string>
     <string name="notification_header">Buzz</string>
+    <string name="cd_ib_delete">Backspace</string>
 </resources>

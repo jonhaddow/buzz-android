@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
-public class TimerList extends Fragment implements AdapterView.OnItemLongClickListener {
+public class FragmentTimerList extends Fragment implements AdapterView.OnItemLongClickListener {
 
     ListView timer_list;
     MainActivity mainActivity;
@@ -20,7 +20,7 @@ public class TimerList extends Fragment implements AdapterView.OnItemLongClickLi
                              Bundle savedInstanceState) {
         // Inflate the layout containing a title and body text.
         ViewGroup rootView = (ViewGroup) inflater
-                .inflate(R.layout.timer_list, container, false);
+                .inflate(R.layout.fragment_recent_timer_list, container, false);
 
         // Get list view and populate with list adapter
         timer_list = (ListView) rootView.findViewById(R.id.timer_list);
@@ -38,7 +38,6 @@ public class TimerList extends Fragment implements AdapterView.OnItemLongClickLi
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         mainActivity.mTimers.remove(mainActivity.mListAdapter.getItem(position));
         mainActivity.mListAdapter.notifyDataSetChanged();
-        mainActivity.saveTimers();
         return true;
     }
 }
