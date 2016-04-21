@@ -1,4 +1,4 @@
-package com.jon.buzz;
+package com.jon.buzz.Interfaces;
 
 /**
  * Created by Jon Haddow on 20/04/2016

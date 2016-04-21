@@ -1,4 +1,4 @@
-package com.jon.buzz;
+package com.jon.buzz.RecentTimers;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,8 +9,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.jon.buzz.Activities.MainActivity;
+import com.jon.buzz.R;
 
-public class FragmentTimerList extends Fragment implements AdapterView.OnItemLongClickListener {
+
+public class FragmentRecentTimers extends Fragment implements AdapterView.OnItemLongClickListener {
 
     ListView timer_list;
     MainActivity mainActivity;

@@ -1,9 +1,13 @@
-package com.jon.buzz;
+package com.jon.buzz.Adapters;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+
+import com.jon.buzz.R;
+import com.jon.buzz.RecentTimers.FragmentRecentTimers;
+import com.jon.buzz.SetTimer.FragmentSetTimer;
 
 /**
  * This class gives the right pages to the view pager widget
@@ -29,7 +33,7 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
             case 0:
 	            return new FragmentSetTimer();
 	        default:
-	            return new FragmentTimerList();
+		        return new FragmentRecentTimers();
         }
     }
 

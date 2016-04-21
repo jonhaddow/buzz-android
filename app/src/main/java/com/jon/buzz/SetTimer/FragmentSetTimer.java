@@ -1,4 +1,4 @@
-package com.jon.buzz;
+package com.jon.buzz.SetTimer;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,6 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.jon.buzz.Interfaces.StartTimerListener;
+import com.jon.buzz.R;
+import com.jon.buzz.Services.BackgroundCountdown;
 
 
 public class FragmentSetTimer extends Fragment implements View.OnClickListener, View.OnLongClickListener {
@@ -61,15 +66,12 @@ public class FragmentSetTimer extends Fragment implements View.OnClickListener, 
 		switch (v.getId()) {
 			case R.id.ib_delete:
 				// If delete button is clicked, collect current display data and shift all digits to the right
-				UISetTimer.removeNumberFromDisplay(UISetTimer.collectDisplayData(getView()));
+				UISetTimer.removeNumberFromDisplay(UISetTimer.collectDisplayData(mRootView));
 				break;
-
 			case R.id.fab_start_timer:
 				// If FAB button is clicked
-				onStartTimer(getView());
-				UISetTimer.clearDisplay(UISetTimer.collectDisplayData(getView()));
+				onStartTimer();
 				break;
-
 			default:
 				//When a digit is selected, the value is added to the display
 				UISetTimer.addNumberToDisplay(
@@ -80,17 +82,24 @@ public class FragmentSetTimer extends Fragment implements View.OnClickListener, 
 
 	/**
 	 * Called when the FAB start timer button is selected
-	 *
-	 * @param view Fab button
 	 */
-	public void onStartTimer(View view) {
+	public void onStartTimer() {
+
+		// Check that service isn't already running
+		if (BackgroundCountdown.isMyServiceRunning(getContext(), BackgroundCountdown.class)) {
+			Toast.makeText(getContext(), "Timer already running", Toast.LENGTH_SHORT).show();
+			return;
+		}
 
 		// Collect current display values and convert to int[]
-		TextView[] displayNumbers = UISetTimer.collectDisplayData(view);
+		TextView[] displayNumbers = UISetTimer.collectDisplayData(mRootView);
 		int[] displayIntegers = new int[6];
 		for (int i = 0; i < 6; i++) {
 			displayIntegers[i] = Integer.parseInt(String.valueOf(displayNumbers[i].getText()));
 		}
+
+		// Clear Display
+		UISetTimer.clearDisplay(UISetTimer.collectDisplayData(mRootView));
 
 		// Calculate length of timer in seconds
 		int overallSeconds = displayIntegers[5]
@@ -107,7 +116,7 @@ public class FragmentSetTimer extends Fragment implements View.OnClickListener, 
 	@Override
 	public boolean onLongClick(View v) {
 
-		UISetTimer.clearDisplay(UISetTimer.collectDisplayData(getView()));
+		UISetTimer.clearDisplay(UISetTimer.collectDisplayData(mRootView));
 		return true;
 	}
 }

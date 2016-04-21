@@ -1,7 +1,9 @@
-package com.jon.buzz;
+package com.jon.buzz.SetTimer;
 
 import android.view.View;
 import android.widget.TextView;
+
+import com.jon.buzz.R;
 
 /**
  * Created by Jon Haddow on 20/04/2016

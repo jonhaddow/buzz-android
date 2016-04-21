@@ -11,8 +11,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <service android:name=".BackgroundCountdown" />
-        <activity android:name=".MainActivity">
+        <service android:name=".Services.BackgroundCountdown"/>
+        <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
