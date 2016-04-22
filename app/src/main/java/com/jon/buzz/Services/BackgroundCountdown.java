@@ -27,6 +27,13 @@ public class BackgroundCountdown extends Service {
 	private LocalBroadcastManager broadcastManager;
 	private CountDownTimer mCountDown;
 
+	/**
+	 * Checks that a service is currently running
+	 *
+	 * @param context      Application context
+	 * @param serviceClass Service which is checked to see if running
+	 * @return true if service is running.
+	 */
 	public static boolean isMyServiceRunning(Context context, Class<?> serviceClass) {
 
 		ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
@@ -84,7 +91,7 @@ public class BackgroundCountdown extends Service {
 				// Convert milliseconds to seconds
 				int timeRemaining = (int) millisUntilFinished / 1000;
 
-				//
+				// Start foreground notification with time remaining
 				startForeground(1, Notifications.setupRunningNotification(getApplicationContext(), timeRemaining).build());
 
 				// Send remaining seconds to main activity to update UI
@@ -94,10 +101,16 @@ public class BackgroundCountdown extends Service {
 			@Override
 			public void onFinish() {
 
-				//
+				// Send broadcast to main activity to update UI
 				sendResult(0);
+
+				// Cancel foreground notification
 				stopForeground(true);
+
+				// Notify user that timer has stopped
 				mNotificationManager.notify(1, Notifications.setupFinishedNotification(getApplicationContext(), mSeconds).build());
+
+				// Stop service
 				stopSelf();
 			}
 		}.start();
@@ -123,6 +136,11 @@ public class BackgroundCountdown extends Service {
 		return null;
 	}
 
+	/**
+	 * Send broadcast to main activity with the seconds remaining.
+	 *
+	 * @param timeRemaining
+	 */
 	public void sendResult(int timeRemaining) {
 
 		Intent intent = new Intent(TIME_REMAINING);
