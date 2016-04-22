@@ -33,15 +33,6 @@ public class MainActivity extends AppCompatActivity implements StartTimerListene
 	private LocalBroadcastManager broadcastManager;
 
 	@Override
-	protected void onPause() {
-
-		// Unregister receiver
-		broadcastManager.unregisterReceiver(receiver);
-
-		super.onPause();
-	}
-
-	@Override
 	protected void onResume() {
 
 		// When broadcast is received, update time remaining
@@ -61,6 +52,15 @@ public class MainActivity extends AppCompatActivity implements StartTimerListene
 				new IntentFilter(BackgroundCountdown.TIME_REMAINING));
 
 		super.onResume();
+	}
+
+	@Override
+	protected void onPause() {
+
+		// Unregister receiver
+		broadcastManager.unregisterReceiver(receiver);
+
+		super.onPause();
 	}
 
 	private void updateTimeRemaining(int timeRemaining) {
