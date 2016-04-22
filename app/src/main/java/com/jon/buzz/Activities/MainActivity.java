@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements StartTimerListener, View.OnClickListener {
 
 	public static final String STOP_TIMER = "com.jon.buzz.activities.MainActivity.STOP_TIMER";
-	public ArrayList<String> mTimers = new ArrayList<>();
+	public final ArrayList<String> mTimers = new ArrayList<>();
 	public ArrayAdapter<String> mListAdapter;
 
 	private TextView mTvTimeRemaining;

@@ -10,8 +10,6 @@ import android.support.v4.app.TaskStackBuilder;
 import com.jon.buzz.R;
 import com.jon.buzz.activities.MainActivity;
 
-import static com.jon.buzz.R.drawable.ic_stat_name;
-
 /**
  * Created by Jon Haddow on 20/04/2016
  */
@@ -21,7 +19,7 @@ public class Notifications {
 
 		// Create notification that shows while countdown is running
 		return new Notification.Builder(context)
-				.setSmallIcon(ic_stat_name)
+				.setSmallIcon(R.drawable.ic_alarm)
 				.setContentTitle(context.getString(R.string.notification_header))
 				.setContentText(timeRemaining + context.getString(R.string.notification_message_running))
 				.setPriority(Notification.PRIORITY_MAX)
@@ -82,7 +80,7 @@ public class Notifications {
 
 		// Show final notification to indicate that the countdown has finished.
 		return new Notification.Builder(context)
-				.setSmallIcon(ic_stat_name)
+				.setSmallIcon(R.drawable.ic_alarm)
 				.setContentTitle(context.getString(R.string.notification_header))
 				.setContentText(seconds + context.getString(R.string.notification_message_finished))
 				.setPriority(Notification.PRIORITY_MAX)

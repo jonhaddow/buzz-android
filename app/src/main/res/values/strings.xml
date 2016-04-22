@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">Buzz</string>
 
-    <string name="user_instruction">Select a time</string>
     <string name="digit_1">1</string>
     <string name="digit_2">2</string>
     <string name="digit_3">3</string>
@@ -17,7 +16,7 @@
     <string name="page_1">Timers</string>
     <string name="default_display_digit">0</string>
     <string name="secs_text">s</string>
-    <string name="mins_text">m</string>
+    <string name="minute_text">m</string>
     <string name="hours_text">h</string>
     <string name="notification_message_running">" seconds remaining…"</string>
     <string name="notification_message_finished">" second timer is complete"</string>

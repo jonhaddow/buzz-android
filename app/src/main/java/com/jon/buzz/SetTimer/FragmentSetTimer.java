@@ -17,11 +17,8 @@ import com.jon.buzz.services.BackgroundCountdown;
 
 public class FragmentSetTimer extends Fragment implements View.OnClickListener, View.OnLongClickListener {
 
-	// Holds the Start Timer listener from main activity
-	StartTimerListener mStartTimerCallback;
-
 	// References id of all digit buttons
-	int[] mDigitButtons = {
+	private final int[] mDigitButtons = {
 			R.id.b_digit0,
 			R.id.b_digit1,
 			R.id.b_digit2,
@@ -33,7 +30,8 @@ public class FragmentSetTimer extends Fragment implements View.OnClickListener, 
 			R.id.b_digit8,
 			R.id.b_digit9
 	};
-
+	// Holds the Start Timer listener from main activity
+	private StartTimerListener mStartTimerCallback;
 	private View mRootView;
 
 	@Override
@@ -83,7 +81,7 @@ public class FragmentSetTimer extends Fragment implements View.OnClickListener, 
 	/**
 	 * Called when the FAB start timer button is selected
 	 */
-	public void onStartTimer() {
+	private void onStartTimer() {
 
 		// Check that service isn't already running
 		if (BackgroundCountdown.isMyServiceRunning(getContext(), BackgroundCountdown.class)) {

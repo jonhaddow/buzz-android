@@ -32,18 +32,18 @@
 			android:text="@string/hours_text"/>
 
 		<TextView
-			android:id="@+id/tv_mins"
+			android:id="@+id/tv_minutes"
 			style="@style/display_digit_a"
 			android:text="@string/default_display_digit"/>
 
 		<TextView
-			android:id="@+id/tv_mins2"
+			android:id="@+id/tv_minutes2"
 			style="@style/display_digit"
 			android:text="@string/default_display_digit"/>
 
 		<TextView
 			style="@style/display_digit_text"
-			android:text="@string/mins_text"/>
+			android:text="@string/minute_text"/>
 
 		<TextView
 			android:id="@+id/tv_secs"
@@ -67,7 +67,8 @@
 			android:layout_height="wrap_content"
 			android:background="@android:color/transparent"
 			android:contentDescription="@string/cd_ib_delete"
-			android:src="@drawable/ic_backspace_grey_500_48dp"/>
+			android:src="@drawable/ic_backspace"
+			android:tint="@android:color/darker_gray"/>
 	</LinearLayout>
 
 	<LinearLayout

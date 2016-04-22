@@ -42,7 +42,8 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:contentDescription="@string/stop_timer_content_description"
-			android:src="@drawable/ic_stop_timer"/>
+			android:src="@drawable/ic_action_stop_timer"
+			android:tint="@android:color/white"/>
 
 	</LinearLayout>
 

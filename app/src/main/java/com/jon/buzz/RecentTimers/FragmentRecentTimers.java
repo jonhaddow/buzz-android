@@ -15,8 +15,7 @@ import com.jon.buzz.activities.MainActivity;
 
 public class FragmentRecentTimers extends Fragment implements AdapterView.OnItemLongClickListener {
 
-    ListView timer_list;
-    MainActivity mainActivity;
+    private MainActivity mainActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -26,7 +25,7 @@ public class FragmentRecentTimers extends Fragment implements AdapterView.OnItem
                 .inflate(R.layout.fragment_recent_timer_list, container, false);
 
         // Get list view and populate with list adapter
-        timer_list = (ListView) rootView.findViewById(R.id.timer_list);
+        ListView timer_list = (ListView) rootView.findViewById(R.id.timer_list);
         mainActivity = ((MainActivity) getActivity());
         mainActivity.mListAdapter = new ArrayAdapter<>(
                 getContext(),
