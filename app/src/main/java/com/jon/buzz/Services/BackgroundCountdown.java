@@ -139,7 +139,7 @@ public class BackgroundCountdown extends Service {
 	/**
 	 * Send broadcast to main activity with the seconds remaining.
 	 *
-	 * @param timeRemaining
+	 * @param timeRemaining seconds remaining
 	 */
 	public void sendResult(int timeRemaining) {
 
