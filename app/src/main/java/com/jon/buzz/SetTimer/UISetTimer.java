@@ -8,7 +8,7 @@ import com.jon.buzz.R;
 /**
  * Created by Jon Haddow on 20/04/2016
  */
-public class UISetTimer {
+class UISetTimer {
 
 	/**
 	 * Collect text views which make up the display
@@ -22,8 +22,8 @@ public class UISetTimer {
 		return new TextView[]{
 				(TextView) view.findViewById(R.id.tv_hours),
 				(TextView) view.findViewById(R.id.tv_hours2),
-				(TextView) view.findViewById(R.id.tv_mins),
-				(TextView) view.findViewById(R.id.tv_mins2),
+				(TextView) view.findViewById(R.id.tv_minutes),
+				(TextView) view.findViewById(R.id.tv_minutes2),
 				(TextView) view.findViewById(R.id.tv_secs),
 				(TextView) view.findViewById(R.id.tv_secs2),
 		};
