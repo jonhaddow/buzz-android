@@ -85,7 +85,7 @@ public class BackgroundCountdown extends Service {
 				int timeRemaining = (int) millisUntilFinished / 1000;
 
 				//
-				startForeground(2, Notifications.setupRunningNotification(getApplicationContext(), timeRemaining).build());
+				startForeground(1, Notifications.setupRunningNotification(getApplicationContext(), timeRemaining).build());
 
 				// Send remaining seconds to main activity to update UI
 				sendResult(timeRemaining);
