@@ -1,4 +1,4 @@
-package com.jon.buzz.Adapters;
+package com.jon.buzz.adapters;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -6,8 +6,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.jon.buzz.R;
-import com.jon.buzz.RecentTimers.FragmentRecentTimers;
-import com.jon.buzz.SetTimer.FragmentSetTimer;
+import com.jon.buzz.recentTimers.FragmentRecentTimers;
+import com.jon.buzz.setTimer.FragmentSetTimer;
 
 /**
  * This class gives the right pages to the view pager widget

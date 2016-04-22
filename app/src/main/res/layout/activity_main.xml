@@ -22,24 +22,28 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="50dp"
         android:background="@color/colorPrimary"
-        android:padding="14dp">
+        android:gravity="center_vertical"
+        android:paddingEnd="14dp"
+        android:paddingStart="14dp">
 
         <TextView
             android:id="@+id/tv_time_remaining"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/textColour"
             android:layout_alignParentStart="true"
+            android:gravity="bottom"
+            android:textColor="@color/textColour"
+            android:textSize="16sp"
             tools:text="Timer Remaining: 100 seconds"/>
 
         <ImageView
+            android:id="@+id/iv_stop_timer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:src="@drawable/ic_stop_timer"
-            android:id="@+id/iv_stop_timer"/>
+            android:src="@drawable/ic_stop_timer"/>
 
     </RelativeLayout>
 

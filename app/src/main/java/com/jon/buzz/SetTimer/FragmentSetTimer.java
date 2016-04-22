@@ -1,4 +1,4 @@
-package com.jon.buzz.SetTimer;
+package com.jon.buzz.setTimer;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,9 +10,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jon.buzz.Interfaces.StartTimerListener;
 import com.jon.buzz.R;
-import com.jon.buzz.Services.BackgroundCountdown;
+import com.jon.buzz.interfaces.StartTimerListener;
+import com.jon.buzz.services.BackgroundCountdown;
 
 
 public class FragmentSetTimer extends Fragment implements View.OnClickListener, View.OnLongClickListener {

@@ -1,4 +1,4 @@
-package com.jon.buzz.SetTimer;
+package com.jon.buzz.setTimer;
 
 import android.view.View;
 import android.widget.TextView;

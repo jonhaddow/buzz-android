@@ -1,4 +1,4 @@
-package com.jon.buzz.Utils;
+package com.jon.buzz.utils;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -7,8 +7,8 @@ import android.content.Intent;
 import android.graphics.drawable.Icon;
 import android.support.v4.app.TaskStackBuilder;
 
-import com.jon.buzz.Activities.MainActivity;
 import com.jon.buzz.R;
+import com.jon.buzz.activities.MainActivity;
 
 import static com.jon.buzz.R.drawable.ic_stat_name;
 
