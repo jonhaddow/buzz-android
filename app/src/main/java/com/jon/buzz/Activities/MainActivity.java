@@ -16,12 +16,11 @@ import android.widget.TextView;
 
 import com.jon.buzz.R;
 import com.jon.buzz.adapters.MyPagerAdapter;
-import com.jon.buzz.interfaces.StartTimerListener;
 import com.jon.buzz.services.BackgroundCountdown;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements StartTimerListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 	public static final String STOP_TIMER = "com.jon.buzz.activities.MainActivity.STOP_TIMER";
 	public final ArrayList<String> mTimers = new ArrayList<>();
@@ -101,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements StartTimerListene
 	 *
 	 * @param seconds number of seconds to set timer for
 	 */
-	@Override
 	public void startTimer(int seconds) {
 
 		// Save current timer seconds
