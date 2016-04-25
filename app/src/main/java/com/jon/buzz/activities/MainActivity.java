@@ -79,14 +79,17 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		// Support toolbar
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
-
+		// Get time remaining reference
 		mTvTimeRemaining = (TextView) findViewById(R.id.tv_time_remaining);
-		ImageView mIvStopTimer = (ImageView) findViewById(R.id.iv_stop_timer);
-		if (mIvStopTimer != null) {
-			mIvStopTimer.setOnClickListener(this);
+
+		// Set on click listener for stop timer image.
+		ImageView ivStopTimer = (ImageView) findViewById(R.id.iv_stop_timer);
+		if (ivStopTimer != null) {
+			ivStopTimer.setOnClickListener(this);
 		}
 
 		// Instantiate view pager and pager adapter
@@ -99,8 +102,8 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		// Set up Tabbed layout
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 		if (tabLayout != null) {
-			tabLayout.addTab(tabLayout.newTab().setText("Set Timer"));
-			tabLayout.addTab(tabLayout.newTab().setText("Recent Timer"));
+			tabLayout.addTab(tabLayout.newTab().setText(R.string.page_0));
+			tabLayout.addTab(tabLayout.newTab().setText(R.string.page_1));
 			tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 			tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
 				@Override
@@ -145,8 +148,6 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		if (recentTimers != null) {
 			recentTimers.addTimerToList(seconds);
 		}
-
-
 	}
 
 	@Override
