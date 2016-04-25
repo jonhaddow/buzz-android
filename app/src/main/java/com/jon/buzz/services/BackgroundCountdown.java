@@ -141,7 +141,7 @@ public class BackgroundCountdown extends Service {
 	 *
 	 * @param timeRemaining seconds remaining
 	 */
-	public void sendResult(int timeRemaining) {
+	private void sendResult(int timeRemaining) {
 
 		Intent intent = new Intent(TIME_REMAINING);
 		intent.putExtra(SECONDS_REMAINING, timeRemaining);
