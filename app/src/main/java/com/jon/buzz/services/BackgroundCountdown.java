@@ -48,11 +48,12 @@ public class BackgroundCountdown extends Service {
 	@Override
 	public void onCreate() {
 
-		// When a broadcast is received, stop service
+		// When a STOP TIMER broadcast is received, stop service
 		receiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 
+				System.out.println("BROADCAST_RELIEVED!");
 				mNotificationManager.cancelAll();
 				mCountDown.cancel();
 				stopSelf();

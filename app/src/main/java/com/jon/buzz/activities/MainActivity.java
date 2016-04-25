@@ -20,6 +20,7 @@ import com.jon.buzz.adapters.MyPagerAdapter;
 import com.jon.buzz.interfaces.StartNewTimerListener;
 import com.jon.buzz.recentTimers.FragmentRecentTimers;
 import com.jon.buzz.services.BackgroundCountdown;
+import com.jon.buzz.utils.Notifications;
 
 public class MainActivity extends AppCompatActivity implements StartNewTimerListener, View.OnClickListener {
 
@@ -84,22 +85,6 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
-		// Get time remaining reference
-		mTvTimeRemaining = (TextView) findViewById(R.id.tv_time_remaining);
-
-		// Set on click listener for stop timer image.
-		ivStopTimer = (ImageView) findViewById(R.id.iv_stop_timer);
-		if (ivStopTimer != null) {
-			ivStopTimer.setOnClickListener(this);
-
-			// If countdown is running enable stop time button
-			if (BackgroundCountdown.isMyServiceRunning(this, BackgroundCountdown.class)) {
-				ivStopTimer.setVisibility(View.VISIBLE);
-			} else {
-				ivStopTimer.setVisibility(View.INVISIBLE);
-			}
-		}
-
 		// Instantiate view pager and pager adapter
 		final ViewPager mPager = (ViewPager) findViewById(R.id.pager);
 		mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), this);
@@ -136,6 +121,22 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 
 		if (mPager != null) {
 			mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+		}
+
+		// Get time remaining reference
+		mTvTimeRemaining = (TextView) findViewById(R.id.tv_time_remaining);
+
+		// Set on click listener for stop timer image.
+		ivStopTimer = (ImageView) findViewById(R.id.iv_stop_timer);
+		if (ivStopTimer != null) {
+			ivStopTimer.setOnClickListener(this);
+
+			// If countdown is running enable stop time button
+			if (BackgroundCountdown.isMyServiceRunning(this, BackgroundCountdown.class)) {
+				ivStopTimer.setVisibility(View.VISIBLE);
+			} else {
+				ivStopTimer.setVisibility(View.INVISIBLE);
+			}
 		}
 	}
 
