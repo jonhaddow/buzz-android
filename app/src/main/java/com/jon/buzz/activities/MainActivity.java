@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 	private int mSeconds;
 	private LocalBroadcastManager broadcastManager;
 	private MyPagerAdapter mPagerAdapter;
+	private ImageView ivStopTimer;
 
 	@Override
 	protected void onPause() {
@@ -87,9 +88,16 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		mTvTimeRemaining = (TextView) findViewById(R.id.tv_time_remaining);
 
 		// Set on click listener for stop timer image.
-		ImageView ivStopTimer = (ImageView) findViewById(R.id.iv_stop_timer);
+		ivStopTimer = (ImageView) findViewById(R.id.iv_stop_timer);
 		if (ivStopTimer != null) {
 			ivStopTimer.setOnClickListener(this);
+
+			// If countdown is running enable stop time button
+			if (BackgroundCountdown.isMyServiceRunning(this, BackgroundCountdown.class)) {
+				ivStopTimer.setVisibility(View.VISIBLE);
+			} else {
+				ivStopTimer.setVisibility(View.INVISIBLE);
+			}
 		}
 
 		// Instantiate view pager and pager adapter
@@ -152,6 +160,8 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		if (recentTimers != null) {
 			recentTimers.addTimerToList(seconds);
 		}
+
+		ivStopTimer.setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -165,5 +175,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 
 		// Stop Timer service
 		broadcastManager.sendBroadcast(new Intent(STOP_TIMER));
+
+		ivStopTimer.setVisibility(View.INVISIBLE);
 	}
 }
