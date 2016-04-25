@@ -12,27 +12,24 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jon.buzz.R;
 import com.jon.buzz.adapters.MyPagerAdapter;
-import com.jon.buzz.interfaces.StartTimerListener;
+import com.jon.buzz.interfaces.StartNewTimerListener;
+import com.jon.buzz.recentTimers.FragmentRecentTimers;
 import com.jon.buzz.services.BackgroundCountdown;
 
-import java.util.ArrayList;
-
-public class MainActivity extends AppCompatActivity implements StartTimerListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements StartNewTimerListener, View.OnClickListener {
 
 	public static final String STOP_TIMER = "com.jon.buzz.activities.MainActivity.STOP_TIMER";
-	public final ArrayList<String> mTimers = new ArrayList<>();
-	public ArrayAdapter<String> mListAdapter;
 
 	private TextView mTvTimeRemaining;
 	private BroadcastReceiver receiver;
 	private int mSeconds;
 	private LocalBroadcastManager broadcastManager;
+	private MyPagerAdapter mPagerAdapter;
 
 	@Override
 	protected void onPause() {
@@ -85,10 +82,6 @@ public class MainActivity extends AppCompatActivity implements StartTimerListene
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 
-		TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-		tabLayout.addTab(tabLayout.newTab().setText("Set Timer"));
-		tabLayout.addTab(tabLayout.newTab().setText("Recent Timer"));
-		tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
 		mTvTimeRemaining = (TextView) findViewById(R.id.tv_time_remaining);
 		ImageView mIvStopTimer = (ImageView) findViewById(R.id.iv_stop_timer);
@@ -96,32 +89,39 @@ public class MainActivity extends AppCompatActivity implements StartTimerListene
 			mIvStopTimer.setOnClickListener(this);
 		}
 
-
 		// Instantiate view pager and pager adapter
 		final ViewPager mPager = (ViewPager) findViewById(R.id.pager);
-		MyPagerAdapter mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), this);
+		mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), this);
 		if (mPager != null) {
 			mPager.setAdapter(mPagerAdapter);
 		}
 
+		// Set up Tabbed layout
+		TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
+		if (tabLayout != null) {
+			tabLayout.addTab(tabLayout.newTab().setText("Set Timer"));
+			tabLayout.addTab(tabLayout.newTab().setText("Recent Timer"));
+			tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+			tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+				@Override
+				public void onTabSelected(TabLayout.Tab tab) {
 
-		mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-		tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-			@Override
-			public void onTabSelected(TabLayout.Tab tab) {
-				mPager.setCurrentItem(tab.getPosition());
-			}
+					if (mPager != null) {
+						mPager.setCurrentItem(tab.getPosition());
+					}
+				}
 
-			@Override
-			public void onTabUnselected(TabLayout.Tab tab) {
+				@Override
+				public void onTabUnselected(TabLayout.Tab tab) {}
 
-			}
+				@Override
+				public void onTabReselected(TabLayout.Tab tab) {}
+			});
+		}
 
-			@Override
-			public void onTabReselected(TabLayout.Tab tab) {
-
-			}
-		});
+		if(mPager!=null){
+			mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+		}
 	}
 
 	/**
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements StartTimerListene
 	 * @param seconds number of seconds to set timer for
 	 */
 	@Override
-	public void startTimer(int seconds) {
+	public void startNewTimer(int seconds) {
 
 		// Save current timer seconds
 		mSeconds = seconds;
@@ -139,6 +139,14 @@ public class MainActivity extends AppCompatActivity implements StartTimerListene
 		Intent countdownIntent = new Intent(this, BackgroundCountdown.class);
 		countdownIntent.putExtra("Seconds", seconds);
 		startService(countdownIntent);
+
+		// Add timer to recent timers list
+		FragmentRecentTimers recentTimers = ((FragmentRecentTimers) mPagerAdapter.getFragment(1));
+		if (recentTimers != null) {
+			recentTimers.addTimerToList(seconds);
+		}
+
+
 	}
 
 	@Override

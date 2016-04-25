@@ -5,41 +5,82 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.jon.buzz.R;
-import com.jon.buzz.activities.MainActivity;
 
+import org.apache.commons.io.FileUtils;
 
-public class FragmentRecentTimers extends Fragment implements AdapterView.OnItemLongClickListener {
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
-    private MainActivity mainActivity;
+public class FragmentRecentTimers extends Fragment {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout containing a title and body text.
-        ViewGroup rootView = (ViewGroup) inflater
-                .inflate(R.layout.fragment_recent_timer_list, container, false);
+	// File name to save current state of list
+	public static final String FILE_NAME = "RecentTimers.txt";
 
-        // Get list view and populate with list adapter
-        ListView timer_list = (ListView) rootView.findViewById(R.id.timer_list);
-        mainActivity = ((MainActivity) getActivity());
-        mainActivity.mListAdapter = new ArrayAdapter<>(
-                getContext(),
-                android.R.layout.simple_list_item_1,
-                mainActivity.mTimers);
-        timer_list.setAdapter(mainActivity.mListAdapter);
-        timer_list.setOnItemLongClickListener(this);
-        return rootView;
-    }
+	// Max number of items to add to list
+	private static final int LIST_LIMIT = 8;
 
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        mainActivity.mTimers.remove(mainActivity.mListAdapter.getItem(position));
-        mainActivity.mListAdapter.notifyDataSetChanged();
-        return true;
-    }
+	private ArrayList<String> mTimers = new ArrayList<>();
+	private ArrayAdapter mListAdapter;
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	                         Bundle savedInstanceState) {
+
+		// Inflate the layout containing a title and body text.
+		ViewGroup rootView = (ViewGroup) inflater
+				.inflate(R.layout.fragment_recent_timer_list, container, false);
+
+		// Load list from local directory
+		LoadList();
+
+		// Get list view and populate with list adapter
+		ListView timer_list = (ListView) rootView.findViewById(R.id.timer_list);
+		mListAdapter = new ArrayAdapter<>(
+				getContext(),
+				android.R.layout.simple_list_item_1,
+				mTimers);
+		timer_list.setAdapter(mListAdapter);
+		return rootView;
+	}
+
+	private void LoadList() {
+
+		// Load list items from local directory
+		File file = new File(getContext().getFilesDir(), FILE_NAME);
+		try {
+			mTimers = new ArrayList<>(FileUtils.readLines(file));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void addTimerToList(int seconds) {
+
+		// Adds timer to the top of list
+		mTimers.add(0, String.valueOf(seconds));
+
+		// Limit list to a set number of items
+		if (mTimers.size() == LIST_LIMIT) {
+			mTimers.remove(LIST_LIMIT - 1);
+		}
+
+		mListAdapter.notifyDataSetChanged();
+		saveList();
+	}
+
+	private void saveList() {
+
+		// Saved List items in local directory
+		File file = new File(getContext().getFilesDir(), FILE_NAME);
+		try {
+			FileUtils.writeLines(file, mTimers);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }
