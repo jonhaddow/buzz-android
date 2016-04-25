@@ -10,11 +10,21 @@ import android.widget.ListView;
 
 import com.jon.buzz.R;
 
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class FragmentRecentTimers extends Fragment {
 
-	private final ArrayList<String> mTimers = new ArrayList<>();
+	// File name to save current state of list
+	public static final String FILE_NAME = "RecentTimers.txt";
+
+	// Max number of items to add to list
+	private static final int LIST_LIMIT = 8;
+
+	private ArrayList<String> mTimers = new ArrayList<>();
 	private ArrayAdapter mListAdapter;
 
 	@Override
@@ -24,6 +34,9 @@ public class FragmentRecentTimers extends Fragment {
 		// Inflate the layout containing a title and body text.
 		ViewGroup rootView = (ViewGroup) inflater
 				.inflate(R.layout.fragment_recent_timer_list, container, false);
+
+		// Load list from local directory
+		LoadList();
 
 		// Get list view and populate with list adapter
 		ListView timer_list = (ListView) rootView.findViewById(R.id.timer_list);
@@ -35,10 +48,39 @@ public class FragmentRecentTimers extends Fragment {
 		return rootView;
 	}
 
+	private void LoadList() {
+
+		// Load list items from local directory
+		File file = new File(getContext().getFilesDir(), FILE_NAME);
+		try {
+			mTimers = new ArrayList<>(FileUtils.readLines(file));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public void addTimerToList(int seconds) {
 
 		// Adds timer to the top of list
 		mTimers.add(0, String.valueOf(seconds));
+
+		// Limit list to a set number of items
+		if (mTimers.size() == LIST_LIMIT) {
+			mTimers.remove(LIST_LIMIT - 1);
+		}
+
 		mListAdapter.notifyDataSetChanged();
+		saveList();
+	}
+
+	private void saveList() {
+
+		// Saved List items in local directory
+		File file = new File(getContext().getFilesDir(), FILE_NAME);
+		try {
+			FileUtils.writeLines(file, mTimers);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
