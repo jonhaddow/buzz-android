@@ -17,6 +17,8 @@ import android.widget.ListView;
 import com.jon.buzz.R;
 import com.jon.buzz.activities.MainActivity;
 
+import java.util.ArrayList;
+
 
 public class FragmentRecentTimers extends Fragment implements AdapterView.OnItemLongClickListener {
 
@@ -24,15 +26,21 @@ public class FragmentRecentTimers extends Fragment implements AdapterView.OnItem
     private BroadcastReceiver mReceiver;
     private LocalBroadcastManager mBroadcastManager;
     public static final String NEW_TIMER = "com.jon.buzz.recentTimers.FragmentRecentTimers.NEW_TIMER";
+	private ArrayAdapter mListAdapter;
+	private ArrayList<String> mTimers = new ArrayList<>();
 
-    @Override
+	@Override
     public void onResume() {
 
-        // When broadcast is received, add new timer to list
+        // When new timer broadcast is received, add new timer to list
         mReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                // TODO: 22/04/2016 add timer to list
+
+	            // Add most recent timer to list
+	            int seconds = intent.getIntExtra("Seconds", 0);
+	            mTimers.add(0,String.valueOf(seconds));
+	            mListAdapter.notifyDataSetChanged();
             }
         };
 
@@ -61,12 +69,11 @@ public class FragmentRecentTimers extends Fragment implements AdapterView.OnItem
 
         // Get list view and populate with list adapter
         ListView timer_list = (ListView) rootView.findViewById(R.id.timer_list);
-        mainActivity = ((MainActivity) getActivity());
-        mainActivity.mListAdapter = new ArrayAdapter<>(
+        mListAdapter = new ArrayAdapter<>(
                 getContext(),
                 android.R.layout.simple_list_item_1,
-                mainActivity.mTimers);
-        timer_list.setAdapter(mainActivity.mListAdapter);
+                mTimers);
+        timer_list.setAdapter(mListAdapter);
         timer_list.setOnItemLongClickListener(this);
         return rootView;
     }

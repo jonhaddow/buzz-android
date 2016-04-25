@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.jon.buzz.R;
 import com.jon.buzz.adapters.MyPagerAdapter;
 import com.jon.buzz.interfaces.StartTimerListener;
+import com.jon.buzz.recentTimers.FragmentRecentTimers;
 import com.jon.buzz.services.BackgroundCountdown;
 
 import java.util.ArrayList;
@@ -111,6 +112,11 @@ public class MainActivity extends AppCompatActivity implements StartTimerListene
 		Intent countdownIntent = new Intent(this, BackgroundCountdown.class);
 		countdownIntent.putExtra("Seconds", seconds);
 		startService(countdownIntent);
+
+		// Add timer to recent timers list
+		Intent newTimerIntent = new Intent(FragmentRecentTimers.NEW_TIMER);
+		newTimerIntent.putExtra("Seconds",seconds);
+		broadcastManager.sendBroadcast(newTimerIntent);
 	}
 
 	@Override
