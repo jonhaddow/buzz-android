@@ -1,4 +1,4 @@
-package com.jon.buzz;
+package com.jon.buzz.services;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

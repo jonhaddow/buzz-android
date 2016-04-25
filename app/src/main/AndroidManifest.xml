@@ -22,7 +22,7 @@
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
-		<receiver android:name=".StopTimerBroadcast">
+		<receiver android:name=".services.StopTimerBroadcast">
 			<intent-filter>
 				<action android:name="com.jon.buzz.activities.MainActivity.STOP_TIMER"/>
 			</intent-filter>
