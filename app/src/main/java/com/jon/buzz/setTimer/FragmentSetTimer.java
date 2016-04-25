@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jon.buzz.R;
-import com.jon.buzz.interfaces.StartTimerListener;
+import com.jon.buzz.interfaces.StartNewTimerListener;
 import com.jon.buzz.services.BackgroundCountdown;
 
 
@@ -31,14 +31,14 @@ public class FragmentSetTimer extends Fragment implements View.OnClickListener, 
 			R.id.b_digit9
 	};
 	// Holds the Start Timer listener from main activity
-	private StartTimerListener mStartTimerCallback;
+	private StartNewTimerListener mMainActivityCallback;
 	private View mRootView;
 
 	@Override
 	public void onAttach(Context context) {
 
 		super.onAttach(context);
-		mStartTimerCallback = (StartTimerListener) context;
+		mMainActivityCallback = (StartNewTimerListener) context;
 	}
 
 	@Override
@@ -108,7 +108,7 @@ public class FragmentSetTimer extends Fragment implements View.OnClickListener, 
 				+ displayIntegers[0] * 60000;
 
 		// Pass seconds to main activity to create new timer
-		mStartTimerCallback.startTimer(overallSeconds);
+		mMainActivityCallback.startNewTimer(overallSeconds);
 	}
 
 	@Override

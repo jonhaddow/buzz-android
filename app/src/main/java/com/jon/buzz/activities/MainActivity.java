@@ -10,28 +10,33 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jon.buzz.R;
 import com.jon.buzz.adapters.MyPagerAdapter;
-import com.jon.buzz.interfaces.StartTimerListener;
+import com.jon.buzz.interfaces.StartNewTimerListener;
 import com.jon.buzz.recentTimers.FragmentRecentTimers;
 import com.jon.buzz.services.BackgroundCountdown;
 
-import java.util.ArrayList;
-
-public class MainActivity extends AppCompatActivity implements StartTimerListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements StartNewTimerListener, View.OnClickListener {
 
 	public static final String STOP_TIMER = "com.jon.buzz.activities.MainActivity.STOP_TIMER";
-	public final ArrayList<String> mTimers = new ArrayList<>();
-	public ArrayAdapter<String> mListAdapter;
 
 	private TextView mTvTimeRemaining;
 	private BroadcastReceiver receiver;
 	private int mSeconds;
 	private LocalBroadcastManager broadcastManager;
+	private MyPagerAdapter mPagerAdapter;
+
+	@Override
+	protected void onPause() {
+
+		// Unregister receiver
+		broadcastManager.unregisterReceiver(receiver);
+
+		super.onPause();
+	}
 
 	@Override
 	protected void onResume() {
@@ -55,15 +60,6 @@ public class MainActivity extends AppCompatActivity implements StartTimerListene
 		super.onResume();
 	}
 
-	@Override
-	protected void onPause() {
-
-		// Unregister receiver
-		broadcastManager.unregisterReceiver(receiver);
-
-		super.onPause();
-	}
-
 	private void updateTimeRemaining(int timeRemaining) {
 
 		String textToDisplay;
@@ -81,17 +77,15 @@ public class MainActivity extends AppCompatActivity implements StartTimerListene
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-
 		mTvTimeRemaining = (TextView) findViewById(R.id.tv_time_remaining);
 		ImageView mIvStopTimer = (ImageView) findViewById(R.id.iv_stop_timer);
 		if (mIvStopTimer != null) {
 			mIvStopTimer.setOnClickListener(this);
 		}
 
-
 		// Instantiate view pager and pager adapter
 		ViewPager mPager = (ViewPager) findViewById(R.id.pager);
-		MyPagerAdapter mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), this);
+		mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), this);
 		if (mPager != null) {
 			mPager.setAdapter(mPagerAdapter);
 		}
@@ -103,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements StartTimerListene
 	 * @param seconds number of seconds to set timer for
 	 */
 	@Override
-	public void startTimer(int seconds) {
+	public void startNewTimer(int seconds) {
 
 		// Save current timer seconds
 		mSeconds = seconds;
@@ -114,9 +108,12 @@ public class MainActivity extends AppCompatActivity implements StartTimerListene
 		startService(countdownIntent);
 
 		// Add timer to recent timers list
-		Intent newTimerIntent = new Intent(FragmentRecentTimers.NEW_TIMER);
-		newTimerIntent.putExtra("Seconds",seconds);
-		broadcastManager.sendBroadcast(newTimerIntent);
+		FragmentRecentTimers recentTimers = ((FragmentRecentTimers) mPagerAdapter.getFragment(1));
+		if (recentTimers != null) {
+			recentTimers.addTimerToList(seconds);
+		}
+
+
 	}
 
 	@Override
