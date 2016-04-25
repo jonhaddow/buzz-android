@@ -19,7 +19,7 @@ import java.util.ArrayList;
 public class FragmentRecentTimers extends Fragment {
 
 	// File name to save current state of list
-	public static final String FILE_NAME = "RecentTimers.txt";
+	private static final String FILE_NAME = "RecentTimers.txt";
 
 	// Max number of items to add to list
 	private static final int LIST_LIMIT = 8;

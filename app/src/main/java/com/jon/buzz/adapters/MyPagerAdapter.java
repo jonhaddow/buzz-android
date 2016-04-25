@@ -46,12 +46,6 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
 	}
 
 	@Override
-	public int getCount() {
-
-		return NUMBER_OF_PAGES;
-	}
-
-	@Override
 	public Object instantiateItem(ViewGroup container, int position) {
 
 		Fragment fragment = (Fragment) super.instantiateItem(container, position);
@@ -61,8 +55,15 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public void destroyItem(ViewGroup container, int position, Object object) {
+
 		registeredFragments.remove(position);
 		super.destroyItem(container, position, object);
+	}
+
+	@Override
+	public int getCount() {
+
+		return NUMBER_OF_PAGES;
 	}
 
 	@Override
@@ -78,6 +79,7 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
 
 	@Nullable
 	public Fragment getFragment(final int position) {
+
 		final WeakReference<Fragment> wr = registeredFragments.get(position);
 		if (wr != null) {
 			return wr.get();
