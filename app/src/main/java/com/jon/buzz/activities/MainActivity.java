@@ -100,9 +100,9 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 				new IntentFilter(CustomBroadcasts.PLAY_TIMER));
 
 		if (BackgroundCountdown.isPaused) {
-			ivPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_play_timer));
+			ivPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_play));
 		} else {
-			ivPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause_timer));
+			ivPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause));
 		}
 
 		super.onResume();
@@ -134,12 +134,12 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 	private void pauseTimer() {
 
 		// Change to play drawable
-		ivPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_play_timer));
+		ivPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_play));
 	}
 
 	private void resumeTimer() {
 
-		ivPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause_timer));
+		ivPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause));
 	}
 
 	@Override

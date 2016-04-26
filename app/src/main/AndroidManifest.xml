@@ -22,17 +22,18 @@
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
-		<receiver android:name=".services.StopTimerBroadcast">
+
+		<receiver android:name=".services.StopTimerBroadcast" android:exported="false">
 			<intent-filter>
 				<action android:name="com.jon.buzz.utils.CustomBroadcasts.STOP_TIMER"/>
 			</intent-filter>
 		</receiver>
-		<receiver android:name=".services.PauseTimerBroadcast">
+		<receiver android:name=".services.PauseTimerBroadcast" android:exported="false">
 			<intent-filter>
 				<action android:name="com.jon.buzz.utils.CustomBroadcasts.PAUSE_TIMER"/>
 			</intent-filter>
 		</receiver>
-		<receiver android:name=".services.PlayTimerBroadcast">
+		<receiver android:name=".services.PlayTimerBroadcast" android:exported="false">
 			<intent-filter>
 				<action android:name="com.jon.buzz.utils.CustomBroadcasts.PLAY_TIMER"/>
 			</intent-filter>

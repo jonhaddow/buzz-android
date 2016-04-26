@@ -52,11 +52,11 @@
 			android:id="@+id/iv_pause_timer"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:contentDescription="@string/pause_timer_content_description"
 			android:paddingEnd="8dp"
-			android:src="@drawable/ic_action_pause_timer"
+			android:src="@drawable/ic_action_pause"
 			android:tint="@android:color/white"
-			tools:ignore="RtlSymmetry"
-			android:contentDescription="@string/pause_timer_content_description"/>
+			tools:ignore="RtlSymmetry"/>
 
 		<ImageView
 			android:id="@+id/iv_stop_timer"

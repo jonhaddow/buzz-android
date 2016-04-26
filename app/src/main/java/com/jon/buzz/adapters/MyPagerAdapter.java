@@ -77,6 +77,7 @@ public class MyPagerAdapter extends FragmentPagerAdapter {
 		}
 	}
 
+	@SuppressWarnings("SameParameterValue")
 	@Nullable
 	public Fragment getFragment(final int position) {
 

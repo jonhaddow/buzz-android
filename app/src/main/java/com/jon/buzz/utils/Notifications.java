@@ -14,8 +14,6 @@ import com.jon.buzz.activities.MainActivity;
  */
 public class Notifications {
 
-	public static final String STOP_TIMER = "com.jon.buzz.utils.Notifications.STOP_TIMER";
-
 	public static Notification.Builder setupRunningNotification(Context context, int timeRemaining) {
 
 		// Create notification that shows while countdown is running
@@ -27,7 +25,7 @@ public class Notifications {
 				.setVisibility(Notification.VISIBILITY_PUBLIC)
 				.setAutoCancel(false)
 				.addAction(new Notification.Action.Builder(
-						Icon.createWithResource(context, R.drawable.ic_action_pause_timer),
+						Icon.createWithResource(context, R.drawable.ic_action_pause),
 						"Pause",
 						createPauseTimerIntent(context)).build()
 				)
@@ -86,7 +84,7 @@ public class Notifications {
 				.setVisibility(Notification.VISIBILITY_PUBLIC)
 				.setAutoCancel(false)
 				.addAction(new Notification.Action.Builder(
-						Icon.createWithResource(context, R.drawable.ic_action_play_timer),
+						Icon.createWithResource(context, R.drawable.ic_action_play),
 						"Play",
 						createPlayTimerIntent(context)).build()
 				)
