@@ -14,12 +14,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 
 import com.jon.buzz.activities.MainActivity;
+import com.jon.buzz.utils.CustomBroadcasts;
 import com.jon.buzz.utils.Notifications;
 
 public class BackgroundCountdown extends Service {
 
-	public static final String SECONDS_REMAINING = "com.jon.buzz.services.SECONDS_REMAINING";
-	public static final String TIME_REMAINING = "com.jon.buzz.services.TIME_REMAINING";
 	private int mSeconds;
 	private NotificationManager mNotificationManager;
 	private PowerManager.WakeLock mWakeLock;
@@ -63,7 +62,7 @@ public class BackgroundCountdown extends Service {
 		// Register receiver
 		broadcastManager = LocalBroadcastManager.getInstance(this);
 		broadcastManager.registerReceiver(receiver,
-				new IntentFilter(MainActivity.STOP_TIMER));
+				new IntentFilter(CustomBroadcasts.STOP_TIMER));
 
 		// Acquire wake lock
 		PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
@@ -144,8 +143,8 @@ public class BackgroundCountdown extends Service {
 	 */
 	private void sendResult(int timeRemaining) {
 
-		Intent intent = new Intent(TIME_REMAINING);
-		intent.putExtra(SECONDS_REMAINING, timeRemaining);
+		Intent intent = new Intent(CustomBroadcasts.TIME_REMAINING);
+		intent.putExtra(CustomBroadcasts.TIME_REMAINING, timeRemaining);
 		broadcastManager.sendBroadcast(intent);
 	}
 }

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.jon.buzz.activities.MainActivity;
+import com.jon.buzz.utils.CustomBroadcasts;
 
 /**
  * Created by Jon Haddow on 25/04/2016
@@ -17,6 +17,6 @@ public class StopTimerBroadcast extends BroadcastReceiver {
 
 		// Send broadcast to BackgroundCountdown
 		LocalBroadcastManager localBroadcastManager = LocalBroadcastManager.getInstance(context);
-		localBroadcastManager.sendBroadcast(new Intent(MainActivity.STOP_TIMER));
+		localBroadcastManager.sendBroadcast(new Intent(CustomBroadcasts.STOP_TIMER));
 	}
 }

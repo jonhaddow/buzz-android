@@ -24,7 +24,7 @@
 		</activity>
 		<receiver android:name=".services.StopTimerBroadcast">
 			<intent-filter>
-				<action android:name="com.jon.buzz.activities.MainActivity.STOP_TIMER"/>
+				<action android:name="com.jon.buzz.utils.CustomBroadcasts.STOP_TIMER"/>
 			</intent-filter>
 		</receiver>
 

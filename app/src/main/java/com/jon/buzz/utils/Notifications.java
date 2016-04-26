@@ -39,7 +39,7 @@ public class Notifications {
 	private static PendingIntent createStopTimerIntent(Context context) {
 
 		// Creates an intent for MainActivity to stop timer
-		Intent notificationIntent = new Intent(MainActivity.STOP_TIMER);
+		Intent notificationIntent = new Intent(CustomBroadcasts.STOP_TIMER);
 		return PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 	}
 
