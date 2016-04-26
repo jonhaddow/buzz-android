@@ -2,6 +2,7 @@ package com.jon.buzz.setTimer;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -106,6 +107,10 @@ public class FragmentSetTimer extends Fragment implements View.OnClickListener, 
 				+ displayIntegers[2] * 600
 				+ displayIntegers[1] * 6000
 				+ displayIntegers[0] * 60000;
+
+		if (overallSeconds == 0) {
+			return;
+		}
 
 		// Pass seconds to main activity to create new timer
 		mMainActivityCallback.startNewTimer(overallSeconds);
