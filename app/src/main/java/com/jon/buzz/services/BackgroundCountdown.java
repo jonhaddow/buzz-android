@@ -13,7 +13,6 @@ import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.jon.buzz.activities.MainActivity;
 import com.jon.buzz.utils.CustomBroadcasts;
 import com.jon.buzz.utils.Notifications;
 
@@ -22,9 +21,12 @@ public class BackgroundCountdown extends Service {
 	private int mSeconds;
 	private NotificationManager mNotificationManager;
 	private PowerManager.WakeLock mWakeLock;
-	private BroadcastReceiver receiver;
+	private BroadcastReceiver mStopTimerReceiver;
 	private LocalBroadcastManager broadcastManager;
 	private CountDownTimer mCountDown;
+	private BroadcastReceiver mPauseTimerReceiver;
+	private int mTimeRemaining;
+	private BroadcastReceiver mPlayTimerReceiver;
 
 	/**
 	 * Checks that a service is currently running
@@ -48,21 +50,45 @@ public class BackgroundCountdown extends Service {
 	public void onCreate() {
 
 		// When a STOP TIMER broadcast is received, stop service
-		receiver = new BroadcastReceiver() {
+		mStopTimerReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 
-				System.out.println("BROADCAST_RELIEVED!");
+				// Cancel notifications, countdown and stop service
 				mNotificationManager.cancelAll();
-				mCountDown.cancel();
+				if (mCountDown != null) {
+					mCountDown.cancel();
+				}
 				stopSelf();
 			}
 		};
 
-		// Register receiver
-		broadcastManager = LocalBroadcastManager.getInstance(this);
-		broadcastManager.registerReceiver(receiver,
+		// When a PAUSE TIMER broadcast is received, pause service
+		mPauseTimerReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+
+				pauseTimer();
+			}
+		};
+
+		// When a PLAY TIMER broadcast is received, resume countdown
+		mPlayTimerReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+
+				resumeTimer();
+			}
+		};
+
+		// Register receivers
+		broadcastManager =  LocalBroadcastManager.getInstance(this);
+		broadcastManager.registerReceiver(mStopTimerReceiver,
 				new IntentFilter(CustomBroadcasts.STOP_TIMER));
+		broadcastManager.registerReceiver(mPauseTimerReceiver,
+				new IntentFilter(CustomBroadcasts.PAUSE_TIMER));
+		broadcastManager.registerReceiver(mPlayTimerReceiver,
+				new IntentFilter(CustomBroadcasts.PLAY_TIMER));
 
 		// Acquire wake lock
 		PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
@@ -71,6 +97,21 @@ public class BackgroundCountdown extends Service {
 		mWakeLock.acquire();
 
 		super.onCreate();
+	}
+
+	private void resumeTimer() {
+
+		// Restart countdown service
+		startCountdownTimer(mTimeRemaining);
+	}
+
+	private void pauseTimer() {
+
+		mCountDown.cancel();
+
+		startForeground(1, Notifications.setupPausedNotification(getApplicationContext(),mTimeRemaining).build());
+
+		sendResult(mTimeRemaining);
 	}
 
 	@Override
@@ -82,20 +123,27 @@ public class BackgroundCountdown extends Service {
 		// Get notification manager
 		mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
+		startCountdownTimer(mSeconds);
+
+		return super.onStartCommand(intent, flags, startId);
+	}
+
+	private void startCountdownTimer(int seconds) {
+
 		// Start countdown service
-		mCountDown = new CountDownTimer(mSeconds * 1000, 1000) {
+		mCountDown = new CountDownTimer(seconds * 1000, 1000) {
 
 			@Override
 			public void onTick(long millisUntilFinished) {
 
 				// Convert milliseconds to seconds
-				int timeRemaining = (int) millisUntilFinished / 1000;
+				mTimeRemaining = (int) millisUntilFinished / 1000;
 
 				// Start foreground notification with time remaining
-				startForeground(1, Notifications.setupRunningNotification(getApplicationContext(), timeRemaining).build());
+				startForeground(1, Notifications.setupRunningNotification(getApplicationContext(), mTimeRemaining).build());
 
 				// Send remaining seconds to main activity to update UI
-				sendResult(timeRemaining);
+				sendResult(mTimeRemaining);
 			}
 
 			@Override
@@ -104,25 +152,23 @@ public class BackgroundCountdown extends Service {
 				// Send broadcast to main activity to update UI
 				sendResult(0);
 
-				// Cancel foreground notification
 				stopForeground(true);
 
 				// Notify user that timer has stopped
 				mNotificationManager.notify(1, Notifications.setupFinishedNotification(getApplicationContext(), mSeconds).build());
 
-				// Stop service
 				stopSelf();
 			}
 		}.start();
-
-		return super.onStartCommand(intent, flags, startId);
 	}
 
 	@Override
 	public void onDestroy() {
 
-		// unregister receiver
-		broadcastManager.unregisterReceiver(receiver);
+		// unregister mStopTimerReceiver
+		broadcastManager.unregisterReceiver(mStopTimerReceiver);
+		broadcastManager.unregisterReceiver(mPauseTimerReceiver);
+		broadcastManager.unregisterReceiver(mPlayTimerReceiver);
 
 		// Release wake lock
 		mWakeLock.release();
