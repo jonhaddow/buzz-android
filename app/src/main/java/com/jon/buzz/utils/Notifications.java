@@ -9,18 +9,20 @@ import android.graphics.drawable.Icon;
 import com.jon.buzz.R;
 import com.jon.buzz.activities.MainActivity;
 
+import java.util.Locale;
+
 /**
  * Created by Jon Haddow on 20/04/2016
  */
 public class Notifications {
 
-	public static Notification.Builder setupRunningNotification(Context context, int timeRemaining) {
+	public static Notification.Builder setupRunningNotification(Context context, TimeConverter myTimer) {
 
 		// Create notification that shows while countdown is running
 		return new Notification.Builder(context)
 				.setSmallIcon(R.drawable.ic_alarm)
 				.setContentTitle(context.getString(R.string.notification_header))
-				.setContentText(timeRemaining + context.getString(R.string.notification_message_running))
+				.setContentText(context.getString(R.string.notification_message_running) + myTimer.toString())
 				.setPriority(Notification.PRIORITY_MAX)
 				.setVisibility(Notification.VISIBILITY_PUBLIC)
 				.setAutoCancel(false)
@@ -60,37 +62,37 @@ public class Notifications {
 		return PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
 	}
 
-	public static Notification.Builder setupFinishedNotification(Context context, int seconds) {
+	public static Notification.Builder setupFinishedNotification(Context context) {
 
 		// Show final notification to indicate that the countdown has finished.
 		return new Notification.Builder(context)
 				.setSmallIcon(R.drawable.ic_alarm)
 				.setContentTitle(context.getString(R.string.notification_header))
-				.setContentText(seconds + context.getString(R.string.notification_message_finished))
+				.setContentText(context.getString(R.string.notification_message_finished))
 				.setPriority(Notification.PRIORITY_MAX)
 				.setVisibility(Notification.VISIBILITY_PUBLIC)
 				.setContentIntent(createRegularIntent(context))
 				.setAutoCancel(true);
 	}
 
-	public static Notification.Builder setupPausedNotification(Context context, int timeRemaining) {
+	public static Notification.Builder setupPausedNotification(Context context, TimeConverter myTimer) {
 
 		// Show Paused notification
 		return new Notification.Builder(context)
 				.setSmallIcon(R.drawable.ic_alarm)
 				.setContentTitle(context.getString(R.string.notification_header))
-				.setContentText(context.getString(R.string.notification_message_paused) + timeRemaining + context.getString(R.string.notification_message_running))
+				.setContentText(context.getString(R.string.notification_message_paused) + myTimer.toString())
 				.setPriority(Notification.PRIORITY_MAX)
 				.setVisibility(Notification.VISIBILITY_PUBLIC)
 				.setAutoCancel(false)
 				.addAction(new Notification.Action.Builder(
 						Icon.createWithResource(context, R.drawable.ic_action_play),
-						"Play",
+						context.getString(R.string.play_action),
 						createPlayTimerIntent(context)).build()
 				)
 				.addAction(new Notification.Action.Builder(
 						Icon.createWithResource(context, R.drawable.ic_action_cancel_timer),
-						"Stop",
+						context.getString(R.string.stop_action),
 						createStopTimerIntent(context)).build()
 				)
 				.setContentIntent(createRegularIntent(context))

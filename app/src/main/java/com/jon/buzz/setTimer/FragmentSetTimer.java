@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.jon.buzz.R;
 import com.jon.buzz.interfaces.StartNewTimerListener;
 import com.jon.buzz.services.BackgroundCountdown;
+import com.jon.buzz.utils.TimeConverter;
 
 
 public class FragmentSetTimer extends Fragment implements View.OnClickListener, View.OnLongClickListener {
@@ -103,17 +104,22 @@ public class FragmentSetTimer extends Fragment implements View.OnClickListener, 
 		// Calculate length of timer in seconds
 		int overallSeconds = displayIntegers[5]
 				+ displayIntegers[4] * 10
+
 				+ displayIntegers[3] * 60
 				+ displayIntegers[2] * 600
-				+ displayIntegers[1] * 6000
-				+ displayIntegers[0] * 60000;
+
+				+ displayIntegers[1] * 3600
+				+ displayIntegers[0] * 36000;
 
 		if (overallSeconds == 0) {
 			return;
 		}
 
+		// Pass the number of milliseconds into TimeConverter class
+		TimeConverter myTimer = new TimeConverter(overallSeconds * 1000);
+
 		// Pass seconds to main activity to create new timer
-		mMainActivityCallback.startNewTimer(overallSeconds);
+		mMainActivityCallback.startNewTimer(myTimer);
 	}
 
 	@Override

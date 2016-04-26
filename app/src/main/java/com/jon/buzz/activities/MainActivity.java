@@ -21,12 +21,15 @@ import com.jon.buzz.interfaces.StartNewTimerListener;
 import com.jon.buzz.recentTimers.FragmentRecentTimers;
 import com.jon.buzz.services.BackgroundCountdown;
 import com.jon.buzz.utils.CustomBroadcasts;
+import com.jon.buzz.utils.TimeConverter;
+
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements StartNewTimerListener, View.OnClickListener {
 
 	private TextView mTvTimeRemaining;
 	private BroadcastReceiver mTimeRemainingReceiver;
-	private int mSeconds;
 	private LocalBroadcastManager broadcastManager;
 	private MyPagerAdapter mPagerAdapter;
 	private ImageView mIvStopTimer;
@@ -108,13 +111,15 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		super.onResume();
 	}
 
-	private void updateTimeRemaining(int timeRemaining) {
+	private void updateTimeRemaining(int milliRemaining) {
+
+		TimeConverter myTimer = new TimeConverter(milliRemaining);
 
 		String mTextToDisplay;
-		if (timeRemaining != 0) {
-			mTextToDisplay = "Time remaining... " + timeRemaining + " seconds";
+		if (milliRemaining != 0) {
+			mTextToDisplay = "Time remaining: " + myTimer.toString();
 		} else {
-			mTextToDisplay = mSeconds + " second timer complete!";
+			mTextToDisplay = "Timer complete!";
 			mIvPauseTimer.setVisibility(View.INVISIBLE);
 			mIvStopTimer.setVisibility(View.INVISIBLE);
 		}
@@ -219,23 +224,20 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 	/**
 	 * This method is called from set timer to add a timer to the list adapter on timer list fragment
 	 *
-	 * @param seconds number of seconds to set timer for
+	 * @param myTimer number of seconds to set timer for
 	 */
 	@Override
-	public void startNewTimer(int seconds) {
-
-		// Save current timer seconds
-		mSeconds = seconds;
+	public void startNewTimer(TimeConverter myTimer) {
 
 		// Start a new countdown service
 		Intent countdownIntent = new Intent(this, BackgroundCountdown.class);
-		countdownIntent.putExtra("Seconds", seconds);
+		countdownIntent.putExtra("Milli", myTimer.getMilli());
 		startService(countdownIntent);
 
 		// Add timer to recent timers list
 		FragmentRecentTimers recentTimers = ((FragmentRecentTimers) mPagerAdapter.getFragment(1));
 		if (recentTimers != null) {
-			recentTimers.addTimerToList(seconds);
+			recentTimers.addTimerToList(myTimer);
 		}
 
 		mIvStopTimer.setVisibility(View.VISIBLE);

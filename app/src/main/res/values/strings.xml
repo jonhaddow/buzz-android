@@ -18,11 +18,13 @@
     <string name="secs_text">s</string>
     <string name="minute_text">m</string>
     <string name="hours_text">h</string>
-    <string name="notification_message_running">" seconds remaining…"</string>
+    <string name="notification_message_running">"Time Remaining: "</string>
     <string name="notification_message_paused">"Timer paused: "</string>
-    <string name="notification_message_finished">" second timer is complete"</string>
+    <string name="notification_message_finished">"Timer Complete!"</string>
     <string name="notification_header">Buzz</string>
     <string name="cd_ib_delete">Backspace</string>
     <string name="stop_timer_content_description">Stop Timer</string>
 	<string name="pause_timer_content_description">Pause Timer</string>
+	<string name="play_action">Play</string>
+	<string name="stop_action">Stop</string>
 </resources>

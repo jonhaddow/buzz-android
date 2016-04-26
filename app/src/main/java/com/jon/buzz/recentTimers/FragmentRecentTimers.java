@@ -9,12 +9,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.jon.buzz.R;
+import com.jon.buzz.utils.TimeConverter;
 
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class FragmentRecentTimers extends Fragment {
 
@@ -59,10 +61,10 @@ public class FragmentRecentTimers extends Fragment {
 		}
 	}
 
-	public void addTimerToList(int seconds) {
+	public void addTimerToList(TimeConverter myTimer) {
 
 		// Adds timer to the top of list
-		mTimers.add(0, String.valueOf(seconds));
+		mTimers.add(0, myTimer.toString());
 
 		// Limit list to a set number of items
 		if (mTimers.size() == LIST_LIMIT) {
