@@ -22,6 +22,21 @@
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
+		<receiver android:name=".services.StopTimerBroadcast">
+			<intent-filter>
+				<action android:name="com.jon.buzz.utils.CustomBroadcasts.STOP_TIMER"/>
+			</intent-filter>
+		</receiver>
+		<receiver android:name=".services.PauseTimerBroadcast">
+			<intent-filter>
+				<action android:name="com.jon.buzz.utils.CustomBroadcasts.PAUSE_TIMER"/>
+			</intent-filter>
+		</receiver>
+		<receiver android:name=".services.PlayTimerBroadcast">
+			<intent-filter>
+				<action android:name="com.jon.buzz.utils.CustomBroadcasts.PLAY_TIMER"/>
+			</intent-filter>
+		</receiver>
 
 	</application>
 

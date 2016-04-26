@@ -20,10 +20,10 @@ import com.jon.buzz.adapters.MyPagerAdapter;
 import com.jon.buzz.interfaces.StartNewTimerListener;
 import com.jon.buzz.recentTimers.FragmentRecentTimers;
 import com.jon.buzz.services.BackgroundCountdown;
+import com.jon.buzz.utils.CustomBroadcasts;
+import com.jon.buzz.utils.Notifications;
 
 public class MainActivity extends AppCompatActivity implements StartNewTimerListener, View.OnClickListener {
-
-	public static final String STOP_TIMER = "com.jon.buzz.activities.MainActivity.STOP_TIMER";
 
 	private TextView mTvTimeRemaining;
 	private BroadcastReceiver receiver;
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 			public void onReceive(Context context, Intent intent) {
 
 				if (intent != null) {
-					updateTimeRemaining(intent.getIntExtra(BackgroundCountdown.SECONDS_REMAINING, 0));
+					updateTimeRemaining(intent.getIntExtra(CustomBroadcasts.TIME_REMAINING, 0));
 				}
 			}
 		};
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		// Register receiver
 		broadcastManager = LocalBroadcastManager.getInstance(this);
 		broadcastManager.registerReceiver((receiver),
-				new IntentFilter(BackgroundCountdown.TIME_REMAINING));
+				new IntentFilter(CustomBroadcasts.TIME_REMAINING));
 
 		super.onResume();
 	}
@@ -83,22 +83,6 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		// Support toolbar
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-
-		// Get time remaining reference
-		mTvTimeRemaining = (TextView) findViewById(R.id.tv_time_remaining);
-
-		// Set on click listener for stop timer image.
-		ivStopTimer = (ImageView) findViewById(R.id.iv_stop_timer);
-		if (ivStopTimer != null) {
-			ivStopTimer.setOnClickListener(this);
-
-			// If countdown is running enable stop time button
-			if (BackgroundCountdown.isMyServiceRunning(this, BackgroundCountdown.class)) {
-				ivStopTimer.setVisibility(View.VISIBLE);
-			} else {
-				ivStopTimer.setVisibility(View.INVISIBLE);
-			}
-		}
 
 		// Instantiate view pager and pager adapter
 		final ViewPager mPager = (ViewPager) findViewById(R.id.pager);
@@ -137,6 +121,22 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		if (mPager != null) {
 			mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 		}
+
+		// Get time remaining reference
+		mTvTimeRemaining = (TextView) findViewById(R.id.tv_time_remaining);
+
+		// Set on click listener for stop timer image.
+		ivStopTimer = (ImageView) findViewById(R.id.iv_stop_timer);
+		if (ivStopTimer != null) {
+			ivStopTimer.setOnClickListener(this);
+
+			// If countdown is running enable stop time button
+			if (BackgroundCountdown.isMyServiceRunning(this, BackgroundCountdown.class)) {
+				ivStopTimer.setVisibility(View.VISIBLE);
+			} else {
+				ivStopTimer.setVisibility(View.INVISIBLE);
+			}
+		}
 	}
 
 	/**
@@ -174,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		mTvTimeRemaining.setText("");
 
 		// Stop Timer service
-		broadcastManager.sendBroadcast(new Intent(STOP_TIMER));
+		broadcastManager.sendBroadcast(new Intent(CustomBroadcasts.STOP_TIMER));
 
 		ivStopTimer.setVisibility(View.INVISIBLE);
 	}

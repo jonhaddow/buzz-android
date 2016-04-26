@@ -5,15 +5,17 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Icon;
-import android.support.v4.app.TaskStackBuilder;
 
 import com.jon.buzz.R;
 import com.jon.buzz.activities.MainActivity;
+import com.jon.buzz.services.BackgroundCountdown;
 
 /**
  * Created by Jon Haddow on 20/04/2016
  */
 public class Notifications {
+
+	public static final String STOP_TIMER = "com.jon.buzz.utils.Notifications.STOP_TIMER";
 
 	public static Notification.Builder setupRunningNotification(Context context, int timeRemaining) {
 
@@ -26,54 +28,38 @@ public class Notifications {
 				.setVisibility(Notification.VISIBILITY_PUBLIC)
 				.setAutoCancel(false)
 				.addAction(new Notification.Action.Builder(
-						Icon.createWithResource(context, R.drawable.ic_action_stop_timer),
-						"Stop Timer",
-						createOnNotificationStopClickIntent(context)).build()
+						Icon.createWithResource(context, R.drawable.ic_action_pause_timer),
+						"Pause",
+						createPauseTimerIntent(context)).build()
 				)
-				.setContentIntent(createOnNotificationClickIntent(context))
+				.addAction(new Notification.Action.Builder(
+						Icon.createWithResource(context, R.drawable.ic_action_stop_timer),
+						"Stop",
+						createStopTimerIntent(context)).build()
+				)
+				.setContentIntent(createRegularIntent(context))
 				.setOngoing(true);
 	}
 
-	private static PendingIntent createOnNotificationStopClickIntent(Context context) {
+	private static PendingIntent createPauseTimerIntent(Context context) {
 
-		// Creates an intent for MainActivity to load timerList fragment
-		Intent notificationIntent = new Intent(context, MainActivity.class);
-		notificationIntent.putExtra("type", "StopTimer");
-		notificationIntent.setAction("onNotificationStop");
-
-		// Create artificial back stack for the intent
-		TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-		stackBuilder.addParentStack(MainActivity.class);
-
-		// Adds the Intent that starts the Activity to the top of the stack
-		stackBuilder.addNextIntent(notificationIntent);
-
-		// Set stack as pending intent for when the notification is clicked
-		return stackBuilder.getPendingIntent(
-				0,
-				PendingIntent.FLAG_ONE_SHOT
-		);
+		// Creates an intent for MainActivity to pause timer
+		Intent notificationIntent = new Intent(CustomBroadcasts.PAUSE_TIMER);
+		return PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 	}
 
-	private static PendingIntent createOnNotificationClickIntent(Context context) {
+	private static PendingIntent createStopTimerIntent(Context context) {
 
-		// Creates an intent for MainActivity to load timerList fragment
+		// Creates an intent for MainActivity to stop timer
+		Intent notificationIntent = new Intent(CustomBroadcasts.STOP_TIMER);
+		return PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+	}
+
+	private static PendingIntent createRegularIntent(Context context) {
+
+		// Creates an intent for MainActivity
 		Intent notificationIntent = new Intent(context, MainActivity.class);
-		notificationIntent.putExtra("type", "TimerList");
-		notificationIntent.setAction("onNotification");
-
-		// Create artificial back stack for the intent
-		TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-		stackBuilder.addParentStack(MainActivity.class);
-
-		// Adds the Intent that starts the Activity to the top of the stack
-		stackBuilder.addNextIntent(notificationIntent);
-
-		// Set stack as pending intent for when the notification is clicked
-		return stackBuilder.getPendingIntent(
-				0,
-				PendingIntent.FLAG_ONE_SHOT
-		);
+		return PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
 	}
 
 	public static Notification.Builder setupFinishedNotification(Context context, int seconds) {
@@ -85,7 +71,38 @@ public class Notifications {
 				.setContentText(seconds + context.getString(R.string.notification_message_finished))
 				.setPriority(Notification.PRIORITY_MAX)
 				.setVisibility(Notification.VISIBILITY_PUBLIC)
-				.setContentIntent(createOnNotificationClickIntent(context))
+				.setContentIntent(createRegularIntent(context))
 				.setAutoCancel(true);
+	}
+
+	public static Notification.Builder setupPausedNotification(Context context, int timeRemaining) {
+
+		// Show Paused notification
+		return new Notification.Builder(context)
+				.setSmallIcon(R.drawable.ic_alarm)
+				.setContentTitle(context.getString(R.string.notification_header))
+				.setContentText(context.getString(R.string.notification_message_paused) + timeRemaining + context.getString(R.string.notification_message_running))
+				.setPriority(Notification.PRIORITY_MAX)
+				.setVisibility(Notification.VISIBILITY_PUBLIC)
+				.setAutoCancel(false)
+				.addAction(new Notification.Action.Builder(
+						Icon.createWithResource(context, R.drawable.ic_action_play_timer),
+						"Play",
+						createPlayTimerIntent(context)).build()
+				)
+				.addAction(new Notification.Action.Builder(
+						Icon.createWithResource(context, R.drawable.ic_action_stop_timer),
+						"Stop",
+						createStopTimerIntent(context)).build()
+				)
+				.setContentIntent(createRegularIntent(context))
+				.setOngoing(true);
+	}
+
+	private static PendingIntent createPlayTimerIntent(Context context) {
+
+		// Creates an intent for MainActivity to play timer
+		Intent notificationIntent = new Intent(CustomBroadcasts.PLAY_TIMER);
+		return PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
 	}
 }
