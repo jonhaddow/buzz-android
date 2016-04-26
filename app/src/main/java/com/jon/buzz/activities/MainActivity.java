@@ -29,8 +29,8 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 	private int mSeconds;
 	private LocalBroadcastManager broadcastManager;
 	private MyPagerAdapter mPagerAdapter;
-	private ImageView ivStopTimer;
-	private ImageView ivPauseTimer;
+	private ImageView mIvStopTimer;
+	private ImageView mIvPauseTimer;
 	private BroadcastReceiver mStopTimerReceiver;
 	private BroadcastReceiver mPauseTimerReceiver;
 	private BroadcastReceiver mPlayTimerReceiver;
@@ -100,9 +100,9 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 				new IntentFilter(CustomBroadcasts.PLAY_TIMER));
 
 		if (BackgroundCountdown.isPaused) {
-			ivPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_play));
+			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_play));
 		} else {
-			ivPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause));
+			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause));
 		}
 
 		super.onResume();
@@ -115,6 +115,8 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 			mTextToDisplay = "Time remaining... " + timeRemaining + " seconds";
 		} else {
 			mTextToDisplay = mSeconds + " second timer complete!";
+			mIvPauseTimer.setVisibility(View.INVISIBLE);
+			mIvStopTimer.setVisibility(View.INVISIBLE);
 		}
 		mTvTimeRemaining.setText(mTextToDisplay);
 	}
@@ -127,19 +129,20 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		// Clear time remaining text on bottom bar
 		mTvTimeRemaining.setText("");
 
-		ivStopTimer.setVisibility(View.INVISIBLE);
-		ivPauseTimer.setVisibility(View.INVISIBLE);
+		mIvStopTimer.setVisibility(View.INVISIBLE);
+		mIvPauseTimer.setVisibility(View.INVISIBLE);
 	}
 
 	private void pauseTimer() {
 
 		// Change to play drawable
-		ivPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_play));
+		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_play));
 	}
 
 	private void resumeTimer() {
 
-		ivPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause));
+		// Change to pause drawable
+		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause));
 	}
 
 	@Override
@@ -192,23 +195,23 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 
 		mTvTimeRemaining = (TextView) findViewById(R.id.tv_time_remaining);
 
-		ivPauseTimer = (ImageView) findViewById(R.id.iv_pause_timer);
-		if (ivPauseTimer != null) {
-			ivPauseTimer.setOnClickListener(this);
+		mIvPauseTimer = (ImageView) findViewById(R.id.iv_pause_timer);
+		if (mIvPauseTimer != null) {
+			mIvPauseTimer.setOnClickListener(this);
 		}
 
-		ivStopTimer = (ImageView) findViewById(R.id.iv_stop_timer);
-		if (ivStopTimer != null) {
-			ivStopTimer.setOnClickListener(this);
+		mIvStopTimer = (ImageView) findViewById(R.id.iv_stop_timer);
+		if (mIvStopTimer != null) {
+			mIvStopTimer.setOnClickListener(this);
 		}
 
 		// If countdown is running enable stop timer and pause timer button
 		if (BackgroundCountdown.isMyServiceRunning(this, BackgroundCountdown.class)) {
-			ivStopTimer.setVisibility(View.VISIBLE);
-			ivPauseTimer.setVisibility(View.VISIBLE);
+			mIvStopTimer.setVisibility(View.VISIBLE);
+			mIvPauseTimer.setVisibility(View.VISIBLE);
 		} else {
-			ivStopTimer.setVisibility(View.INVISIBLE);
-			ivPauseTimer.setVisibility(View.INVISIBLE);
+			mIvStopTimer.setVisibility(View.INVISIBLE);
+			mIvPauseTimer.setVisibility(View.INVISIBLE);
 		}
 
 	}
@@ -235,8 +238,8 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 			recentTimers.addTimerToList(seconds);
 		}
 
-		ivStopTimer.setVisibility(View.VISIBLE);
-		ivPauseTimer.setVisibility(View.VISIBLE);
+		mIvStopTimer.setVisibility(View.VISIBLE);
+		mIvPauseTimer.setVisibility(View.VISIBLE);
 	}
 
 	@Override
