@@ -8,7 +8,6 @@ import android.graphics.drawable.Icon;
 
 import com.jon.buzz.R;
 import com.jon.buzz.activities.MainActivity;
-import com.jon.buzz.services.BackgroundCountdown;
 
 /**
  * Created by Jon Haddow on 20/04/2016
@@ -33,7 +32,7 @@ public class Notifications {
 						createPauseTimerIntent(context)).build()
 				)
 				.addAction(new Notification.Action.Builder(
-						Icon.createWithResource(context, R.drawable.ic_action_stop_timer),
+						Icon.createWithResource(context, R.drawable.ic_action_cancel_timer),
 						"Stop",
 						createStopTimerIntent(context)).build()
 				)
@@ -91,7 +90,7 @@ public class Notifications {
 						createPlayTimerIntent(context)).build()
 				)
 				.addAction(new Notification.Action.Builder(
-						Icon.createWithResource(context, R.drawable.ic_action_stop_timer),
+						Icon.createWithResource(context, R.drawable.ic_action_cancel_timer),
 						"Stop",
 						createStopTimerIntent(context)).build()
 				)
