@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 	private MyPagerAdapter mPagerAdapter;
 	private ImageView ivStopTimer;
 	private ImageView ivPauseTimer;
-	private boolean isPaused;
 	private BroadcastReceiver mStopTimerReceiver;
 	private BroadcastReceiver mPauseTimerReceiver;
 	private BroadcastReceiver mPlayTimerReceiver;
@@ -109,20 +108,15 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		super.onResume();
 	}
 
-	private void resumeTimer() {
+	private void updateTimeRemaining(int timeRemaining) {
 
-		ivPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause_timer));
-
-		isPaused = false;
-
-	}
-
-	private void pauseTimer() {
-
-		// Change to play drawable
-		ivPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_play_timer));
-
-		isPaused = true;
+		String mTextToDisplay;
+		if (timeRemaining != 0) {
+			mTextToDisplay = "Time remaining... " + timeRemaining + " seconds";
+		} else {
+			mTextToDisplay = mSeconds + " second timer complete!";
+		}
+		mTvTimeRemaining.setText(mTextToDisplay);
 	}
 
 	private void stopTimer() {
@@ -137,15 +131,15 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		ivPauseTimer.setVisibility(View.INVISIBLE);
 	}
 
-	private void updateTimeRemaining(int timeRemaining) {
+	private void pauseTimer() {
 
-		String textToDisplay;
-		if (timeRemaining != 0) {
-			textToDisplay = "Time remaining... " + timeRemaining + " seconds";
-		} else {
-			textToDisplay = mSeconds + " second timer complete!";
-		}
-		mTvTimeRemaining.setText(textToDisplay);
+		// Change to play drawable
+		ivPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_play_timer));
+	}
+
+	private void resumeTimer() {
+
+		ivPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause_timer));
 	}
 
 	@Override

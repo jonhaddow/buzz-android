@@ -58,6 +58,7 @@ public class Notifications {
 
 		// Creates an intent for MainActivity
 		Intent notificationIntent = new Intent(context, MainActivity.class);
+		notificationIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		return PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
 	}
 
