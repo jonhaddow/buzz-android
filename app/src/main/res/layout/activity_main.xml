@@ -1,8 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical">
 
 	<android.support.v7.widget.Toolbar
@@ -43,16 +43,27 @@
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
+			android:freezesText="true"
 			android:textColor="@color/textColour"
 			android:textSize="18sp"
 			tools:text="Timer Remaining: 100 seconds"/>
+
+		<ImageView
+			android:id="@+id/iv_pause_timer"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:contentDescription="@string/pause_timer_content_description"
+			android:paddingEnd="8dp"
+			android:src="@drawable/ic_action_pause"
+			android:tint="@android:color/white"
+			tools:ignore="RtlSymmetry"/>
 
 		<ImageView
 			android:id="@+id/iv_stop_timer"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:contentDescription="@string/stop_timer_content_description"
-			android:src="@drawable/ic_action_stop_timer"
+			android:src="@drawable/ic_action_cancel_timer"
 			android:tint="@android:color/white"/>
 
 	</LinearLayout>

@@ -20,22 +20,29 @@ import com.jon.buzz.adapters.MyPagerAdapter;
 import com.jon.buzz.interfaces.StartNewTimerListener;
 import com.jon.buzz.recentTimers.FragmentRecentTimers;
 import com.jon.buzz.services.BackgroundCountdown;
+import com.jon.buzz.utils.CustomBroadcasts;
 
 public class MainActivity extends AppCompatActivity implements StartNewTimerListener, View.OnClickListener {
 
-	public static final String STOP_TIMER = "com.jon.buzz.activities.MainActivity.STOP_TIMER";
-
 	private TextView mTvTimeRemaining;
-	private BroadcastReceiver receiver;
+	private BroadcastReceiver mTimeRemainingReceiver;
 	private int mSeconds;
 	private LocalBroadcastManager broadcastManager;
 	private MyPagerAdapter mPagerAdapter;
+	private ImageView mIvStopTimer;
+	private ImageView mIvPauseTimer;
+	private BroadcastReceiver mStopTimerReceiver;
+	private BroadcastReceiver mPauseTimerReceiver;
+	private BroadcastReceiver mPlayTimerReceiver;
 
 	@Override
 	protected void onPause() {
 
 		// Unregister receiver
-		broadcastManager.unregisterReceiver(receiver);
+		broadcastManager.unregisterReceiver(mTimeRemainingReceiver);
+		broadcastManager.unregisterReceiver(mPauseTimerReceiver);
+		broadcastManager.unregisterReceiver(mPlayTimerReceiver);
+		broadcastManager.unregisterReceiver(mStopTimerReceiver);
 
 		super.onPause();
 	}
@@ -44,33 +51,98 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 	protected void onResume() {
 
 		// When broadcast is received, update time remaining
-		receiver = new BroadcastReceiver() {
+		mTimeRemainingReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 
 				if (intent != null) {
-					updateTimeRemaining(intent.getIntExtra(BackgroundCountdown.SECONDS_REMAINING, 0));
+					updateTimeRemaining(intent.getIntExtra(CustomBroadcasts.TIME_REMAINING, 0));
 				}
 			}
 		};
 
-		// Register receiver
+		// When a STOP TIMER broadcast is received, stop service
+		mStopTimerReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+
+				stopTimer();
+			}
+		};
+
+		// When a PAUSE TIMER broadcast is received, pause service
+		mPauseTimerReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+
+				pauseTimer();
+			}
+		};
+
+		// When a PLAY TIMER broadcast is received, resume countdown
+		mPlayTimerReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+
+				resumeTimer();
+			}
+		};
+
+		// Register receivers
 		broadcastManager = LocalBroadcastManager.getInstance(this);
-		broadcastManager.registerReceiver((receiver),
-				new IntentFilter(BackgroundCountdown.TIME_REMAINING));
+		broadcastManager.registerReceiver((mTimeRemainingReceiver),
+				new IntentFilter(CustomBroadcasts.TIME_REMAINING));
+		broadcastManager.registerReceiver(mStopTimerReceiver,
+				new IntentFilter(CustomBroadcasts.STOP_TIMER));
+		broadcastManager.registerReceiver(mPauseTimerReceiver,
+				new IntentFilter(CustomBroadcasts.PAUSE_TIMER));
+		broadcastManager.registerReceiver(mPlayTimerReceiver,
+				new IntentFilter(CustomBroadcasts.PLAY_TIMER));
+
+		if (BackgroundCountdown.isPaused) {
+			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_play));
+		} else {
+			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause));
+		}
 
 		super.onResume();
 	}
 
 	private void updateTimeRemaining(int timeRemaining) {
 
-		String textToDisplay;
+		String mTextToDisplay;
 		if (timeRemaining != 0) {
-			textToDisplay = "Time remaining... " + timeRemaining + " seconds";
+			mTextToDisplay = "Time remaining... " + timeRemaining + " seconds";
 		} else {
-			textToDisplay = mSeconds + " second timer complete!";
+			mTextToDisplay = mSeconds + " second timer complete!";
+			mIvPauseTimer.setVisibility(View.INVISIBLE);
+			mIvStopTimer.setVisibility(View.INVISIBLE);
 		}
-		mTvTimeRemaining.setText(textToDisplay);
+		mTvTimeRemaining.setText(mTextToDisplay);
+	}
+
+	private void stopTimer() {
+
+		// Cancel all notifications
+		((NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+
+		// Clear time remaining text on bottom bar
+		mTvTimeRemaining.setText("");
+
+		mIvStopTimer.setVisibility(View.INVISIBLE);
+		mIvPauseTimer.setVisibility(View.INVISIBLE);
+	}
+
+	private void pauseTimer() {
+
+		// Change to play drawable
+		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_play));
+	}
+
+	private void resumeTimer() {
+
+		// Change to pause drawable
+		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause));
 	}
 
 	@Override
@@ -82,15 +154,6 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		// Support toolbar
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-
-		// Get time remaining reference
-		mTvTimeRemaining = (TextView) findViewById(R.id.tv_time_remaining);
-
-		// Set on click listener for stop timer image.
-		ImageView ivStopTimer = (ImageView) findViewById(R.id.iv_stop_timer);
-		if (ivStopTimer != null) {
-			ivStopTimer.setOnClickListener(this);
-		}
 
 		// Instantiate view pager and pager adapter
 		final ViewPager mPager = (ViewPager) findViewById(R.id.pager);
@@ -129,6 +192,28 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		if (mPager != null) {
 			mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 		}
+
+		mTvTimeRemaining = (TextView) findViewById(R.id.tv_time_remaining);
+
+		mIvPauseTimer = (ImageView) findViewById(R.id.iv_pause_timer);
+		if (mIvPauseTimer != null) {
+			mIvPauseTimer.setOnClickListener(this);
+		}
+
+		mIvStopTimer = (ImageView) findViewById(R.id.iv_stop_timer);
+		if (mIvStopTimer != null) {
+			mIvStopTimer.setOnClickListener(this);
+		}
+
+		// If countdown is running enable stop timer and pause timer button
+		if (BackgroundCountdown.isMyServiceRunning(this, BackgroundCountdown.class)) {
+			mIvStopTimer.setVisibility(View.VISIBLE);
+			mIvPauseTimer.setVisibility(View.VISIBLE);
+		} else {
+			mIvStopTimer.setVisibility(View.INVISIBLE);
+			mIvPauseTimer.setVisibility(View.INVISIBLE);
+		}
+
 	}
 
 	/**
@@ -152,18 +237,33 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		if (recentTimers != null) {
 			recentTimers.addTimerToList(seconds);
 		}
+
+		mIvStopTimer.setVisibility(View.VISIBLE);
+		mIvPauseTimer.setVisibility(View.VISIBLE);
 	}
 
 	@Override
 	public void onClick(View view) {
 
-		// Cancel all notifications
-		((NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+		switch (view.getId()) {
+			case R.id.iv_stop_timer:
 
-		// Clear time remaining text on bottom bar
-		mTvTimeRemaining.setText("");
+				// Send stop timer broadcast to service
+				broadcastManager.sendBroadcast(new Intent(CustomBroadcasts.STOP_TIMER));
 
-		// Stop Timer service
-		broadcastManager.sendBroadcast(new Intent(STOP_TIMER));
+				break;
+
+			case R.id.iv_pause_timer:
+
+				if (BackgroundCountdown.isPaused) {
+
+					// Send play timer broadcast to service
+					broadcastManager.sendBroadcast(new Intent(CustomBroadcasts.PLAY_TIMER));
+				} else {
+
+					// Send pause timer broadcast to service
+					broadcastManager.sendBroadcast(new Intent(CustomBroadcasts.PAUSE_TIMER));
+				}
+		}
 	}
 }
