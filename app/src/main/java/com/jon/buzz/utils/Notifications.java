@@ -9,8 +9,6 @@ import android.graphics.drawable.Icon;
 import com.jon.buzz.R;
 import com.jon.buzz.activities.MainActivity;
 
-import java.util.Locale;
-
 /**
  * Created by Jon Haddow on 20/04/2016
  */
@@ -43,15 +41,17 @@ public class Notifications {
 	private static PendingIntent createPauseTimerIntent(Context context) {
 
 		// Creates an intent for MainActivity to pause timer
-		Intent notificationIntent = new Intent(CustomBroadcasts.PAUSE_TIMER);
-		return PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		Intent notificationIntent = new Intent(CustomBroadcasts.BROADCAST);
+		notificationIntent.putExtra("type", CustomBroadcasts.PAUSE_TIMER);
+		return PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 
 	private static PendingIntent createStopTimerIntent(Context context) {
 
 		// Creates an intent for MainActivity to stop timer
-		Intent notificationIntent = new Intent(CustomBroadcasts.STOP_TIMER);
-		return PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		Intent notificationIntent = new Intent(CustomBroadcasts.BROADCAST);
+		notificationIntent.putExtra("type", CustomBroadcasts.STOP_TIMER);
+		return PendingIntent.getBroadcast(context, 1, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 
 	private static PendingIntent createRegularIntent(Context context) {
@@ -102,7 +102,8 @@ public class Notifications {
 	private static PendingIntent createPlayTimerIntent(Context context) {
 
 		// Creates an intent for MainActivity to play timer
-		Intent notificationIntent = new Intent(CustomBroadcasts.PLAY_TIMER);
-		return PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		Intent notificationIntent = new Intent(CustomBroadcasts.BROADCAST);
+		notificationIntent.putExtra("type", CustomBroadcasts.PLAY_TIMER);
+		return PendingIntent.getBroadcast(context, 2, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 }

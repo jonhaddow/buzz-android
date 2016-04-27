@@ -23,29 +23,20 @@ import com.jon.buzz.services.BackgroundCountdown;
 import com.jon.buzz.utils.CustomBroadcasts;
 import com.jon.buzz.utils.TimeConverter;
 
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-
 public class MainActivity extends AppCompatActivity implements StartNewTimerListener, View.OnClickListener {
 
 	private TextView mTvTimeRemaining;
-	private BroadcastReceiver mTimeRemainingReceiver;
 	private LocalBroadcastManager broadcastManager;
 	private MyPagerAdapter mPagerAdapter;
 	private ImageView mIvStopTimer;
 	private ImageView mIvPauseTimer;
-	private BroadcastReceiver mStopTimerReceiver;
-	private BroadcastReceiver mPauseTimerReceiver;
-	private BroadcastReceiver mPlayTimerReceiver;
+	private BroadcastReceiver mBroadcastReceiver;
 
 	@Override
 	protected void onPause() {
 
 		// Unregister receiver
-		broadcastManager.unregisterReceiver(mTimeRemainingReceiver);
-		broadcastManager.unregisterReceiver(mPauseTimerReceiver);
-		broadcastManager.unregisterReceiver(mPlayTimerReceiver);
-		broadcastManager.unregisterReceiver(mStopTimerReceiver);
+		broadcastManager.unregisterReceiver(mBroadcastReceiver);
 
 		super.onPause();
 	}
@@ -53,54 +44,34 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 	@Override
 	protected void onResume() {
 
-		// When broadcast is received, update time remaining
-		mTimeRemainingReceiver = new BroadcastReceiver() {
+		mBroadcastReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 
-				if (intent != null) {
-					updateTimeRemaining(intent.getIntExtra(CustomBroadcasts.TIME_REMAINING, 0));
+				// Get type of broadcast.
+				String type = intent.getStringExtra("type");
+
+				// Deal with broadcast depending on the type.
+				switch (type) {
+					case CustomBroadcasts.TIME_REMAINING:
+						updateTimeRemaining(intent.getIntExtra(CustomBroadcasts.TIME_REMAINING, 0));
+						break;
+					case CustomBroadcasts.STOP_TIMER:
+						stopTimer();
+						break;
+					case CustomBroadcasts.PAUSE_TIMER:
+						pauseTimer();
+						break;
+					case CustomBroadcasts.PLAY_TIMER:
+						resumeTimer();
 				}
-			}
-		};
-
-		// When a STOP TIMER broadcast is received, stop service
-		mStopTimerReceiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-
-				stopTimer();
-			}
-		};
-
-		// When a PAUSE TIMER broadcast is received, pause service
-		mPauseTimerReceiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-
-				pauseTimer();
-			}
-		};
-
-		// When a PLAY TIMER broadcast is received, resume countdown
-		mPlayTimerReceiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-
-				resumeTimer();
 			}
 		};
 
 		// Register receivers
 		broadcastManager = LocalBroadcastManager.getInstance(this);
-		broadcastManager.registerReceiver((mTimeRemainingReceiver),
-				new IntentFilter(CustomBroadcasts.TIME_REMAINING));
-		broadcastManager.registerReceiver(mStopTimerReceiver,
-				new IntentFilter(CustomBroadcasts.STOP_TIMER));
-		broadcastManager.registerReceiver(mPauseTimerReceiver,
-				new IntentFilter(CustomBroadcasts.PAUSE_TIMER));
-		broadcastManager.registerReceiver(mPlayTimerReceiver,
-				new IntentFilter(CustomBroadcasts.PLAY_TIMER));
+		broadcastManager.registerReceiver((mBroadcastReceiver),
+				new IntentFilter(CustomBroadcasts.BROADCAST));
 
 		if (BackgroundCountdown.isPaused) {
 			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_play));
@@ -256,7 +227,9 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 			case R.id.iv_stop_timer:
 
 				// Send stop timer broadcast to service
-				broadcastManager.sendBroadcast(new Intent(CustomBroadcasts.STOP_TIMER));
+				Intent stopIntent = new Intent(CustomBroadcasts.BROADCAST);
+				stopIntent.putExtra("type", CustomBroadcasts.STOP_TIMER);
+				broadcastManager.sendBroadcast(stopIntent);
 
 				break;
 
@@ -265,11 +238,15 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 				if (BackgroundCountdown.isPaused) {
 
 					// Send play timer broadcast to service
-					broadcastManager.sendBroadcast(new Intent(CustomBroadcasts.PLAY_TIMER));
+					Intent playIntent = new Intent(CustomBroadcasts.BROADCAST);
+					playIntent.putExtra("type", CustomBroadcasts.PLAY_TIMER);
+					broadcastManager.sendBroadcast(playIntent);
 				} else {
 
 					// Send pause timer broadcast to service
-					broadcastManager.sendBroadcast(new Intent(CustomBroadcasts.PAUSE_TIMER));
+					Intent pauseIntent = new Intent(CustomBroadcasts.BROADCAST);
+					pauseIntent.putExtra("type", CustomBroadcasts.PAUSE_TIMER);
+					broadcastManager.sendBroadcast(pauseIntent);
 				}
 		}
 	}

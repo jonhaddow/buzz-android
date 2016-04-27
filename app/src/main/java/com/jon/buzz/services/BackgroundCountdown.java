@@ -1,6 +1,5 @@
 package com.jon.buzz.services;
 
-import android.app.ActivityManager;
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -13,26 +12,23 @@ import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 
-import com.jon.buzz.activities.MainActivity;
 import com.jon.buzz.utils.CustomBroadcasts;
 import com.jon.buzz.utils.Notifications;
 import com.jon.buzz.utils.TimeConverter;
 
 public class BackgroundCountdown extends Service {
 
-	public static final int COUNT_DOWN_INTERVAL = 1000;
 	public static boolean isPaused = false;
 	public static boolean isRunning = false;
 
-	private int mMilliseconds;
+	private static final int COUNT_DOWN_INTERVAL = 1000;
+	
 	private NotificationManager mNotificationManager;
 	private PowerManager.WakeLock mWakeLock;
-	private BroadcastReceiver mStopTimerReceiver;
 	private LocalBroadcastManager broadcastManager;
 	private CountDownTimer mCountDown;
-	private BroadcastReceiver mPauseTimerReceiver;
 	private int mMilliRemaining;
-	private BroadcastReceiver mPlayTimerReceiver;
+	private BroadcastReceiver mBroadcastReceiver;
 
 	@Override
 	public void onCreate() {
@@ -40,46 +36,32 @@ public class BackgroundCountdown extends Service {
 		isRunning = true;
 		isPaused = false;
 
-		// When a STOP TIMER broadcast is received, stop service
-		mStopTimerReceiver = new BroadcastReceiver() {
+		mBroadcastReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
 
-				// Cancel notifications, countdown and stop service
-				mNotificationManager.cancelAll();
-				if (mCountDown != null) {
-					mCountDown.cancel();
+				// Get type of broadcast.
+				String type = intent.getStringExtra("type");
+
+				// Deal with broadcast depending on type.
+				switch (type) {
+					case CustomBroadcasts.STOP_TIMER:
+						stopTimer();
+						break;
+					case CustomBroadcasts.PAUSE_TIMER:
+						pauseTimer();
+						break;
+					case CustomBroadcasts.PLAY_TIMER:
+						resumeTimer();
 				}
-				stopSelf();
 			}
 		};
 
-		// When a PAUSE TIMER broadcast is received, pause service
-		mPauseTimerReceiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-
-				pauseTimer();
-			}
-		};
-
-		// When a PLAY TIMER broadcast is received, resume countdown
-		mPlayTimerReceiver = new BroadcastReceiver() {
-			@Override
-			public void onReceive(Context context, Intent intent) {
-
-				resumeTimer();
-			}
-		};
 
 		// Register receivers
 		broadcastManager = LocalBroadcastManager.getInstance(this);
-		broadcastManager.registerReceiver(mStopTimerReceiver,
-				new IntentFilter(CustomBroadcasts.STOP_TIMER));
-		broadcastManager.registerReceiver(mPauseTimerReceiver,
-				new IntentFilter(CustomBroadcasts.PAUSE_TIMER));
-		broadcastManager.registerReceiver(mPlayTimerReceiver,
-				new IntentFilter(CustomBroadcasts.PLAY_TIMER));
+		broadcastManager.registerReceiver(mBroadcastReceiver,
+				new IntentFilter(CustomBroadcasts.BROADCAST));
 
 		// Acquire wake lock
 		PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
@@ -88,6 +70,16 @@ public class BackgroundCountdown extends Service {
 		mWakeLock.acquire();
 
 		super.onCreate();
+	}
+
+	private void stopTimer() {
+
+		// Cancel notifications, countdown and stop service
+		mNotificationManager.cancelAll();
+		if (mCountDown != null) {
+			mCountDown.cancel();
+		}
+		stopSelf();
 	}
 
 	private void pauseTimer() {
@@ -118,7 +110,8 @@ public class BackgroundCountdown extends Service {
 	 */
 	private void sendResult(int milliRemaining) {
 
-		Intent intent = new Intent(CustomBroadcasts.TIME_REMAINING);
+		Intent intent = new Intent(CustomBroadcasts.BROADCAST);
+		intent.putExtra("type", CustomBroadcasts.TIME_REMAINING);
 		intent.putExtra(CustomBroadcasts.TIME_REMAINING, milliRemaining);
 		broadcastManager.sendBroadcast(intent);
 	}
@@ -161,12 +154,11 @@ public class BackgroundCountdown extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
-		// Get the length of the timer in milliseconds
-		mMilliseconds = intent.getIntExtra("Milli", 0);
-
 		// Get notification manager
 		mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
+		// Get the length of the timer and start countdown.
+		int mMilliseconds = intent.getIntExtra("Milli", 0);
 		startCountdownTimer(mMilliseconds);
 
 		return super.onStartCommand(intent, flags, startId);
@@ -178,9 +170,7 @@ public class BackgroundCountdown extends Service {
 		isRunning = false;
 
 		// unregister mStopTimerReceiver
-		broadcastManager.unregisterReceiver(mStopTimerReceiver);
-		broadcastManager.unregisterReceiver(mPauseTimerReceiver);
-		broadcastManager.unregisterReceiver(mPlayTimerReceiver);
+		broadcastManager.unregisterReceiver(mBroadcastReceiver);
 
 		// Release wake lock
 		mWakeLock.release();

@@ -8,10 +8,10 @@ import java.util.concurrent.TimeUnit;
  */
 public class TimeConverter {
 
-	private int milli;
-	private long hours;
-	private long minutes;
-	private long seconds;
+	private final int milli;
+	private final long hours;
+	private final long minutes;
+	private final long seconds;
 
 	public TimeConverter(int milli) {
 
