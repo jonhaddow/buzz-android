@@ -21,6 +21,15 @@ public class TimeConverter {
 		seconds = TimeUnit.MILLISECONDS.toSeconds(milli) - TimeUnit.HOURS.toSeconds(hours) - TimeUnit.MINUTES.toSeconds(minutes);
 	}
 
+	public TimeConverter(int hours, int minutes, int seconds) {
+
+		this.hours = hours;
+		this.minutes = minutes;
+		this.seconds = seconds;
+
+		milli = 1000 * (seconds + (minutes * 60) + (hours * 3600));
+	}
+
 	public int getMilli() {
 
 		return milli;
