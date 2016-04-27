@@ -242,6 +242,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 
 		mIvStopTimer.setVisibility(View.VISIBLE);
 		mIvPauseTimer.setVisibility(View.VISIBLE);
+		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause));
 	}
 
 	@Override
