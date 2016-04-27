@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 	private ImageView mIvStopTimer;
 	private ImageView mIvPauseTimer;
 	private BroadcastReceiver mBroadcastReceiver;
+	private View[] bottomBarElements; // TODO: 27/04/2016 SET VISIBILITY OF BOTTOM BAR ELEMENTS on resume() and pause()!
 
 	@Override
 	protected void onPause() {
@@ -73,10 +74,22 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		broadcastManager.registerReceiver((mBroadcastReceiver),
 				new IntentFilter(CustomBroadcasts.BROADCAST));
 
+		// Set correct pause/play drawable
 		if (BackgroundCountdown.isPaused) {
 			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_play));
 		} else {
 			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause));
+		}
+
+		// Set visibility of elements when service is running
+		if (BackgroundCountdown.isRunning) {
+			mIvPauseTimer.setVisibility(View.VISIBLE);
+			mIvStopTimer.setVisibility(View.VISIBLE);
+			mTvTimeRemaining.setVisibility(View.VISIBLE);
+		} else {
+			mIvPauseTimer.setVisibility(View.INVISIBLE);
+			mIvStopTimer.setVisibility(View.INVISIBLE);
+			mTvTimeRemaining.setVisibility(View.INVISIBLE);
 		}
 
 		super.onResume();
