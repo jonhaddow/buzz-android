@@ -134,7 +134,7 @@ public class FragmentRecentTimers extends Fragment implements AdapterView.OnItem
 					public void onClick(DialogInterface dialogInterface, int i) {
 
 						// Check that service isn't already running
-						if (BackgroundCountdown.isMyServiceRunning(getContext(), BackgroundCountdown.class)) {
+						if (BackgroundCountdown.isRunning) {
 							Toast.makeText(getContext(), "Timer already running", Toast.LENGTH_SHORT).show();
 							return;
 						}

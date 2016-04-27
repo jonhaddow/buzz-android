@@ -86,7 +86,7 @@ public class FragmentSetTimer extends Fragment implements View.OnClickListener, 
 	private void onStartTimer() {
 
 		// Check that service isn't already running
-		if (BackgroundCountdown.isMyServiceRunning(getContext(), BackgroundCountdown.class)) {
+		if (BackgroundCountdown.isRunning) {
 			Toast.makeText(getContext(), "Timer already running", Toast.LENGTH_SHORT).show();
 			return;
 		}

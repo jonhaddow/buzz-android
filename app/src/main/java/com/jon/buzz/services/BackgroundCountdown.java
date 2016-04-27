@@ -13,6 +13,7 @@ import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.jon.buzz.activities.MainActivity;
 import com.jon.buzz.utils.CustomBroadcasts;
 import com.jon.buzz.utils.Notifications;
 import com.jon.buzz.utils.TimeConverter;
@@ -21,6 +22,7 @@ public class BackgroundCountdown extends Service {
 
 	public static final int COUNT_DOWN_INTERVAL = 1000;
 	public static boolean isPaused = false;
+	public static boolean isRunning = false;
 
 	private int mMilliseconds;
 	private NotificationManager mNotificationManager;
@@ -32,27 +34,10 @@ public class BackgroundCountdown extends Service {
 	private int mMilliRemaining;
 	private BroadcastReceiver mPlayTimerReceiver;
 
-	/**
-	 * Checks that a service is currently running
-	 *
-	 * @param context      Application context
-	 * @param serviceClass Service which is checked to see if running
-	 * @return true if service is running.
-	 */
-	public static boolean isMyServiceRunning(Context context, Class<?> serviceClass) {
-
-		ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
-		for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-			if (serviceClass.getName().equals(service.service.getClassName())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
 	@Override
 	public void onCreate() {
 
+		isRunning = true;
 		isPaused = false;
 
 		// When a STOP TIMER broadcast is received, stop service
@@ -189,6 +174,8 @@ public class BackgroundCountdown extends Service {
 
 	@Override
 	public void onDestroy() {
+
+		isRunning = false;
 
 		// unregister mStopTimerReceiver
 		broadcastManager.unregisterReceiver(mStopTimerReceiver);

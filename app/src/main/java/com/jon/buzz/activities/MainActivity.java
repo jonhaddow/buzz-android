@@ -211,11 +211,15 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		}
 
 		// If countdown is running enable stop timer and pause timer button
-		if (BackgroundCountdown.isMyServiceRunning(this, BackgroundCountdown.class)) {
-			mIvStopTimer.setVisibility(View.VISIBLE);
+		if (BackgroundCountdown.isRunning) {
+			if (mIvStopTimer != null) {
+				mIvStopTimer.setVisibility(View.VISIBLE);
+			}
 			mIvPauseTimer.setVisibility(View.VISIBLE);
 		} else {
-			mIvStopTimer.setVisibility(View.INVISIBLE);
+			if (mIvStopTimer != null) {
+				mIvStopTimer.setVisibility(View.INVISIBLE);
+			}
 			mIvPauseTimer.setVisibility(View.INVISIBLE);
 		}
 
