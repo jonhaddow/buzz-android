@@ -32,38 +32,51 @@
 
 	<LinearLayout
 		android:layout_width="match_parent"
-		android:layout_height="50dp"
+		android:layout_height="@dimen/bottom_bar_height"
 		android:background="@color/colorPrimary"
 		android:gravity="center_vertical"
-		android:paddingEnd="14dp"
-		android:paddingStart="14dp">
+		android:paddingEnd="@dimen/bottom_bar_padding"
+		android:paddingStart="@dimen/bottom_bar_padding">
+
+		<ImageView
+			android:id="@+id/iv_add_min"
+			android:layout_width="@dimen/bottom_bar_icons"
+			android:layout_height="@dimen/bottom_bar_icons"
+			android:contentDescription="@string/add_min_content_description"
+			android:paddingEnd="@dimen/bottom_bar_padding"
+			android:paddingStart="@dimen/bottom_bar_padding"
+			android:src="@drawable/ic_action_add_min"
+			android:tint="@android:color/white"/>
 
 		<TextView
 			android:id="@+id/tv_time_remaining"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:freezesText="true"
+			android:paddingEnd="@dimen/bottom_bar_padding"
+			android:paddingStart="@dimen/bottom_bar_padding"
 			android:textColor="@color/textColour"
 			android:textSize="18sp"
-			tools:text="Timer Remaining: 100 seconds"/>
+			tools:text="Timer Remaining: 24:12:06"/>
 
 		<ImageView
 			android:id="@+id/iv_pause_timer"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
+			android:layout_width="@dimen/bottom_bar_icons"
+			android:layout_height="@dimen/bottom_bar_icons"
 			android:contentDescription="@string/pause_timer_content_description"
-			android:paddingEnd="8dp"
-			android:src="@drawable/ic_action_pause"
-			android:tint="@android:color/white"
-			tools:ignore="RtlSymmetry"/>
+			android:paddingEnd="@dimen/bottom_bar_padding"
+			android:paddingStart="@dimen/bottom_bar_padding"
+			android:src="@drawable/ic_pause_circle_outline"
+			android:tint="@android:color/white"/>
 
 		<ImageView
 			android:id="@+id/iv_stop_timer"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
+			android:layout_width="@dimen/bottom_bar_icons"
+			android:layout_height="@dimen/bottom_bar_icons"
 			android:contentDescription="@string/stop_timer_content_description"
-			android:src="@drawable/ic_action_cancel_timer"
+			android:paddingEnd="@dimen/bottom_bar_padding"
+			android:paddingStart="@dimen/bottom_bar_padding"
+			android:src="@drawable/ic_highlight_off"
 			android:tint="@android:color/white"/>
 
 	</LinearLayout>
