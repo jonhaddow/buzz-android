@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 	private ImageView mIvStopTimer;
 	private ImageView mIvPauseTimer;
 	private BroadcastReceiver mBroadcastReceiver;
-	private View[] mBottomBarElements = new View[4];
+	private final View[] mBottomBarElements = new View[4];
 
 	@Override
 	protected void onPause() {
