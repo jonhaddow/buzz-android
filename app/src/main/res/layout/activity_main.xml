@@ -40,44 +40,31 @@
 
 		<ImageView
 			android:id="@+id/iv_add_min"
-			android:layout_width="@dimen/bottom_bar_icons"
-			android:layout_height="@dimen/bottom_bar_icons"
+			style="@style/bottom_bar_element"
 			android:contentDescription="@string/add_min_content_description"
-			android:paddingEnd="@dimen/bottom_bar_padding"
-			android:paddingStart="@dimen/bottom_bar_padding"
-			android:src="@drawable/ic_action_add_min"
-			android:tint="@android:color/white"/>
+			android:src="@drawable/ic_add_min_circle"/>
 
 		<TextView
 			android:id="@+id/tv_time_remaining"
+			style="@style/bottom_bar_element"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:paddingEnd="@dimen/bottom_bar_padding"
-			android:paddingStart="@dimen/bottom_bar_padding"
 			android:textColor="@color/textColour"
 			android:textSize="18sp"
 			tools:text="Timer Remaining: 24:12:06"/>
 
 		<ImageView
 			android:id="@+id/iv_pause_timer"
-			android:layout_width="@dimen/bottom_bar_icons"
-			android:layout_height="@dimen/bottom_bar_icons"
+			style="@style/bottom_bar_element"
 			android:contentDescription="@string/pause_timer_content_description"
-			android:paddingEnd="@dimen/bottom_bar_padding"
-			android:paddingStart="@dimen/bottom_bar_padding"
-			android:src="@drawable/ic_pause_circle_outline"
-			android:tint="@android:color/white"/>
+			android:src="@drawable/ic_pause_circle"/>
 
 		<ImageView
 			android:id="@+id/iv_stop_timer"
-			android:layout_width="@dimen/bottom_bar_icons"
-			android:layout_height="@dimen/bottom_bar_icons"
+			style="@style/bottom_bar_element"
 			android:contentDescription="@string/stop_timer_content_description"
-			android:paddingEnd="@dimen/bottom_bar_padding"
-			android:paddingStart="@dimen/bottom_bar_padding"
-			android:src="@drawable/ic_highlight_off"
-			android:tint="@android:color/white"/>
+			android:src="@drawable/ic_cancel_circle"/>
 
 	</LinearLayout>
 

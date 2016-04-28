@@ -5,4 +5,5 @@
     <dimen name="bottom_bar_icons">45dp</dimen>
     <dimen name="bottom_bar_height">60dp</dimen>
     <dimen name="bottom_bar_padding">4dp</dimen>
+    <dimen name="backspace_size">40dp</dimen>
 </resources>

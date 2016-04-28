@@ -109,22 +109,22 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 	private void pauseTimer() {
 
 		// Change to play drawable
-		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_play_circle_outline));
+		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_play_circle));
 	}
 
 	private void resumeTimer() {
 
 		// Change to pause drawable
-		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_pause_circle_outline));
+		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_pause_circle));
 	}
 
 	private void updateBottomBar() {
 
 		// Set correct pause/play drawable
 		if (BackgroundCountdown.isPaused) {
-			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_play_circle_outline));
+			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_play_circle));
 		} else {
-			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_pause_circle_outline));
+			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_pause_circle));
 		}
 
 		// If countdown is running enable stop timer and pause timer button
@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		for (View mBottomBarElement : mBottomBarElements) {
 			mBottomBarElement.setVisibility(View.VISIBLE);
 		}
-		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_pause_circle_outline));
+		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_pause_circle));
 	}
 
 	@Override

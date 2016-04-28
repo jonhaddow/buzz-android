@@ -25,12 +25,12 @@ public class Notifications {
 				.setVisibility(Notification.VISIBILITY_PUBLIC)
 				.setAutoCancel(false)
 				.addAction(new Notification.Action.Builder(
-						Icon.createWithResource(context, R.drawable.ic_pause_circle_outline),
+						Icon.createWithResource(context, R.drawable.ic_pause_circle),
 						context.getString(R.string.pause_timer),
 						createPauseTimerIntent(context)).build()
 				)
 				.addAction(new Notification.Action.Builder(
-						Icon.createWithResource(context, R.drawable.ic_highlight_off),
+						Icon.createWithResource(context, R.drawable.ic_cancel_circle),
 						context.getString(R.string.cancel_timer),
 						createStopTimerIntent(context)).build()
 				)
@@ -86,12 +86,12 @@ public class Notifications {
 				.setVisibility(Notification.VISIBILITY_PUBLIC)
 				.setAutoCancel(false)
 				.addAction(new Notification.Action.Builder(
-						Icon.createWithResource(context, R.drawable.ic_play_circle_outline),
+						Icon.createWithResource(context, R.drawable.ic_play_circle),
 						context.getString(R.string.play_timer),
 						createPlayTimerIntent(context)).build()
 				)
 				.addAction(new Notification.Action.Builder(
-						Icon.createWithResource(context, R.drawable.ic_highlight_off),
+						Icon.createWithResource(context, R.drawable.ic_cancel_circle),
 						context.getString(R.string.cancel_timer),
 						createStopTimerIntent(context)).build()
 				)
