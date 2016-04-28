@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 	private ImageView mIvStopTimer;
 	private ImageView mIvPauseTimer;
 	private BroadcastReceiver mBroadcastReceiver;
-	private View[] bottomBarElements; // TODO: 27/04/2016 SET VISIBILITY OF BOTTOM BAR ELEMENTS on resume() and pause()!
+	private View[] mBottomBarElements = new View[3];
 
 	@Override
 	protected void onPause() {
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		mBroadcastReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-
+				
 				// Get type of broadcast.
 				String type = intent.getStringExtra("type");
 
@@ -74,23 +74,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		broadcastManager.registerReceiver((mBroadcastReceiver),
 				new IntentFilter(CustomBroadcasts.BROADCAST));
 
-		// Set correct pause/play drawable
-		if (BackgroundCountdown.isPaused) {
-			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_play));
-		} else {
-			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause));
-		}
-
-		// Set visibility of elements when service is running
-		if (BackgroundCountdown.isRunning) {
-			mIvPauseTimer.setVisibility(View.VISIBLE);
-			mIvStopTimer.setVisibility(View.VISIBLE);
-			mTvTimeRemaining.setVisibility(View.VISIBLE);
-		} else {
-			mIvPauseTimer.setVisibility(View.INVISIBLE);
-			mIvStopTimer.setVisibility(View.INVISIBLE);
-			mTvTimeRemaining.setVisibility(View.INVISIBLE);
-		}
+		updateBottomBar();
 
 		super.onResume();
 	}
@@ -115,11 +99,10 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		// Cancel all notifications
 		((NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
 
-		// Clear time remaining text on bottom bar
-		mTvTimeRemaining.setText("");
-
-		mIvStopTimer.setVisibility(View.INVISIBLE);
-		mIvPauseTimer.setVisibility(View.INVISIBLE);
+		// Make Bottom bar elements invisible
+		for (View mBottomBarElement : mBottomBarElements) {
+			mBottomBarElement.setVisibility(View.INVISIBLE);
+		}
 	}
 
 	private void pauseTimer() {
@@ -182,31 +165,39 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 			mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 		}
 
-		mTvTimeRemaining = (TextView) findViewById(R.id.tv_time_remaining);
+		// Get bottom bar elements
+		mBottomBarElements[0] = findViewById(R.id.tv_time_remaining);
+		mBottomBarElements[1] = findViewById(R.id.iv_pause_timer);
+		mBottomBarElements[2] = findViewById(R.id.iv_stop_timer);
+		mTvTimeRemaining = (TextView) mBottomBarElements[0];
+		mIvPauseTimer = (ImageView) mBottomBarElements[1];
+		mIvStopTimer = (ImageView) mBottomBarElements[2];
 
-		mIvPauseTimer = (ImageView) findViewById(R.id.iv_pause_timer);
-		if (mIvPauseTimer != null) {
-			mIvPauseTimer.setOnClickListener(this);
+		// Set on Click listeners
+		for (int i = 1; i < mBottomBarElements.length; i++) {
+			mBottomBarElements[i].setOnClickListener(this);
 		}
 
-		mIvStopTimer = (ImageView) findViewById(R.id.iv_stop_timer);
-		if (mIvStopTimer != null) {
-			mIvStopTimer.setOnClickListener(this);
+		updateBottomBar();
+	}
+
+	private void updateBottomBar() {
+
+		// Set correct pause/play drawable
+		if (BackgroundCountdown.isPaused) {
+			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_play));
+		} else {
+			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause));
 		}
 
 		// If countdown is running enable stop timer and pause timer button
-		if (BackgroundCountdown.isRunning) {
-			if (mIvStopTimer != null) {
-				mIvStopTimer.setVisibility(View.VISIBLE);
+		for (View mBottomBarElement : mBottomBarElements) {
+			if (BackgroundCountdown.isRunning) {
+				mBottomBarElement.setVisibility(View.VISIBLE);
+			} else {
+				mBottomBarElement.setVisibility(View.INVISIBLE);
 			}
-			mIvPauseTimer.setVisibility(View.VISIBLE);
-		} else {
-			if (mIvStopTimer != null) {
-				mIvStopTimer.setVisibility(View.INVISIBLE);
-			}
-			mIvPauseTimer.setVisibility(View.INVISIBLE);
 		}
-
 	}
 
 	/**
@@ -228,8 +219,9 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 			recentTimers.addTimerToList(myTimer);
 		}
 
-		mIvStopTimer.setVisibility(View.VISIBLE);
-		mIvPauseTimer.setVisibility(View.VISIBLE);
+		for (View mBottomBarElement : mBottomBarElements) {
+			mBottomBarElement.setVisibility(View.VISIBLE);
+		}
 		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause));
 	}
 
