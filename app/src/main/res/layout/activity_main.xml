@@ -32,39 +32,39 @@
 
 	<LinearLayout
 		android:layout_width="match_parent"
-		android:layout_height="50dp"
+		android:layout_height="@dimen/bottom_bar_height"
 		android:background="@color/colorPrimary"
 		android:gravity="center_vertical"
-		android:paddingEnd="14dp"
-		android:paddingStart="14dp">
+		android:paddingEnd="@dimen/bottom_bar_padding"
+		android:paddingStart="@dimen/bottom_bar_padding">
+
+		<ImageView
+			android:id="@+id/iv_add_min"
+			style="@style/bottom_bar_element"
+			android:contentDescription="@string/add_min_content_description"
+			android:src="@drawable/ic_add_min_circle"/>
 
 		<TextView
 			android:id="@+id/tv_time_remaining"
+			style="@style/bottom_bar_element"
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
-			android:freezesText="true"
 			android:textColor="@color/textColour"
 			android:textSize="18sp"
-			tools:text="Timer Remaining: 100 seconds"/>
+			tools:text="Timer Remaining: 24:12:06"/>
 
 		<ImageView
 			android:id="@+id/iv_pause_timer"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
+			style="@style/bottom_bar_element"
 			android:contentDescription="@string/pause_timer_content_description"
-			android:paddingEnd="8dp"
-			android:src="@drawable/ic_action_pause"
-			android:tint="@android:color/white"
-			tools:ignore="RtlSymmetry"/>
+			android:src="@drawable/ic_pause_circle"/>
 
 		<ImageView
 			android:id="@+id/iv_stop_timer"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
+			style="@style/bottom_bar_element"
 			android:contentDescription="@string/stop_timer_content_description"
-			android:src="@drawable/ic_action_cancel_timer"
-			android:tint="@android:color/white"/>
+			android:src="@drawable/ic_cancel_circle"/>
 
 	</LinearLayout>
 

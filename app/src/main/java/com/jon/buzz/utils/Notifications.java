@@ -14,24 +14,24 @@ import com.jon.buzz.activities.MainActivity;
  */
 public class Notifications {
 
-	public static Notification.Builder setupRunningNotification(Context context, int timeRemaining) {
+	public static Notification.Builder setupRunningNotification(Context context, TimeConverter myTimer) {
 
 		// Create notification that shows while countdown is running
 		return new Notification.Builder(context)
-				.setSmallIcon(R.drawable.ic_alarm)
+				.setSmallIcon(R.drawable.ic_notification)
 				.setContentTitle(context.getString(R.string.notification_header))
-				.setContentText(timeRemaining + context.getString(R.string.notification_message_running))
+				.setContentText(context.getString(R.string.notification_message_running) + myTimer.toString())
 				.setPriority(Notification.PRIORITY_MAX)
 				.setVisibility(Notification.VISIBILITY_PUBLIC)
 				.setAutoCancel(false)
 				.addAction(new Notification.Action.Builder(
-						Icon.createWithResource(context, R.drawable.ic_action_pause),
-						"Pause",
+						Icon.createWithResource(context, R.drawable.ic_pause_circle),
+						context.getString(R.string.pause_timer),
 						createPauseTimerIntent(context)).build()
 				)
 				.addAction(new Notification.Action.Builder(
-						Icon.createWithResource(context, R.drawable.ic_action_cancel_timer),
-						"Stop",
+						Icon.createWithResource(context, R.drawable.ic_cancel_circle),
+						context.getString(R.string.cancel_timer),
 						createStopTimerIntent(context)).build()
 				)
 				.setContentIntent(createRegularIntent(context))
@@ -41,15 +41,17 @@ public class Notifications {
 	private static PendingIntent createPauseTimerIntent(Context context) {
 
 		// Creates an intent for MainActivity to pause timer
-		Intent notificationIntent = new Intent(CustomBroadcasts.PAUSE_TIMER);
-		return PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		Intent notificationIntent = new Intent(CustomBroadcasts.BROADCAST);
+		notificationIntent.putExtra("type", CustomBroadcasts.PAUSE_TIMER);
+		return PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 
 	private static PendingIntent createStopTimerIntent(Context context) {
 
 		// Creates an intent for MainActivity to stop timer
-		Intent notificationIntent = new Intent(CustomBroadcasts.STOP_TIMER);
-		return PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		Intent notificationIntent = new Intent(CustomBroadcasts.BROADCAST);
+		notificationIntent.putExtra("type", CustomBroadcasts.STOP_TIMER);
+		return PendingIntent.getBroadcast(context, 1, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 
 	private static PendingIntent createRegularIntent(Context context) {
@@ -60,37 +62,37 @@ public class Notifications {
 		return PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_ONE_SHOT);
 	}
 
-	public static Notification.Builder setupFinishedNotification(Context context, int seconds) {
+	public static Notification.Builder setupFinishedNotification(Context context) {
 
 		// Show final notification to indicate that the countdown has finished.
 		return new Notification.Builder(context)
-				.setSmallIcon(R.drawable.ic_alarm)
+				.setSmallIcon(R.drawable.ic_notification)
 				.setContentTitle(context.getString(R.string.notification_header))
-				.setContentText(seconds + context.getString(R.string.notification_message_finished))
+				.setContentText(context.getString(R.string.notification_message_finished))
 				.setPriority(Notification.PRIORITY_MAX)
 				.setVisibility(Notification.VISIBILITY_PUBLIC)
 				.setContentIntent(createRegularIntent(context))
 				.setAutoCancel(true);
 	}
 
-	public static Notification.Builder setupPausedNotification(Context context, int timeRemaining) {
+	public static Notification.Builder setupPausedNotification(Context context, TimeConverter myTimer) {
 
 		// Show Paused notification
 		return new Notification.Builder(context)
-				.setSmallIcon(R.drawable.ic_alarm)
+				.setSmallIcon(R.drawable.ic_notification)
 				.setContentTitle(context.getString(R.string.notification_header))
-				.setContentText(context.getString(R.string.notification_message_paused) + timeRemaining + context.getString(R.string.notification_message_running))
+				.setContentText(context.getString(R.string.notification_message_paused) + myTimer.toString())
 				.setPriority(Notification.PRIORITY_MAX)
 				.setVisibility(Notification.VISIBILITY_PUBLIC)
 				.setAutoCancel(false)
 				.addAction(new Notification.Action.Builder(
-						Icon.createWithResource(context, R.drawable.ic_action_play),
-						"Play",
+						Icon.createWithResource(context, R.drawable.ic_play_circle),
+						context.getString(R.string.play_timer),
 						createPlayTimerIntent(context)).build()
 				)
 				.addAction(new Notification.Action.Builder(
-						Icon.createWithResource(context, R.drawable.ic_action_cancel_timer),
-						"Stop",
+						Icon.createWithResource(context, R.drawable.ic_cancel_circle),
+						context.getString(R.string.cancel_timer),
 						createStopTimerIntent(context)).build()
 				)
 				.setContentIntent(createRegularIntent(context))
@@ -99,8 +101,9 @@ public class Notifications {
 
 	private static PendingIntent createPlayTimerIntent(Context context) {
 
-		// Creates an intent for MainActivity to play timer
-		Intent notificationIntent = new Intent(CustomBroadcasts.PLAY_TIMER);
-		return PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		// Creates an intent to play timer.
+		Intent notificationIntent = new Intent(CustomBroadcasts.BROADCAST);
+		notificationIntent.putExtra("type", CustomBroadcasts.PLAY_TIMER);
+		return PendingIntent.getBroadcast(context, 2, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 }
