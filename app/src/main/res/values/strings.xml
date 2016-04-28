@@ -29,4 +29,5 @@
     <string name="play_timer">Play</string>
 	<string name="cancel_timer">Cancel</string>
 	<string name="add_min_content_description">Add 1 minute to timer</string>
+	<string name="menu_settings">Settings</string>
 </resources>
