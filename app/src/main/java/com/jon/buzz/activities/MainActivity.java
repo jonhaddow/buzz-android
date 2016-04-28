@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 	private ImageView mIvStopTimer;
 	private ImageView mIvPauseTimer;
 	private BroadcastReceiver mBroadcastReceiver;
-	private View[] mBottomBarElements = new View[3];
+	private View[] mBottomBarElements = new View[4];
 
 	@Override
 	protected void onPause() {
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		mBroadcastReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				
+
 				// Get type of broadcast.
 				String type = intent.getStringExtra("type");
 
@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 						break;
 					case CustomBroadcasts.PLAY_TIMER:
 						resumeTimer();
+						break;
 				}
 			}
 		};
@@ -108,13 +109,32 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 	private void pauseTimer() {
 
 		// Change to play drawable
-		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_play));
+		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_play_circle));
 	}
 
 	private void resumeTimer() {
 
 		// Change to pause drawable
-		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause));
+		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_pause_circle));
+	}
+
+	private void updateBottomBar() {
+
+		// Set correct pause/play drawable
+		if (BackgroundCountdown.isPaused) {
+			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_play_circle));
+		} else {
+			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_pause_circle));
+		}
+
+		// If countdown is running enable stop timer and pause timer button
+		for (View mBottomBarElement : mBottomBarElements) {
+			if (BackgroundCountdown.isRunning) {
+				mBottomBarElement.setVisibility(View.VISIBLE);
+			} else {
+				mBottomBarElement.setVisibility(View.INVISIBLE);
+			}
+		}
 	}
 
 	@Override
@@ -169,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		mBottomBarElements[0] = findViewById(R.id.tv_time_remaining);
 		mBottomBarElements[1] = findViewById(R.id.iv_pause_timer);
 		mBottomBarElements[2] = findViewById(R.id.iv_stop_timer);
+		mBottomBarElements[3] = findViewById(R.id.iv_add_min);
 		mTvTimeRemaining = (TextView) mBottomBarElements[0];
 		mIvPauseTimer = (ImageView) mBottomBarElements[1];
 		mIvStopTimer = (ImageView) mBottomBarElements[2];
@@ -179,25 +200,6 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		}
 
 		updateBottomBar();
-	}
-
-	private void updateBottomBar() {
-
-		// Set correct pause/play drawable
-		if (BackgroundCountdown.isPaused) {
-			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_play));
-		} else {
-			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause));
-		}
-
-		// If countdown is running enable stop timer and pause timer button
-		for (View mBottomBarElement : mBottomBarElements) {
-			if (BackgroundCountdown.isRunning) {
-				mBottomBarElement.setVisibility(View.VISIBLE);
-			} else {
-				mBottomBarElement.setVisibility(View.INVISIBLE);
-			}
-		}
 	}
 
 	/**
@@ -222,7 +224,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		for (View mBottomBarElement : mBottomBarElements) {
 			mBottomBarElement.setVisibility(View.VISIBLE);
 		}
-		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_action_pause));
+		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_pause_circle));
 	}
 
 	@Override
@@ -253,6 +255,14 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 					pauseIntent.putExtra("type", CustomBroadcasts.PAUSE_TIMER);
 					broadcastManager.sendBroadcast(pauseIntent);
 				}
+
+				break;
+			case R.id.iv_add_min:
+
+				// Send add minute to timer broadcast to service
+				Intent addMinIntent = new Intent(CustomBroadcasts.BROADCAST);
+				addMinIntent.putExtra("type", CustomBroadcasts.ADD_MIN);
+				broadcastManager.sendBroadcast(addMinIntent);
 		}
 	}
 }

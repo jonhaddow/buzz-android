@@ -63,11 +63,12 @@
 
 		<ImageButton
 			android:id="@+id/ib_delete"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
+			android:layout_width="@dimen/backspace_size"
+			android:layout_height="@dimen/backspace_size"
 			android:background="@android:color/transparent"
 			android:contentDescription="@string/cd_ib_delete"
-			android:src="@drawable/ic_backspace"
+			android:src="@drawable/ic_backspace_"
+			android:scaleType="fitXY"
 			android:tint="@android:color/darker_gray"/>
 	</LinearLayout>
 

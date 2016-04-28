@@ -19,4 +19,7 @@ public class CustomBroadcasts {
 
 	// Broadcast to receive pending intents from notifications.
 	public static final String BROADCAST = "com.jon.buzz.utils.CustomBroadcasts.BROADCAST";
+
+	// Broadcast to add min to timer.
+	public static final String ADD_MIN = "com.jon.buz.utils.CustomBroadcasts.ADD_MIN";
 }
