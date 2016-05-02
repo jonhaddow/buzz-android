@@ -12,6 +12,7 @@ import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.jon.buzz.activities.RunningTimer;
 import com.jon.buzz.utils.CustomBroadcasts;
 import com.jon.buzz.utils.Notifications;
 import com.jon.buzz.utils.TimeConverter;
@@ -79,6 +80,10 @@ public class BackgroundCountdown extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
+
+		Intent newActivity = new Intent(getApplication(), RunningTimer.class);
+		newActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(newActivity);
 
 		// Get the length of the timer and start countdown.
 		int mMilliseconds = intent.getIntExtra("Milli", 0);
