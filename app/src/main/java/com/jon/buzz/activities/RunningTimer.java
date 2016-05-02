@@ -40,6 +40,7 @@ public class RunningTimer extends AppCompatActivity implements View.OnClickListe
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        // Get reference to view and set on click listeners
         mTvTimeRemaining = (TextView) findViewById(R.id.timeRemaining);
         mIvAddMin = (ImageView) findViewById(R.id.iv_add_min);
         mIvPauseTimer = (ImageView) findViewById(R.id.iv_pause_timer);
@@ -105,13 +106,26 @@ public class RunningTimer extends AppCompatActivity implements View.OnClickListe
         // Cancel all notifications
         ((NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
 
+        return2Main();
+
     }
 
     private void updateTimeRemaining(int milliseconds) {
 
         TimeConverter myTimer = new TimeConverter(milliseconds);
 
+        if (milliseconds < 1) {
+            return2Main();
+        }
         mTvTimeRemaining.setText(myTimer.toString());
+
+    }
+
+    private void return2Main() {
+
+        // Go back to main activity
+        Intent back2MainActivity = new Intent(this, MainActivity.class);
+        startActivity(back2MainActivity);
 
     }
 
@@ -123,6 +137,8 @@ public class RunningTimer extends AppCompatActivity implements View.OnClickListe
         } else {
             mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_pause_circle));
         }
+
+
 
     }
 

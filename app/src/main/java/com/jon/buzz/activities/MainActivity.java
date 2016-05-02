@@ -43,16 +43,27 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 
 	@Override
 	protected void onResume() {
+		super.onResume();
 
 		// Register receivers
 		broadcastManager.registerReceiver((mBroadcastReceiver),
 				new IntentFilter(CustomBroadcasts.BROADCAST));
 
-		super.onResume();
+		if (!BackgroundCountdown.isRunning) {
+			updateTimeRemaining(0);
+		}
 	}
 
 	private void updateTimeRemaining(int milliRemaining) {
-
+		TimeConverter myTimer = new TimeConverter(milliRemaining);
+		String text2Display;
+		if (milliRemaining < 1) {
+			text2Display = "";
+			mTvShowRunningTimer.setClickable(false);
+		} else {
+			text2Display = "Current Timer: " + myTimer.toString();
+		}
+		mTvShowRunningTimer.setText(text2Display);
 	}
 
 
