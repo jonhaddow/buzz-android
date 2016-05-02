@@ -22,17 +22,45 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:gravity="center"
-        tools:text="Time Remaining:"
-        android:textSize="25sp"/>
+        android:textSize="25sp"
+        android:textColor="@android:color/holo_green_light"
+        android:text="Time Remaining:" />
 
     <TextView
         android:id="@+id/timeRemaining"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/timeRemainingLabel"
+        android:layout_below="@id/timeRemainingLabel"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        tools:text="06:45:03"
-        android:textSize="40sp"/>
+        android:textSize="40sp"
+        android:textColor="@android:color/holo_red_light"
+        tools:text="06:45:03" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/timeRemaining"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:paddingTop="50dp">
+
+        <ImageView
+            android:id="@+id/iv_add_min"
+            style="@style/timer_buttons"
+            android:src="@drawable/ic_add_min_circle" />
+
+        <ImageView
+            android:id="@+id/iv_pause_timer"
+            style="@style/timer_buttons"
+            android:src="@drawable/ic_pause_circle" />
+
+        <ImageView
+            android:id="@+id/iv_cancel_timer"
+            style="@style/timer_buttons"
+            android:src="@drawable/ic_cancel_circle"
+            android:contentDescription="@string/cancel_timer_content_description" />
+
+    </LinearLayout>
 
 </RelativeLayout>

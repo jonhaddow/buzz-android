@@ -39,33 +39,16 @@
         android:paddingEnd="@dimen/bottom_bar_padding"
         android:paddingStart="@dimen/bottom_bar_padding">
 
-        <ImageView
-            android:id="@+id/iv_add_min"
-            style="@style/bottom_bar_element"
-            android:contentDescription="@string/add_min_content_description"
-            android:src="@drawable/ic_add_min_circle" />
-
         <TextView
-            android:id="@+id/tv_time_remaining"
-            style="@style/bottom_bar_element"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textColor="@color/textColour"
-            android:textSize="18sp"
-            tools:text="Timer Remaining: 24:12:06" />
+            android:id="@+id/showRunningTimer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Current Timer"
+            android:textColor="@android:color/white"
+            android:textSize="40sp"
+            android:gravity="center"/>
 
-        <ImageView
-            android:id="@+id/iv_pause_timer"
-            style="@style/bottom_bar_element"
-            android:contentDescription="@string/pause_timer_content_description"
-            android:src="@drawable/ic_pause_circle" />
 
-        <ImageView
-            android:id="@+id/iv_stop_timer"
-            style="@style/bottom_bar_element"
-            android:contentDescription="@string/stop_timer_content_description"
-            android:src="@drawable/ic_cancel_circle" />
 
     </LinearLayout>
 
