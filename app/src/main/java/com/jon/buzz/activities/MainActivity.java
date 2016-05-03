@@ -1,6 +1,5 @@
 package com.jon.buzz.activities;
 
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jon.buzz.R;
@@ -27,45 +25,15 @@ import com.jon.buzz.utils.TimeConverter;
 
 public class MainActivity extends AppCompatActivity implements StartNewTimerListener, View.OnClickListener {
 
+	// Manage broadcasts
 	private LocalBroadcastManager broadcastManager;
-	private MyPagerAdapter mPagerAdapter;
 	private BroadcastReceiver mBroadcastReceiver;
+
+	// Reference to pages
+	private MyPagerAdapter mPagerAdapter;
+
+	// text on bottom bar
 	private TextView mTvShowRunningTimer;
-
-	@Override
-	protected void onPause() {
-
-		// Unregister receiver
-		broadcastManager.unregisterReceiver(mBroadcastReceiver);
-
-		super.onPause();
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-
-		// Register receivers
-		broadcastManager.registerReceiver((mBroadcastReceiver),
-				new IntentFilter(CustomBroadcasts.BROADCAST));
-
-		if (!BackgroundCountdown.isRunning) {
-			updateTimeRemaining(0);
-		}
-	}
-
-	private void updateTimeRemaining(int milliRemaining) {
-		TimeConverter myTimer = new TimeConverter(milliRemaining);
-		String text2Display;
-		if (milliRemaining < 1) {
-			text2Display = "";
-			mTvShowRunningTimer.setClickable(false);
-		} else {
-			text2Display = "Current Timer: " + myTimer.toString();
-		}
-		mTvShowRunningTimer.setText(text2Display);
-	}
-
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,18 +41,21 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		// Support toolbar
+		// Support toolbar.
 		Toolbar toolbar = (Toolbar) findViewById(R.id.mainToolbar);
+		if (toolbar != null) {
+			toolbar.setTitle("Create a Timer");
+		}
 		setSupportActionBar(toolbar);
 
-		// Instantiate view pager and pager adapter
+		// Instantiate view pager and pager adapter.
 		final ViewPager mPager = (ViewPager) findViewById(R.id.pager);
 		mPagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), this);
 		if (mPager != null) {
 			mPager.setAdapter(mPagerAdapter);
 		}
 
-		// Set up Tabbed layout
+		// Set up Tabbed layout.
 		TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
 		if (tabLayout != null) {
 			tabLayout.addTab(tabLayout.newTab().setText(R.string.page_0));
@@ -115,16 +86,14 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 			mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 		}
 
-		// Get bottom bar text view
+		// Get bottom bar text view and set on click listener.
 		mTvShowRunningTimer = (TextView) findViewById(R.id.showRunningTimer);
-
-		// Set on Click listeners
 		if (mTvShowRunningTimer != null) {
 			mTvShowRunningTimer.setOnClickListener(this);
 		}
 
+		// Manage local broadcasts from this activity.
 		broadcastManager = LocalBroadcastManager.getInstance(this);
-
 		mBroadcastReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
@@ -142,17 +111,54 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		};
 	}
 
+	private void updateTimeRemaining(int milliRemaining) {
+
+		TimeConverter myTimer = new TimeConverter(milliRemaining);
+		String text2Display;
+		if (milliRemaining < 1) {
+			text2Display = "";
+			mTvShowRunningTimer.setClickable(false);
+		} else {
+			text2Display = "Current Timer: " + myTimer.toString();
+			mTvShowRunningTimer.setClickable(true);
+		}
+		mTvShowRunningTimer.setText(text2Display);
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+
 		getMenuInflater().inflate(R.menu.main_activity_menu, menu);
 		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		
+
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected void onPause() {
+
+		// Unregister receiver
+		broadcastManager.unregisterReceiver(mBroadcastReceiver);
+
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+
+		super.onResume();
+
+		// Register receivers
+		broadcastManager.registerReceiver((mBroadcastReceiver),
+				new IntentFilter(CustomBroadcasts.BROADCAST));
+
+		if (!BackgroundCountdown.isRunning) {
+			updateTimeRemaining(0);
+		}
 	}
 
 	/**
