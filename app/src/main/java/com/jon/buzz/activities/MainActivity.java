@@ -10,6 +10,8 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Transition;
+import android.transition.TransitionManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -102,18 +104,25 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 				String type = intent.getStringExtra("type");
 
 				// Deal with broadcast depending on the type.
-				switch (type) {
-					case CustomBroadcasts.TIME_REMAINING:
-						updateTimeRemaining(intent.getIntExtra(CustomBroadcasts.TIME_REMAINING, 0));
-						break;
+				if (type.equals(CustomBroadcasts.TIME_REMAINING)) {
+					updateTimeRemaining(intent.getIntExtra(CustomBroadcasts.TIME_REMAINING, 0));
 				}
 			}
+
 		};
 	}
 
+	/**
+	 * Update current time on bottom bar.
+	 *
+	 * @param milliRemaining milliseconds remaining
+	 */
 	private void updateTimeRemaining(int milliRemaining) {
 
+		// Convert milliseconds into timer class.
 		TimeConverter myTimer = new TimeConverter(milliRemaining);
+
+		// Show time remaining and allow bar to be clickable, unless time is up.
 		String text2Display;
 		if (milliRemaining < 1) {
 			text2Display = "";
@@ -169,20 +178,20 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 	@Override
 	public void startNewTimer(TimeConverter myTimer) {
 
-		// Start a new countdown service
+		// Start a new countdown service.
 		Intent countdownIntent = new Intent(this, BackgroundCountdown.class);
 		countdownIntent.putExtra("Milli", myTimer.getMilli());
 		startService(countdownIntent);
 
-		// Add timer to recent timers list
+		// Add timer to recent timers list.
 		FragmentRecentTimers recentTimers = ((FragmentRecentTimers) mPagerAdapter.getFragment(1));
 		if (recentTimers != null) {
 			recentTimers.addTimerToList(myTimer);
 		}
 
+		// Go to running timer activity.
 		Intent newActivity = new Intent(getApplication(), RunningTimer.class);
 		startActivity(newActivity);
-
 	}
 
 	@Override

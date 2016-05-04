@@ -20,155 +20,163 @@ import com.jon.buzz.utils.TimeConverter;
 
 public class RunningTimer extends AppCompatActivity implements View.OnClickListener {
 
+	// Manage broadcasts
+	private LocalBroadcastManager mBroadcastManager;
+	private BroadcastReceiver mBroadcastReceiver;
 
-    private LocalBroadcastManager mBroadcastManager;
-    private BroadcastReceiver mBroadcastReceiver;
-    private TextView mTvTimeRemaining;
-    private ImageView mIvPauseTimer;
-    private ImageView mIvCancelTimer;
-    private ImageView mIvAddMin;
+	// Views in layout
+	private TextView mTvTimeRemaining;
+	private ImageView mIvPauseTimer;
+	private ImageView mIvCancelTimer;
+	private ImageView mIvAddMin;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_running_timer);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
 
-        // Support toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.runningToolbar);
-        setSupportActionBar(toolbar);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_running_timer);
 
-        // Get reference to view and set on click listeners
-        mTvTimeRemaining = (TextView) findViewById(R.id.timeRemaining);
-        mIvAddMin = (ImageView) findViewById(R.id.iv_add_min);
-        mIvPauseTimer = (ImageView) findViewById(R.id.iv_pause_timer);
-        mIvCancelTimer = (ImageView) findViewById(R.id.iv_cancel_timer);
-        mIvAddMin.setOnClickListener(this);
-        mIvPauseTimer.setOnClickListener(this);
-        mIvCancelTimer.setOnClickListener(this);
+		// Support toolbar
+		Toolbar toolbar = (Toolbar) findViewById(R.id.runningToolbar);
+		setSupportActionBar(toolbar);
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		}
 
-        mBroadcastManager = LocalBroadcastManager.getInstance(this);
+		// Get reference to view and set on click listeners
+		mTvTimeRemaining = (TextView) findViewById(R.id.timeRemaining);
+		mIvAddMin = (ImageView) findViewById(R.id.iv_add_min);
+		mIvPauseTimer = (ImageView) findViewById(R.id.iv_pause_timer);
+		mIvCancelTimer = (ImageView) findViewById(R.id.iv_cancel_timer);
+		mIvAddMin.setOnClickListener(this);
+		mIvPauseTimer.setOnClickListener(this);
+		mIvCancelTimer.setOnClickListener(this);
 
-        mBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
+		mBroadcastManager = LocalBroadcastManager.getInstance(this);
 
-                // Get type of broadcast.
-                String type = intent.getStringExtra("type");
+		mBroadcastReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
 
-                // Deal with broadcast depending on the type.
-                switch (type) {
-                    case CustomBroadcasts.TIME_REMAINING:
-                        updateTimeRemaining(intent.getIntExtra(CustomBroadcasts.TIME_REMAINING, 0));
-                        break;
-                    case CustomBroadcasts.STOP_TIMER:
-                        stopTimer();
-                        break;
-                    case CustomBroadcasts.PAUSE_TIMER:
-                        pauseTimer();
-                        break;
-                    case CustomBroadcasts.PLAY_TIMER:
-                        resumeTimer();
-                        break;
-                }
-            }
-        };
-    }
+				// Get type of broadcast.
+				String type = intent.getStringExtra("type");
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+				// Deal with broadcast depending on the type.
+				switch (type) {
+					case CustomBroadcasts.TIME_REMAINING:
+						updateTimeRemaining(intent.getIntExtra(CustomBroadcasts.TIME_REMAINING, 0));
+						break;
+					case CustomBroadcasts.STOP_TIMER:
+						stopTimer();
+						break;
+					case CustomBroadcasts.PAUSE_TIMER:
+						pauseTimer();
+						break;
+					case CustomBroadcasts.PLAY_TIMER:
+						resumeTimer();
+						break;
+				}
+			}
+		};
+	}
 
-        mBroadcastManager.registerReceiver(mBroadcastReceiver,
-                new IntentFilter(CustomBroadcasts.BROADCAST));
+	private void updateTimeRemaining(int milliseconds) {
 
-        updateUI();
-    }
+		// Convert milliseconds to Timer class
+		TimeConverter myTimer = new TimeConverter(milliseconds);
 
-    private void resumeTimer() {
+		if (milliseconds < 1) {
+			return2Main();
+		}
+		mTvTimeRemaining.setText(myTimer.toString());
 
-        // Change to pause drawable
-        mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_pause_circle));
+	}
 
-    }
+	private void stopTimer() {
 
-    private void pauseTimer() {
+		// Cancel all notifications
+		((NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
 
-        // Change to play drawable
-        mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_play_circle));
+		return2Main();
 
-    }
+	}
 
-    private void stopTimer() {
+	private void pauseTimer() {
 
-        // Cancel all notifications
-        ((NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+		// Change to play drawable
+		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_play_circle));
 
-        return2Main();
+	}
 
-    }
+	private void resumeTimer() {
 
-    private void updateTimeRemaining(int milliseconds) {
+		// Change to pause drawable
+		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_pause_circle));
 
-        TimeConverter myTimer = new TimeConverter(milliseconds);
+	}
 
-        if (milliseconds < 1) {
-            return2Main();
-        }
-        mTvTimeRemaining.setText(myTimer.toString());
+	private void return2Main() {
 
-    }
+		// Go back to main activity
+		Intent back2MainActivity = new Intent(this, MainActivity.class);
+		startActivity(back2MainActivity);
 
-    private void return2Main() {
+	}
 
-        // Go back to main activity
-        Intent back2MainActivity = new Intent(this, MainActivity.class);
-        startActivity(back2MainActivity);
+	@Override
+	protected void onPause() {
 
-    }
+		super.onPause();
 
-    private void updateUI() {
+		// Unregister receiver
+		mBroadcastManager.unregisterReceiver(mBroadcastReceiver);
+	}
 
-        // Set correct pause/play drawable
-        if (BackgroundCountdown.isPaused) {
-            mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_play_circle));
-        } else {
-            mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_pause_circle));
-        }
+	@Override
+	protected void onResume() {
+
+		super.onResume();
+
+		// Register receiver
+		mBroadcastManager.registerReceiver(mBroadcastReceiver,
+				new IntentFilter(CustomBroadcasts.BROADCAST));
+
+		// Update interface
+		updateUI();
+	}
+
+	private void updateUI() {
+
+		// Set correct pause/play drawable
+		if (BackgroundCountdown.isPaused) {
+			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_play_circle));
+		} else {
+			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_pause_circle));
+		}
 
 
+	}
 
-    }
+	@Override
+	public void onClick(View v) {
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        mBroadcastManager.unregisterReceiver(mBroadcastReceiver);
-    }
-
-    @Override
-    public void onClick(View v) {
-
-        Intent broadcastIntent = new Intent(CustomBroadcasts.BROADCAST);
-        switch (v.getId()) {
-            case R.id.iv_add_min:
-                broadcastIntent.putExtra("type", CustomBroadcasts.ADD_MIN);
-                break;
-            case R.id.iv_pause_timer:
-                if (BackgroundCountdown.isPaused) {
-                    broadcastIntent.putExtra("type", CustomBroadcasts.PLAY_TIMER);
-                } else {
-                    broadcastIntent.putExtra("type", CustomBroadcasts.PAUSE_TIMER);
-                }
-                break;
-            case R.id.iv_cancel_timer:
-                broadcastIntent.putExtra("type", CustomBroadcasts.STOP_TIMER);
-        }
-        mBroadcastManager.sendBroadcast(broadcastIntent);
-
-    }
-
+		// When a button is clicked, send the appropriate broadcast to handle it.
+		Intent broadcastIntent = new Intent(CustomBroadcasts.BROADCAST);
+		switch (v.getId()) {
+			case R.id.iv_add_min:
+				broadcastIntent.putExtra("type", CustomBroadcasts.ADD_MIN);
+				break;
+			case R.id.iv_pause_timer:
+				// If it's paused, play. Else, pause.
+				if (BackgroundCountdown.isPaused) {
+					broadcastIntent.putExtra("type", CustomBroadcasts.PLAY_TIMER);
+				} else {
+					broadcastIntent.putExtra("type", CustomBroadcasts.PAUSE_TIMER);
+				}
+				break;
+			case R.id.iv_cancel_timer:
+				broadcastIntent.putExtra("type", CustomBroadcasts.STOP_TIMER);
+		}
+		mBroadcastManager.sendBroadcast(broadcastIntent);
+	}
 }
