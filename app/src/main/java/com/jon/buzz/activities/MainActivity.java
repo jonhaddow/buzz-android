@@ -12,8 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
 import com.jon.buzz.R;
 import com.jon.buzz.adapters.MyPagerAdapter;
@@ -22,8 +20,9 @@ import com.jon.buzz.recentTimers.FragmentRecentTimers;
 import com.jon.buzz.services.BackgroundCountdown;
 import com.jon.buzz.utils.CustomBroadcasts;
 import com.jon.buzz.utils.TimeConverter;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-public class MainActivity extends AppCompatActivity implements StartNewTimerListener, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements StartNewTimerListener {
 
 	// Manage broadcasts
 	private LocalBroadcastManager broadcastManager;
@@ -31,6 +30,8 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 
 	// Reference to pages
 	private MyPagerAdapter mPagerAdapter;
+	private SlidingUpPanelLayout mBottomPanel;
+	private FragmentRunningTimer runningTimerFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +84,10 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 			mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 		}
 
+		mBottomPanel = (SlidingUpPanelLayout) findViewById(R.id.slidingPanelLayout);
+
+		runningTimerFragment = (FragmentRunningTimer) getSupportFragmentManager().findFragmentById(R.id.fragmentRunningTimer);
+
 		// Manage local broadcasts from this activity.
 		broadcastManager = LocalBroadcastManager.getInstance(this);
 		mBroadcastReceiver = new BroadcastReceiver() {
@@ -93,8 +98,24 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 				String type = intent.getStringExtra("type");
 
 				// Deal with broadcast depending on the type.
-				if (type.equals(CustomBroadcasts.TIME_REMAINING)) {
-					updateTimeRemaining(intent.getIntExtra(CustomBroadcasts.TIME_REMAINING, 0));
+				switch (type) {
+					case CustomBroadcasts.TIME_REMAINING:
+						int timeRemaining = intent.getIntExtra(CustomBroadcasts.TIME_REMAINING, 0);
+						if (timeRemaining == 0) {
+							stopTimer();
+						}
+						runningTimerFragment.updateTimeRemaining(timeRemaining);
+						break;
+					case CustomBroadcasts.STOP_TIMER:
+						stopTimer();
+						runningTimerFragment.stopTimer();
+						break;
+					case CustomBroadcasts.PAUSE_TIMER:
+						runningTimerFragment.pauseTimer();
+						break;
+					case CustomBroadcasts.PLAY_TIMER:
+						runningTimerFragment.resumeTimer();
+						break;
 				}
 			}
 
@@ -102,25 +123,13 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 	}
 
 	/**
-	 * Update current time on bottom bar.
-	 *
-	 * @param milliRemaining milliseconds remaining
+	 * Disable bottom bar.
 	 */
-	private void updateTimeRemaining(int milliRemaining) {
+	private void stopTimer() {
 
-		// Convert milliseconds into timer class.
-		TimeConverter myTimer = new TimeConverter(milliRemaining);
-
-		// Show time remaining and allow bar to be clickable, unless time is up.
-		String text2Display;
-		if (milliRemaining < 1) {
-			text2Display = "";
-			//todo mTvShowRunningTimer.setClickable(false);
-		} else {
-			text2Display = "Current Timer: " + myTimer.toString();
-			//todo mTvShowRunningTimer.setClickable(true);
-		}
-		//todo mTvShowRunningTimer.setText(text2Display);
+		// Show time remaining and allow bottom bar to be clickable, unless time is up.
+		mBottomPanel.setTouchEnabled(false);
+		mBottomPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
 	}
 
 	@Override
@@ -155,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 				new IntentFilter(CustomBroadcasts.BROADCAST));
 
 		if (!BackgroundCountdown.isRunning) {
-			updateTimeRemaining(0);
+			stopTimer();
 		}
 	}
 
@@ -177,12 +186,9 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		if (recentTimers != null) {
 			recentTimers.addTimerToList(myTimer);
 		}
-	}
 
-	@Override
-	public void onClick(View view) {
-
-		Intent newActivity = new Intent(getApplication(), FragmentRunningTimer.class);
-		startActivity(newActivity);
+		// Update bottom bar fragment.
+		runningTimerFragment.startNewTimer();
+		mBottomPanel.setTouchEnabled(true);
 	}
 }

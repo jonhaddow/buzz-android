@@ -1,49 +1,41 @@
 <RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="wrap_content"
+	android:layout_height="match_parent"
+	android:padding="@dimen/bottom_bar_padding"
+	android:background="@color/colorPrimary"
 	tools:context=".activities.FragmentRunningTimer">
-
-	<android.support.v7.widget.Toolbar
-		android:id="@+id/showRunningTimer"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:background="@color/colorPrimary"
-		android:elevation="6dp"
-		android:gravity="center"
-		android:minHeight="?attr/actionBarSize"
-		android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-		android:title="Time Remaining: "
-		app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
 	<TextView
 		android:id="@+id/timeRemainingLabel"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_centerInParent="true"
+		android:layout_centerHorizontal="true"
 		android:gravity="center"
-		android:text="Time Remaining:"
+		android:text="Time Remaining"
+		android:textColor="@color/textColour"
 		android:textSize="25sp"/>
 
 	<TextView
 		android:id="@+id/timeRemaining"
 		android:layout_width="wrap_content"
+		android:paddingTop="@dimen/bottom_bar_padding"
 		android:layout_height="wrap_content"
 		android:layout_below="@id/timeRemainingLabel"
 		android:layout_centerHorizontal="true"
 		android:gravity="center"
 		android:textSize="40sp"
-		tools:text="06:45:03"/>
+		android:text="06:45:03"
+		android:textColor="@color/textColour"/>
 
 	<LinearLayout
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/bottom_bar_padding"
 		android:layout_below="@id/timeRemaining"
 		android:layout_centerHorizontal="true"
-		android:gravity="center"
-		android:paddingTop="50dp">
+		android:gravity="center">
 
 		<ImageView
 			android:id="@+id/iv_add_min"
