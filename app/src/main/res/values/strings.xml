@@ -23,10 +23,11 @@
     <string name="notification_message_finished">"Timer Complete!"</string>
     <string name="notification_header">Buzz</string>
     <string name="cd_ib_delete">Backspace</string>
-    <string name="stop_timer_content_description">Stop Timer</string>
-	<string name="pause_timer_content_description">Pause Timer</string>
+    <string name="add_min_content_description">Add 1 minute to timer</string>
+    <string name="cancel_timer_content_description">Stop Timer</string>
+    <string name="pause_timer_content_description">Pause Timer</string>
     <string name="pause_timer">Pause</string>
     <string name="play_timer">Play</string>
-	<string name="cancel_timer">Cancel</string>
-	<string name="add_min_content_description">Add 1 minute to timer</string>
+    <string name="cancel_timer">Cancel</string>
+    <string name="menu_settings">Settings</string>
 </resources>
