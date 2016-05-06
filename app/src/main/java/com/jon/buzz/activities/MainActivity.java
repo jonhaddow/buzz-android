@@ -41,9 +41,6 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 
 		// Support toolbar.
 		Toolbar toolbar = (Toolbar) findViewById(R.id.mainToolbar);
-		if (toolbar != null) {
-			toolbar.setTitle("Create a Timer");
-		}
 		setSupportActionBar(toolbar);
 
 		// Instantiate view pager and pager adapter.

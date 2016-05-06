@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android"
+     xmlns:tools="http://schemas.android.com/tools">
+	<objectAnimator
+		android:duration="250"
+		android:propertyName="pathData"
+		android:valueFrom="@string/SVGplay"
+		android:valueTo="@string/SVGpause"
+		android:valueType="pathType"
+		tools:targetApi="honeycomb" />
+</set>

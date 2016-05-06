@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -97,14 +98,18 @@ public class FragmentRunningTimer extends Fragment implements View.OnClickListen
 	public void pauseTimer() {
 
 		// Change to play drawable
-		mIvPauseTimer.setImageDrawable(mContext.getDrawable(R.drawable.ic_play_circle));
+		mIvPauseTimer.setImageDrawable(mContext.getDrawable(R.drawable.animated_pause2play));
+		Animatable temp = (Animatable) mIvPauseTimer.getDrawable();
+		temp.start();
 
 	}
 
 	public void resumeTimer() {
 
 		// Change to pause drawable
-		mIvPauseTimer.setImageDrawable(mContext.getDrawable(R.drawable.ic_pause_circle));
+		mIvPauseTimer.setImageDrawable(mContext.getDrawable(R.drawable.animated_play2pause));
+		Animatable temp = (Animatable) mIvPauseTimer.getDrawable();
+				temp.start();
 	}
 
 	@Override
