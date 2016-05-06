@@ -1,0 +1,66 @@
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	tools:context=".activities.FragmentRunningTimer">
+
+	<android.support.v7.widget.Toolbar
+		android:id="@+id/showRunningTimer"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="@color/colorPrimary"
+		android:elevation="6dp"
+		android:gravity="center"
+		android:minHeight="?attr/actionBarSize"
+		android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+		android:title="Time Remaining: "
+		app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+	<TextView
+		android:id="@+id/timeRemainingLabel"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_centerInParent="true"
+		android:gravity="center"
+		android:text="Time Remaining:"
+		android:textSize="25sp"/>
+
+	<TextView
+		android:id="@+id/timeRemaining"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/timeRemainingLabel"
+		android:layout_centerHorizontal="true"
+		android:gravity="center"
+		android:textSize="40sp"
+		tools:text="06:45:03"/>
+
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_below="@id/timeRemaining"
+		android:layout_centerHorizontal="true"
+		android:gravity="center"
+		android:paddingTop="50dp">
+
+		<ImageView
+			android:id="@+id/iv_add_min"
+			style="@style/timer_buttons"
+			android:src="@drawable/ic_add_min_circle"/>
+
+		<ImageView
+			android:id="@+id/iv_pause_timer"
+			style="@style/timer_buttons"
+			android:src="@drawable/ic_pause_circle"/>
+
+		<ImageView
+			android:id="@+id/iv_cancel_timer"
+			style="@style/timer_buttons"
+			android:contentDescription="@string/cancel_timer_content_description"
+			android:src="@drawable/ic_cancel_circle"/>
+
+	</LinearLayout>
+
+</RelativeLayout>

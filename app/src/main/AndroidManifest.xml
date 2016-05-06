@@ -31,14 +31,6 @@
 				<action android:name="com.jon.buzz.utils.CustomBroadcasts.BROADCAST"/>
 			</intent-filter>
 		</receiver>
-
-		<activity
-			android:name=".activities.RunningTimer"
-			android:parentActivityName=".activities.MainActivity">
-			<meta-data
-				android:name="android.support.PARENT_ACTIVITY"
-				android:value=".activities.MainActivity"/>
-		</activity>
 	</application>
 
 </manifest>

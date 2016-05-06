@@ -10,8 +10,6 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.transition.Transition;
-import android.transition.TransitionManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,9 +31,6 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 
 	// Reference to pages
 	private MyPagerAdapter mPagerAdapter;
-
-	// text on bottom bar
-	private TextView mTvShowRunningTimer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,12 +83,6 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 			mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 		}
 
-		// Get bottom bar text view and set on click listener.
-		mTvShowRunningTimer = (TextView) findViewById(R.id.showRunningTimer);
-		if (mTvShowRunningTimer != null) {
-			mTvShowRunningTimer.setOnClickListener(this);
-		}
-
 		// Manage local broadcasts from this activity.
 		broadcastManager = LocalBroadcastManager.getInstance(this);
 		mBroadcastReceiver = new BroadcastReceiver() {
@@ -126,12 +115,12 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		String text2Display;
 		if (milliRemaining < 1) {
 			text2Display = "";
-			mTvShowRunningTimer.setClickable(false);
+			//todo mTvShowRunningTimer.setClickable(false);
 		} else {
 			text2Display = "Current Timer: " + myTimer.toString();
-			mTvShowRunningTimer.setClickable(true);
+			//todo mTvShowRunningTimer.setClickable(true);
 		}
-		mTvShowRunningTimer.setText(text2Display);
+		//todo mTvShowRunningTimer.setText(text2Display);
 	}
 
 	@Override
@@ -188,16 +177,12 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		if (recentTimers != null) {
 			recentTimers.addTimerToList(myTimer);
 		}
-
-		// Go to running timer activity.
-		Intent newActivity = new Intent(getApplication(), RunningTimer.class);
-		startActivity(newActivity);
 	}
 
 	@Override
 	public void onClick(View view) {
 
-		Intent newActivity = new Intent(getApplication(), RunningTimer.class);
+		Intent newActivity = new Intent(getApplication(), FragmentRunningTimer.class);
 		startActivity(newActivity);
 	}
 }

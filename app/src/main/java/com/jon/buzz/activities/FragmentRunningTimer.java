@@ -1,15 +1,17 @@
 package com.jon.buzz.activities;
 
+import android.app.Fragment;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,7 +20,7 @@ import com.jon.buzz.services.BackgroundCountdown;
 import com.jon.buzz.utils.CustomBroadcasts;
 import com.jon.buzz.utils.TimeConverter;
 
-public class RunningTimer extends AppCompatActivity implements View.OnClickListener {
+public class FragmentRunningTimer extends Fragment implements View.OnClickListener {
 
 	// Manage broadcasts
 	private LocalBroadcastManager mBroadcastManager;
@@ -29,30 +31,17 @@ public class RunningTimer extends AppCompatActivity implements View.OnClickListe
 	private ImageView mIvPauseTimer;
 	private ImageView mIvCancelTimer;
 	private ImageView mIvAddMin;
+	private Context mContext;
+	private View mRootView;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_running_timer);
 
-		// Support toolbar
-		Toolbar toolbar = (Toolbar) findViewById(R.id.runningToolbar);
-		setSupportActionBar(toolbar);
-		if (getSupportActionBar() != null) {
-			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		}
+		mContext = getContext();
 
-		// Get reference to view and set on click listeners
-		mTvTimeRemaining = (TextView) findViewById(R.id.timeRemaining);
-		mIvAddMin = (ImageView) findViewById(R.id.iv_add_min);
-		mIvPauseTimer = (ImageView) findViewById(R.id.iv_pause_timer);
-		mIvCancelTimer = (ImageView) findViewById(R.id.iv_cancel_timer);
-		mIvAddMin.setOnClickListener(this);
-		mIvPauseTimer.setOnClickListener(this);
-		mIvCancelTimer.setOnClickListener(this);
-
-		mBroadcastManager = LocalBroadcastManager.getInstance(this);
+		mBroadcastManager = LocalBroadcastManager.getInstance(mContext);
 
 		mBroadcastReceiver = new BroadcastReceiver() {
 			@Override
@@ -80,13 +69,31 @@ public class RunningTimer extends AppCompatActivity implements View.OnClickListe
 		};
 	}
 
+	@Nullable
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+		mRootView = inflater.inflate(R.layout.fragment_running_timer, container, false);
+
+		// Get reference to view and set on click listeners
+		mTvTimeRemaining = (TextView) mRootView.findViewById(R.id.timeRemaining);
+		mIvAddMin = (ImageView) mRootView.findViewById(R.id.iv_add_min);
+		mIvPauseTimer = (ImageView) mRootView.findViewById(R.id.iv_pause_timer);
+		mIvCancelTimer = (ImageView) mRootView.findViewById(R.id.iv_cancel_timer);
+		mIvAddMin.setOnClickListener(this);
+		mIvPauseTimer.setOnClickListener(this);
+		mIvCancelTimer.setOnClickListener(this);
+
+		return mRootView;
+	}
+
 	private void updateTimeRemaining(int milliseconds) {
 
 		// Convert milliseconds to Timer class
 		TimeConverter myTimer = new TimeConverter(milliseconds);
 
 		if (milliseconds < 1) {
-			return2Main();
+			// TODO: 06/05/2016 Respond to end of time.
 		}
 		mTvTimeRemaining.setText(myTimer.toString());
 
@@ -95,36 +102,25 @@ public class RunningTimer extends AppCompatActivity implements View.OnClickListe
 	private void stopTimer() {
 
 		// Cancel all notifications
-		((NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
-
-		return2Main();
-
+		((NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
 	}
 
 	private void pauseTimer() {
 
 		// Change to play drawable
-		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_play_circle));
+		mIvPauseTimer.setImageDrawable(mContext.getDrawable(R.drawable.ic_play_circle));
 
 	}
 
 	private void resumeTimer() {
 
 		// Change to pause drawable
-		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_pause_circle));
-
-	}
-
-	private void return2Main() {
-
-		// Go back to main activity
-		Intent back2MainActivity = new Intent(this, MainActivity.class);
-		startActivity(back2MainActivity);
+		mIvPauseTimer.setImageDrawable(mContext.getDrawable(R.drawable.ic_pause_circle));
 
 	}
 
 	@Override
-	protected void onPause() {
+	public void onPause() {
 
 		super.onPause();
 
@@ -133,7 +129,7 @@ public class RunningTimer extends AppCompatActivity implements View.OnClickListe
 	}
 
 	@Override
-	protected void onResume() {
+	public void onResume() {
 
 		super.onResume();
 
@@ -149,9 +145,9 @@ public class RunningTimer extends AppCompatActivity implements View.OnClickListe
 
 		// Set correct pause/play drawable
 		if (BackgroundCountdown.isPaused) {
-			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_play_circle));
+			mIvPauseTimer.setImageDrawable(mContext.getDrawable(R.drawable.ic_play_circle));
 		} else {
-			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_pause_circle));
+			mIvPauseTimer.setImageDrawable(mContext.getDrawable(R.drawable.ic_pause_circle));
 		}
 
 

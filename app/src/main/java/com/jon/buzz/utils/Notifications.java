@@ -2,14 +2,13 @@ package com.jon.buzz.utils;
 
 import android.app.Notification;
 import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Icon;
 
 import com.jon.buzz.R;
 import com.jon.buzz.activities.MainActivity;
-import com.jon.buzz.activities.RunningTimer;
+import com.jon.buzz.activities.FragmentRunningTimer;
 
 /**
  * Created by Jon Haddow on 20/04/2016
@@ -59,7 +58,7 @@ public class Notifications {
 	private static PendingIntent createRegularIntent(Context context) {
 
 		// Creates an intent for Running Timer activity
-		Intent notificationIntent = new Intent(context, RunningTimer.class);
+		Intent notificationIntent = new Intent(context, FragmentRunningTimer.class);
 
 		// Adds the back stack
 		Intent backintent = new Intent(context, MainActivity.class);

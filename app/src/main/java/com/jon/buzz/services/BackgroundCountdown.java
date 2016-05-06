@@ -18,7 +18,7 @@ import com.jon.buzz.utils.TimeConverter;
 
 public class BackgroundCountdown extends Service {
 
-    private static final int COUNT_DOWN_INTERVAL = 100;
+    private static final int COUNT_DOWN_INTERVAL = 1000;
     public static boolean isPaused = false;
     public static boolean isRunning = false;
     private NotificationManager mNotificationManager;
