@@ -1,38 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.jon.buzz">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.jon.buzz">
 
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
+	<uses-permission android:name="android.permission.WAKE_LOCK"/>
 
-    <application
-        android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
-        <service android:name=".services.BackgroundCountdown" />
+	<application
+		android:allowBackup="false"
+		android:icon="@mipmap/ic_launcher"
+		android:label="@string/app_name"
+		android:supportsRtl="true"
+		android:theme="@style/AppTheme"
+		tools:ignore="GoogleAppIndexingWarning">
+		<service android:name=".services.BackgroundCountdown"/>
 
-        <activity
-            android:name=".activities.MainActivity"
-            android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+		<activity
+			android:name=".activities.MainActivity"
+			android:screenOrientation="portrait">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+				<category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+		</activity>
 
-        <receiver
-            android:name=".utils.NotificationBroadcastReceiver"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.jon.buzz.utils.CustomBroadcasts.BROADCAST" />
-            </intent-filter>
-        </receiver>
-
-        <activity android:name=".activities.RunningTimer" android:parentActivityName=".activities.MainActivity"/>
-    </application>
+		<receiver
+			android:name=".utils.NotificationBroadcastReceiver"
+			android:exported="false">
+			<intent-filter>
+				<action android:name="com.jon.buzz.utils.CustomBroadcasts.BROADCAST"/>
+			</intent-filter>
+		</receiver>
+	</application>
 
 </manifest>

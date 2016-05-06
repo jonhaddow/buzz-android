@@ -44,12 +44,12 @@
         <item name="android:textSize">25sp</item>
     </style>
 
-    <style name="bottom_bar_element">
-	    <item name="android:layout_height">@dimen/bottom_bar_icons</item>
-	    <item name="android:layout_width">@dimen/bottom_bar_icons</item>
+    <style name="timer_buttons">
 	    <item name="android:paddingStart">@dimen/bottom_bar_padding</item>
 	    <item name="android:paddingEnd">@dimen/bottom_bar_padding</item>
-	    <item name="android:tint">@android:color/white</item>
+        <item name="android:layout_height">90dp</item>
+        <item name="android:layout_width">90dp</item>
+	    <item name="android:tint">@color/textColour</item>
     </style>
 
 </resources>
