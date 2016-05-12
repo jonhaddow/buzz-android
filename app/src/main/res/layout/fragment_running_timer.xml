@@ -13,7 +13,7 @@
 		android:layout_height="wrap_content"
 		android:layout_centerHorizontal="true"
 		android:gravity="center"
-		android:text="Time Remaining"
+		android:text="@string/time_remaining_label"
 		android:textColor="@color/textColour"
 		android:textSize="25sp"/>
 
@@ -26,7 +26,7 @@
 		android:layout_centerHorizontal="true"
 		android:gravity="center"
 		android:textSize="40sp"
-		android:text="06:45:03"
+		tools:text="06:45:03"
 		android:textColor="@color/textColour"/>
 
 	<LinearLayout
@@ -40,12 +40,14 @@
 		<ImageView
 			android:id="@+id/iv_add_min"
 			style="@style/timer_buttons"
-			android:src="@drawable/ic_add_min_circle"/>
+			android:src="@drawable/ic_add_min_circle"
+			android:contentDescription="@string/add_min_content_description"/>
 
 		<ImageView
 			android:id="@+id/iv_pause_timer"
 			style="@style/timer_buttons"
-			android:src="@drawable/ic_pause_circle"/>
+			android:src="@drawable/ic_pause_circle"
+			android:contentDescription="@string/pause_timer_content_description"/>
 
 		<ImageView
 			android:id="@+id/iv_cancel_timer"

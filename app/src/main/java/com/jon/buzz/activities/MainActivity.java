@@ -11,7 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuItem;
 
 import com.jon.buzz.R;
 import com.jon.buzz.adapters.MyPagerAdapter;
@@ -141,12 +140,6 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 
 		getMenuInflater().inflate(R.menu.main_activity_menu, menu);
 		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-
-		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
