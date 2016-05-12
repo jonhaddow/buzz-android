@@ -51,7 +51,7 @@ public class Notifications {
 
 		// Creates an intent for MainActivity to stop timer
 		Intent notificationIntent = new Intent(CustomBroadcasts.BROADCAST);
-		notificationIntent.putExtra("type", CustomBroadcasts.STOP_TIMER);
+		notificationIntent.putExtra("type", CustomBroadcasts.CANCEL_TIMER);
 		return PendingIntent.getBroadcast(context, 1, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 

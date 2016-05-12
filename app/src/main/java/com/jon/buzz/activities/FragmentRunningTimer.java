@@ -1,10 +1,8 @@
 package com.jon.buzz.activities;
 
 import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -86,7 +84,7 @@ public class FragmentRunningTimer extends Fragment implements View.OnClickListen
 		mTvTimeRemaining.setText(myTimer.toString());
 	}
 
-	public void stopTimer() {
+	public void cancelTimer() {
 
 		// Cancel all notifications
 		((NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
@@ -130,7 +128,7 @@ public class FragmentRunningTimer extends Fragment implements View.OnClickListen
 				}
 				break;
 			case R.id.iv_cancel_timer:
-				broadcastIntent.putExtra("type", CustomBroadcasts.STOP_TIMER);
+				broadcastIntent.putExtra("type", CustomBroadcasts.CANCEL_TIMER);
 		}
 		LocalBroadcastManager.getInstance(mContext).sendBroadcast(broadcastIntent);
 	}

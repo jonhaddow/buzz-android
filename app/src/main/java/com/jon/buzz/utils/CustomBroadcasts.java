@@ -8,8 +8,8 @@ public class CustomBroadcasts {
 	// Broadcast to pause timer.
 	public static final String PAUSE_TIMER = "com.jon.buzz.utils.CustomBroadcasts.PAUSE_TIMER";
 
-	// Broadcast to stop timer.
-	public static final String STOP_TIMER = "com.jon.buzz.utils.CustomBroadcasts.STOP_TIMER";
+	// Broadcast to cancel timer.
+	public static final String CANCEL_TIMER = "com.jon.buzz.utils.CustomBroadcasts.CANCEL_TIMER";
 
 	// Broadcast from Background service to main activity to update UI.
 	public static final String TIME_REMAINING = "com.jon.buzz.utils.CustomBroadcasts.TIME_REMAINING";
