@@ -30,6 +30,7 @@
     <string name="play_timer">Play</string>
     <string name="cancel_timer">Cancel</string>
     <string name="menu_settings">Settings</string>
-    <string name="SVGplay">M10,16.5l3,-2.25v-4.5l-3,-2.25zM13,14.25l3,-2.25v0l-3,-2.25zM12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2zM12,20c-4.41,0 -8,-3.59 -8,-8s3.59,-8 8,-8 8,3.59 8,8 -3.59,8 -8,8z</string>
-    <string name="SVGpause">M9,16l2,0v-8l-2,0zM13,16l2,0v-8l-2,0zM12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2zM12,20c-4.41,0 -8,-3.59 -8,-8s3.59,-8 8,-8 8,3.59 8,8 -3.59,8 -8,8z</string>
+    <string name="SVG_play">M10,16.5l3,-2.25v-4.5l-3,-2.25zM13,14.25l3,-2.25v0l-3,-2.25zM12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2zM12,20c-4.41,0 -8,-3.59 -8,-8s3.59,-8 8,-8 8,3.59 8,8 -3.59,8 -8,8z</string>
+    <string name="SVG_pause">M9,16l2,0v-8l-2,0zM13,16l2,0v-8l-2,0zM12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2zM12,20c-4.41,0 -8,-3.59 -8,-8s3.59,-8 8,-8 8,3.59 8,8 -3.59,8 -8,8z</string>
+    <string name="replay_timer">Replay</string>
 </resources>

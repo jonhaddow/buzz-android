@@ -22,4 +22,7 @@ public class CustomBroadcasts {
 
 	// Broadcast to add min to timer.
 	public static final String ADD_MIN = "com.jon.buz.utils.CustomBroadcasts.ADD_MIN";
+
+	// Broadcast to replay timer.
+	public static final String REPLAY_TIMER = "com.jon.buzz.utils.CustomBroadcasts.REPLAY_TIMER";
 }

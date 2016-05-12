@@ -80,8 +80,10 @@ public class FragmentRunningTimer extends Fragment implements View.OnClickListen
 		if (milliseconds < 1) {
 			mTvTimeRemainingLabel.setVisibility(View.INVISIBLE);
 			mTvTimeRemaining.setText("");
+		} else {
+			mTvTimeRemainingLabel.setVisibility(View.VISIBLE);
+			mTvTimeRemaining.setText(myTimer.toString());
 		}
-		mTvTimeRemaining.setText(myTimer.toString());
 	}
 
 	public void cancelTimer() {

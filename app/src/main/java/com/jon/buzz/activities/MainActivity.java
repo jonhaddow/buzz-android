@@ -99,12 +99,12 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 					case CustomBroadcasts.TIME_REMAINING:
 						int timeRemaining = intent.getIntExtra(CustomBroadcasts.TIME_REMAINING, 0);
 						if (timeRemaining == 0) {
-							cancelTimer();
+							hidePanel();
 						}
 						runningTimerFragment.updateTimeRemaining(timeRemaining);
 						break;
 					case CustomBroadcasts.CANCEL_TIMER:
-						cancelTimer();
+						hidePanel();
 						runningTimerFragment.cancelTimer();
 						break;
 					case CustomBroadcasts.PAUSE_TIMER:
@@ -113,18 +113,25 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 					case CustomBroadcasts.PLAY_TIMER:
 						runningTimerFragment.resumeTimer();
 						break;
+					case CustomBroadcasts.REPLAY_TIMER:
+						showPanel();
 				}
 			}
 
 		};
 	}
 
+	private void showPanel() {
+
+		mBottomPanel.setTouchEnabled(true);
+		mBottomPanel.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+	}
+
 	/**
 	 * Disable bottom bar.
 	 */
-	private void cancelTimer() {
+	private void hidePanel() {
 
-		// Show time remaining and allow bottom bar to be clickable, unless time is up.
 		mBottomPanel.setTouchEnabled(false);
 		mBottomPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
 	}
@@ -161,7 +168,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 				new IntentFilter(CustomBroadcasts.BROADCAST));
 
 		if (!BackgroundCountdown.isRunning) {
-			cancelTimer();
+			hidePanel();
 		}
 	}
 

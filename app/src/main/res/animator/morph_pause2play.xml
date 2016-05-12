@@ -3,7 +3,7 @@
 	<objectAnimator
 		android:duration="250"
 		android:propertyName="pathData"
-		android:valueFrom="@string/SVGpause"
-		android:valueTo="@string/SVGplay"
+		android:valueFrom="@string/SVG_pause"
+		android:valueTo="@string/SVG_play"
 		android:valueType="pathType"/>
 </set>

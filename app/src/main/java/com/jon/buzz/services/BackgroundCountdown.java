@@ -19,20 +19,30 @@ import com.jon.buzz.utils.TimeConverter;
 public class BackgroundCountdown extends Service {
 
 	private static final int COUNT_DOWN_INTERVAL = 1000;
+
+	// Is timer paused or playing?
 	public static boolean isPaused = false;
+
+	// Is service running or not?
 	public static boolean isRunning = false;
+
+	// Is countdown in finished state?
+	public static boolean isFinished = false;
+
 	private NotificationManager mNotificationManager;
 	private PowerManager.WakeLock mWakeLock;
 	private LocalBroadcastManager broadcastManager;
 	private CountDownTimer mCountDown;
 	private int mMilliRemaining;
 	private BroadcastReceiver mBroadcastReceiver;
+	private int mMilliseconds2Start;
 
 	@Override
 	public void onCreate() {
 
 		isRunning = true;
 		isPaused = false;
+		isFinished = false;
 
 		// Get notification manager
 		mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -57,6 +67,9 @@ public class BackgroundCountdown extends Service {
 						break;
 					case CustomBroadcasts.ADD_MIN:
 						addMin();
+						break;
+					case CustomBroadcasts.REPLAY_TIMER:
+						replayTimer();
 				}
 			}
 		};
@@ -75,12 +88,17 @@ public class BackgroundCountdown extends Service {
 		super.onCreate();
 	}
 
+	private void replayTimer() {
+
+		startCountdownTimer(mMilliseconds2Start);
+	}
+
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
 		// Get the length of the timer and start countdown.
-		int mMilliseconds = intent.getIntExtra("Milli", 0);
-		startCountdownTimer(mMilliseconds);
+		mMilliseconds2Start = intent.getIntExtra("Milli", 0);
+		startCountdownTimer(mMilliseconds2Start);
 
 		return super.onStartCommand(intent, flags, startId);
 	}
@@ -107,6 +125,8 @@ public class BackgroundCountdown extends Service {
 			@Override
 			public void onFinish() {
 
+				isFinished = true;
+
 				// Send broadcast to main activity to update UI
 				sendResult(0);
 
@@ -115,7 +135,6 @@ public class BackgroundCountdown extends Service {
 				// Notify user that timer has stopped
 				mNotificationManager.notify(1, Notifications.setupFinishedNotification(getApplicationContext()).build());
 
-				stopSelf();
 			}
 		}.start();
 	}

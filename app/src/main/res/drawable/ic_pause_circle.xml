@@ -6,5 +6,5 @@
 	<path
 		android:name="pause"
 		android:fillColor="#FF000000"
-		android:pathData="@string/SVGpause"/>
+		android:pathData="@string/SVG_pause"/>
 </vector>

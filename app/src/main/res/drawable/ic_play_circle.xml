@@ -6,5 +6,5 @@
     <path
         android:name="play"
         android:fillColor="#FF000000"
-        android:pathData="@string/SVGplay"/>
+        android:pathData="@string/SVG_play"/>
 </vector>

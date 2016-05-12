@@ -4,8 +4,8 @@
 	<objectAnimator
 		android:duration="250"
 		android:propertyName="pathData"
-		android:valueFrom="@string/SVGplay"
-		android:valueTo="@string/SVGpause"
+		android:valueFrom="@string/SVG_play"
+		android:valueTo="@string/SVG_pause"
 		android:valueType="pathType"
 		tools:targetApi="honeycomb" />
 </set>
