@@ -1,10 +1,9 @@
 package com.jon.buzz.activities;
 
 import android.app.NotificationManager;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -81,11 +80,13 @@ public class FragmentRunningTimer extends Fragment implements View.OnClickListen
 		if (milliseconds < 1) {
 			mTvTimeRemainingLabel.setVisibility(View.INVISIBLE);
 			mTvTimeRemaining.setText("");
+		} else {
+			mTvTimeRemainingLabel.setVisibility(View.VISIBLE);
+			mTvTimeRemaining.setText(myTimer.toString());
 		}
-		mTvTimeRemaining.setText(myTimer.toString());
 	}
 
-	public void stopTimer() {
+	public void cancelTimer() {
 
 		// Cancel all notifications
 		((NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
@@ -97,14 +98,18 @@ public class FragmentRunningTimer extends Fragment implements View.OnClickListen
 	public void pauseTimer() {
 
 		// Change to play drawable
-		mIvPauseTimer.setImageDrawable(mContext.getDrawable(R.drawable.ic_play_circle));
+		mIvPauseTimer.setImageDrawable(mContext.getDrawable(R.drawable.animated_pause2play));
+		Animatable temp = (Animatable) mIvPauseTimer.getDrawable();
+		temp.start();
 
 	}
 
 	public void resumeTimer() {
 
 		// Change to pause drawable
-		mIvPauseTimer.setImageDrawable(mContext.getDrawable(R.drawable.ic_pause_circle));
+		mIvPauseTimer.setImageDrawable(mContext.getDrawable(R.drawable.animated_play2pause));
+		Animatable temp = (Animatable) mIvPauseTimer.getDrawable();
+				temp.start();
 	}
 
 	@Override
@@ -125,7 +130,7 @@ public class FragmentRunningTimer extends Fragment implements View.OnClickListen
 				}
 				break;
 			case R.id.iv_cancel_timer:
-				broadcastIntent.putExtra("type", CustomBroadcasts.STOP_TIMER);
+				broadcastIntent.putExtra("type", CustomBroadcasts.CANCEL_TIMER);
 		}
 		LocalBroadcastManager.getInstance(mContext).sendBroadcast(broadcastIntent);
 	}

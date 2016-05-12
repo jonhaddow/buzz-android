@@ -11,7 +11,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuItem;
 
 import com.jon.buzz.R;
 import com.jon.buzz.adapters.MyPagerAdapter;
@@ -41,9 +40,6 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 
 		// Support toolbar.
 		Toolbar toolbar = (Toolbar) findViewById(R.id.mainToolbar);
-		if (toolbar != null) {
-			toolbar.setTitle("Create a Timer");
-		}
 		setSupportActionBar(toolbar);
 
 		// Instantiate view pager and pager adapter.
@@ -102,13 +98,13 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 					case CustomBroadcasts.TIME_REMAINING:
 						int timeRemaining = intent.getIntExtra(CustomBroadcasts.TIME_REMAINING, 0);
 						if (timeRemaining == 0) {
-							stopTimer();
+							hidePanel();
 						}
 						runningTimerFragment.updateTimeRemaining(timeRemaining);
 						break;
-					case CustomBroadcasts.STOP_TIMER:
-						stopTimer();
-						runningTimerFragment.stopTimer();
+					case CustomBroadcasts.CANCEL_TIMER:
+						hidePanel();
+						runningTimerFragment.cancelTimer();
 						break;
 					case CustomBroadcasts.PAUSE_TIMER:
 						runningTimerFragment.pauseTimer();
@@ -116,18 +112,25 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 					case CustomBroadcasts.PLAY_TIMER:
 						runningTimerFragment.resumeTimer();
 						break;
+					case CustomBroadcasts.REPLAY_TIMER:
+						showPanel();
 				}
 			}
 
 		};
 	}
 
+	private void showPanel() {
+
+		mBottomPanel.setTouchEnabled(true);
+		mBottomPanel.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+	}
+
 	/**
 	 * Disable bottom bar.
 	 */
-	private void stopTimer() {
+	private void hidePanel() {
 
-		// Show time remaining and allow bottom bar to be clickable, unless time is up.
 		mBottomPanel.setTouchEnabled(false);
 		mBottomPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
 	}
@@ -137,12 +140,6 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 
 		getMenuInflater().inflate(R.menu.main_activity_menu, menu);
 		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-
-		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -164,7 +161,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 				new IntentFilter(CustomBroadcasts.BROADCAST));
 
 		if (!BackgroundCountdown.isRunning) {
-			stopTimer();
+			hidePanel();
 		}
 	}
 

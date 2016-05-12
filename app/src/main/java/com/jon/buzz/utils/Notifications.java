@@ -51,7 +51,7 @@ public class Notifications {
 
 		// Creates an intent for MainActivity to stop timer
 		Intent notificationIntent = new Intent(CustomBroadcasts.BROADCAST);
-		notificationIntent.putExtra("type", CustomBroadcasts.STOP_TIMER);
+		notificationIntent.putExtra("type", CustomBroadcasts.CANCEL_TIMER);
 		return PendingIntent.getBroadcast(context, 1, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 
@@ -61,11 +61,10 @@ public class Notifications {
 		Intent notificationIntent = new Intent(context, FragmentRunningTimer.class);
 
 		// Adds the back stack
-		Intent backintent = new Intent(context, MainActivity.class);
-		backintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		Intent backIntent = new Intent(context, MainActivity.class);
+		backIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-
-		return PendingIntent.getActivities(context, 3, new Intent[]{backintent, notificationIntent}, PendingIntent.FLAG_ONE_SHOT);
+		return PendingIntent.getActivities(context, 3, new Intent[]{backIntent, notificationIntent}, PendingIntent.FLAG_ONE_SHOT);
 	}
 
 	public static Notification.Builder setupFinishedNotification(Context context) {
@@ -78,7 +77,20 @@ public class Notifications {
 				.setPriority(Notification.PRIORITY_MAX)
 				.setVisibility(Notification.VISIBILITY_PUBLIC)
 				.setContentIntent(createRegularIntent(context))
+				.addAction(new Notification.Action.Builder(
+						Icon.createWithResource(context,R.drawable.ic_replay),
+						context.getString(R.string.replay_timer),
+						createReplayTimerIntent(context)).build()
+				)
 				.setAutoCancel(true);
+	}
+
+	private static PendingIntent createReplayTimerIntent(Context context) {
+
+		// Creates an intent for MainActivity to replay timer
+		Intent notificationIntent = new Intent(CustomBroadcasts.BROADCAST);
+		notificationIntent.putExtra("type", CustomBroadcasts.REPLAY_TIMER);
+		return PendingIntent.getBroadcast(context, 4, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 	}
 
 	public static Notification.Builder setupPausedNotification(Context context, TimeConverter myTimer) {
