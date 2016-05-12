@@ -61,10 +61,10 @@ public class Notifications {
 		Intent notificationIntent = new Intent(context, FragmentRunningTimer.class);
 
 		// Adds the back stack
-		Intent backintent = new Intent(context, MainActivity.class);
-		backintent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		Intent backIntent = new Intent(context, MainActivity.class);
+		backIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-		return PendingIntent.getActivities(context, 3, new Intent[]{backintent, notificationIntent}, PendingIntent.FLAG_ONE_SHOT);
+		return PendingIntent.getActivities(context, 3, new Intent[]{backIntent, notificationIntent}, PendingIntent.FLAG_ONE_SHOT);
 	}
 
 	public static Notification.Builder setupFinishedNotification(Context context) {

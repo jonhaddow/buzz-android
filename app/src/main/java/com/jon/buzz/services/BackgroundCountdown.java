@@ -26,9 +26,6 @@ public class BackgroundCountdown extends Service {
 	// Is service running or not?
 	public static boolean isRunning = false;
 
-	// Is countdown in finished state?
-	public static boolean isFinished = false;
-
 	private NotificationManager mNotificationManager;
 	private PowerManager.WakeLock mWakeLock;
 	private LocalBroadcastManager broadcastManager;
@@ -42,7 +39,6 @@ public class BackgroundCountdown extends Service {
 
 		isRunning = true;
 		isPaused = false;
-		isFinished = false;
 
 		// Get notification manager
 		mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -124,8 +120,6 @@ public class BackgroundCountdown extends Service {
 
 			@Override
 			public void onFinish() {
-
-				isFinished = true;
 
 				// Send broadcast to main activity to update UI
 				sendResult(0);
