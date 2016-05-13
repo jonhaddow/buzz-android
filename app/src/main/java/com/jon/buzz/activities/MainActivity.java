@@ -187,5 +187,6 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		// Update bottom bar fragment.
 		runningTimerFragment.startNewTimer();
 		mBottomPanel.setTouchEnabled(true);
+		mBottomPanel.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
 	}
 }
