@@ -170,8 +170,6 @@ public class BackgroundCountdown extends Service {
 
 	private void addMin() {
 
-		System.out.println("One minute added");
-
 		// Cancel previous countdown.
 		mCountDown.cancel();
 
@@ -182,20 +180,15 @@ public class BackgroundCountdown extends Service {
 
 	private void cancelTimer() {
 
-		System.out.println("Timer Stopped");
-
 		// Cancel notifications, countdown and stop service
 		mNotificationManager.cancelAll();
 		if (mCountDown != null) {
-			System.out.println("Countdown cancelled");
 			mCountDown.cancel();
 		}
 		stopSelf();
 	}
 
 	private void pauseTimer() {
-
-		System.out.println("Timer Paused");
 
 		isPaused = true;
 
@@ -209,8 +202,6 @@ public class BackgroundCountdown extends Service {
 	}
 
 	private void resumeTimer() {
-
-		System.out.println("Timer Resumed");
 
 		isPaused = false;
 
