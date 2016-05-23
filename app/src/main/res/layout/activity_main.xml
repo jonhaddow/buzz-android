@@ -1,7 +1,7 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                                  xmlns:app="http://schemas.android.com/apk/res-auto"
                                                  xmlns:tools="http://schemas.android.com/tools"
-                                                 android:id="@+id/mainContent"
+                                                 android:id="@+id/slidingPanelLayout"
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
                                                  android:gravity="bottom"
@@ -41,11 +41,11 @@
 	</LinearLayout>
 
 	<fragment
-		android:id="@+id/fragmentRunningTimer"
 		android:name="com.jon.buzz.activities.FragmentRunningTimer"
+		android:id="@+id/fragmentRunningTimer"
+		android:tag="fragmentRunningTimer"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		app:layout_behavior="@string/bottom_sheet_behavior"
 		tools:layout="@layout/fragment_running_timer"/>
 
-</android.support.design.widget.CoordinatorLayout>
+</com.sothree.slidinguppanel.SlidingUpPanelLayout>

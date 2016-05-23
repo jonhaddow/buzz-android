@@ -5,15 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.View;
 
 import com.jon.buzz.R;
 import com.jon.buzz.adapters.MyPagerAdapter;
@@ -22,6 +19,7 @@ import com.jon.buzz.recentTimers.FragmentRecentTimers;
 import com.jon.buzz.services.BackgroundCountdown;
 import com.jon.buzz.utils.CustomBroadcasts;
 import com.jon.buzz.utils.TimeConverter;
+import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
 public class MainActivity extends AppCompatActivity implements StartNewTimerListener {
 
@@ -31,9 +29,8 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 
 	// Reference to pages
 	private MyPagerAdapter mPagerAdapter;
-	private View mBottomSheet;
+	private SlidingUpPanelLayout mBottomPanel;
 	private FragmentRunningTimer runningTimerFragment;
-	private BottomSheetBehavior mBottomSheetBehavior;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +80,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 			mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 		}
 
-		mBottomSheet = findViewById(R.id.fragmentRunningTimer);
-		if (mBottomSheet != null) {
-			mBottomSheetBehavior = BottomSheetBehavior.from(mBottomSheet);
-		}
+		mBottomPanel = (SlidingUpPanelLayout) findViewById(R.id.slidingPanelLayout);
 
 		runningTimerFragment = (FragmentRunningTimer) getSupportFragmentManager().findFragmentById(R.id.fragmentRunningTimer);
 
@@ -126,17 +120,19 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		};
 	}
 
+	private void showPanel() {
+
+		mBottomPanel.setTouchEnabled(true);
+		mBottomPanel.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+	}
+
 	/**
 	 * Disable bottom bar.
 	 */
 	private void hidePanel() {
 
-		mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-	}
-
-	private void showPanel() {
-
-		mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+		mBottomPanel.setTouchEnabled(false);
+		mBottomPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
 	}
 
 	@Override
@@ -190,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 
 		// Update bottom bar fragment.
 		runningTimerFragment.startNewTimer();
-		BottomSheetDialogFragment bottomSheetDialogFragment = new FragmentRunningTimer();
-		bottomSheetDialogFragment.show(getSupportFragmentManager(), bottomSheetDialogFragment.getTag());
+		mBottomPanel.setTouchEnabled(true);
+		mBottomPanel.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
 	}
 }

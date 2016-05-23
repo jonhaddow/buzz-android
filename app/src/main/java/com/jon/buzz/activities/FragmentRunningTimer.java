@@ -1,16 +1,11 @@
 package com.jon.buzz.activities;
 
-import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
@@ -24,44 +19,13 @@ import com.jon.buzz.services.BackgroundCountdown;
 import com.jon.buzz.utils.CustomBroadcasts;
 import com.jon.buzz.utils.TimeConverter;
 
-public class FragmentRunningTimer extends BottomSheetDialogFragment implements View.OnClickListener {
+public class FragmentRunningTimer extends Fragment implements View.OnClickListener {
 
 	// Views in layout
 	private TextView mTvTimeRemaining;
 	private ImageView mIvPauseTimer;
 	private Context mContext;
 	private TextView mTvTimeRemainingLabel;
-
-	private BottomSheetBehavior.BottomSheetCallback mBottomSheetBehaviorCallback = new BottomSheetBehavior.BottomSheetCallback() {
-
-		@Override
-		public void onStateChanged(@NonNull View bottomSheet, int newState) {
-			if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-				dismiss();
-			}
-
-		}
-
-		@Override
-		public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-		}
-	};
-
-	@Override
-	public void setupDialog(Dialog dialog, int style) {
-
-		super.setupDialog(dialog, style);
-		// TODO: 13/05/2016 replace get context with context
-		View contentView = View.inflate(getContext(), R.layout.fragment_running_timer, null);
-		dialog.setContentView(contentView);
-
-		CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) ((View) contentView.getParent()).getLayoutParams();
-		CoordinatorLayout.Behavior behavior = params.getBehavior();
-
-		if( behavior != null && behavior instanceof BottomSheetBehavior ) {
-			((BottomSheetBehavior) behavior).setBottomSheetCallback(mBottomSheetBehaviorCallback);
-		}
-	}
 
 	@Nullable
 	@Override
