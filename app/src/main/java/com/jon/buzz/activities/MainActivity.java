@@ -120,19 +120,16 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		};
 	}
 
-	private void showPanel() {
-
-		mBottomPanel.setTouchEnabled(true);
-		mBottomPanel.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
-	}
-
-	/**
-	 * Disable bottom bar.
-	 */
 	private void hidePanel() {
 
 		mBottomPanel.setTouchEnabled(false);
 		mBottomPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+	}
+
+	private void showPanel() {
+
+		mBottomPanel.setTouchEnabled(true);
+		mBottomPanel.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
 	}
 
 	@Override
