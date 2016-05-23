@@ -129,8 +129,7 @@ public class BackgroundCountdown extends Service {
 				// Notify user that timer has stopped
 				mNotificationManager.notify(1, Notifications.setupFinishedNotification(getApplicationContext()).build());
 
-				// Kill the service.
-				stopSelf();
+				isRunning = false;
 			}
 		}.start();
 	}

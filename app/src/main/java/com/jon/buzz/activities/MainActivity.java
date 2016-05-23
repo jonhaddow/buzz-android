@@ -222,6 +222,8 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		// Clear time remaining text when no timer is running.
 		if (!BackgroundCountdown.isRunning) {
 			hideBottomBar();
+		} else {
+			showBottomBar();
 		}
 
 	}
