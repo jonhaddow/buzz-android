@@ -8,7 +8,6 @@ import android.graphics.drawable.Icon;
 
 import com.jon.buzz.R;
 import com.jon.buzz.activities.MainActivity;
-import com.jon.buzz.activities.FragmentRunningTimer;
 
 /**
  * Created by Jon Haddow on 20/04/2016
@@ -58,7 +57,7 @@ public class Notifications {
 	private static PendingIntent createRegularIntent(Context context) {
 
 		// Creates an intent for Running Timer activity
-		Intent notificationIntent = new Intent(context, FragmentRunningTimer.class);
+		Intent notificationIntent = new Intent(context, MainActivity.class);
 
 		// Adds the back stack
 		Intent backIntent = new Intent(context, MainActivity.class);

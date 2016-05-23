@@ -1,9 +1,11 @@
 package com.jon.buzz.activities;
 
+import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
@@ -11,6 +13,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.jon.buzz.R;
 import com.jon.buzz.adapters.MyPagerAdapter;
@@ -19,9 +24,8 @@ import com.jon.buzz.recentTimers.FragmentRecentTimers;
 import com.jon.buzz.services.BackgroundCountdown;
 import com.jon.buzz.utils.CustomBroadcasts;
 import com.jon.buzz.utils.TimeConverter;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 
-public class MainActivity extends AppCompatActivity implements StartNewTimerListener {
+public class MainActivity extends AppCompatActivity implements StartNewTimerListener, View.OnClickListener {
 
 	// Manage broadcasts
 	private LocalBroadcastManager broadcastManager;
@@ -29,8 +33,12 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 
 	// Reference to pages
 	private MyPagerAdapter mPagerAdapter;
-	private SlidingUpPanelLayout mBottomPanel;
-	private FragmentRunningTimer runningTimerFragment;
+
+	// Reference to views
+	private TextView mTvTimeRemaining;
+	private ImageView mIvPauseTimer;
+	private ImageView mIvAddMin;
+	private ImageView mIvCancelTimer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,9 +88,13 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 			mPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 		}
 
-		mBottomPanel = (SlidingUpPanelLayout) findViewById(R.id.slidingPanelLayout);
-
-		runningTimerFragment = (FragmentRunningTimer) getSupportFragmentManager().findFragmentById(R.id.fragmentRunningTimer);
+		mTvTimeRemaining = (TextView) findViewById(R.id.timeRemaining);
+		mIvAddMin = (ImageView) findViewById(R.id.iv_add_min);
+		mIvPauseTimer = (ImageView) findViewById(R.id.iv_pause_timer);
+		mIvCancelTimer = (ImageView) findViewById(R.id.iv_cancel_timer);
+		mIvAddMin.setOnClickListener(this);
+		mIvPauseTimer.setOnClickListener(this);
+		mIvCancelTimer.setOnClickListener(this);
 
 		// Manage local broadcasts from this activity.
 		broadcastManager = LocalBroadcastManager.getInstance(this);
@@ -97,39 +109,81 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 				switch (type) {
 					case CustomBroadcasts.TIME_REMAINING:
 						int timeRemaining = intent.getIntExtra(CustomBroadcasts.TIME_REMAINING, 0);
-						if (timeRemaining == 0) {
-							hidePanel();
+						if (timeRemaining < 1) {
+							hideBottomBar();
 						}
-						runningTimerFragment.updateTimeRemaining(timeRemaining);
+						updateTimeRemaining(timeRemaining);
 						break;
 					case CustomBroadcasts.CANCEL_TIMER:
-						hidePanel();
-						runningTimerFragment.cancelTimer();
+						hideBottomBar();
+						cancelTimer();
 						break;
 					case CustomBroadcasts.PAUSE_TIMER:
-						runningTimerFragment.pauseTimer();
+						pauseTimer();
 						break;
 					case CustomBroadcasts.PLAY_TIMER:
-						runningTimerFragment.resumeTimer();
+						resumeTimer();
 						break;
 					case CustomBroadcasts.REPLAY_TIMER:
-						showPanel();
+						showBottomBar();
 				}
 			}
 
 		};
 	}
 
-	private void hidePanel() {
+	private void hideBottomBar() {
 
-		mBottomPanel.setTouchEnabled(false);
-		mBottomPanel.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+		mTvTimeRemaining.setText("");
+		mIvAddMin.setVisibility(View.INVISIBLE);
+		mIvPauseTimer.setVisibility(View.INVISIBLE);
+		mIvCancelTimer.setVisibility(View.INVISIBLE);
 	}
 
-	private void showPanel() {
+	public void updateTimeRemaining(int milliseconds) {
 
-		mBottomPanel.setTouchEnabled(true);
-		mBottomPanel.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+		// Convert milliseconds to Timer class
+		TimeConverter myTimer = new TimeConverter(milliseconds);
+
+		if (milliseconds < 1) {
+			mTvTimeRemaining.setText("");
+		} else {
+			mTvTimeRemaining.setText(myTimer.toString());
+		}
+	}
+
+	public void cancelTimer() {
+
+		// Cancel all notifications
+		((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).cancelAll();
+
+		mTvTimeRemaining.setText("");
+
+		hideBottomBar();
+	}
+
+	public void pauseTimer() {
+
+		// Change to play drawable
+		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.animated_pause2play));
+		Animatable temp = (Animatable) mIvPauseTimer.getDrawable();
+		temp.start();
+
+	}
+
+	public void resumeTimer() {
+
+		// Change to pause drawable
+		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.animated_play2pause));
+		Animatable temp = (Animatable) mIvPauseTimer.getDrawable();
+		temp.start();
+	}
+
+	private void showBottomBar() {
+
+		mIvAddMin.setVisibility(View.VISIBLE);
+		mIvPauseTimer.setVisibility(View.VISIBLE);
+		mIvCancelTimer.setVisibility(View.VISIBLE);
 	}
 
 	@Override
@@ -157,9 +211,19 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		broadcastManager.registerReceiver((mBroadcastReceiver),
 				new IntentFilter(CustomBroadcasts.BROADCAST));
 
-		if (!BackgroundCountdown.isRunning) {
-			hidePanel();
+
+		// Set correct pause/play drawable.
+		if (BackgroundCountdown.isPaused) {
+			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_play_circle));
+		} else {
+			mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.ic_pause_circle));
 		}
+
+		// Clear time remaining text when no timer is running.
+		if (!BackgroundCountdown.isRunning) {
+			hideBottomBar();
+		}
+
 	}
 
 	/**
@@ -181,9 +245,28 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 			recentTimers.addTimerToList(myTimer);
 		}
 
-		// Update bottom bar fragment.
-		runningTimerFragment.startNewTimer();
-		mBottomPanel.setTouchEnabled(true);
-		mBottomPanel.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+		showBottomBar();
+	}
+
+	@Override
+	public void onClick(View view) {
+
+		Intent broadcastIntent = new Intent(CustomBroadcasts.BROADCAST);
+		switch (view.getId()) {
+			case R.id.iv_add_min:
+				broadcastIntent.putExtra("type", CustomBroadcasts.ADD_MIN);
+				break;
+			case R.id.iv_pause_timer:
+				// If it's paused, play. Else, pause.
+				if (BackgroundCountdown.isPaused) {
+					broadcastIntent.putExtra("type", CustomBroadcasts.PLAY_TIMER);
+				} else {
+					broadcastIntent.putExtra("type", CustomBroadcasts.PAUSE_TIMER);
+				}
+				break;
+			case R.id.iv_cancel_timer:
+				broadcastIntent.putExtra("type", CustomBroadcasts.CANCEL_TIMER);
+		}
+		broadcastManager.sendBroadcast(broadcastIntent);
 	}
 }
