@@ -40,4 +40,9 @@ public class TimeConverter {
 
 		return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
 	}
+
+	public Object getSecs() {
+
+		return seconds;
+	}
 }

@@ -112,7 +112,8 @@ public class BackgroundCountdown extends Service {
 				TimeConverter myTimer = new TimeConverter(mMilliRemaining);
 
 				// Start foreground notification with time remaining
-				startForeground(1, Notifications.setupRunningNotification(getApplicationContext(), myTimer).build());
+				startForeground(1,
+						Notifications.setupRunningNotification(getApplicationContext(), myTimer, mMilliseconds2Start).build());
 
 				// Send remaining milliseconds to main activity to update UI
 				sendResult(mMilliRemaining);

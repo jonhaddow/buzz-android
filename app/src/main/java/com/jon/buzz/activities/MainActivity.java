@@ -166,18 +166,13 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 	public void pauseTimer() {
 
 		// Change to play drawable
-		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.animated_pause2play));
-		Animatable temp = (Animatable) mIvPauseTimer.getDrawable();
-		temp.start();
-
+		mIvPauseTimer.setImageResource(R.drawable.ic_play_circle);
 	}
 
 	public void resumeTimer() {
 
 		// Change to pause drawable
-		mIvPauseTimer.setImageDrawable(getDrawable(R.drawable.animated_play2pause));
-		Animatable temp = (Animatable) mIvPauseTimer.getDrawable();
-		temp.start();
+		mIvPauseTimer.setImageResource(R.drawable.ic_pause_circle);
 	}
 
 	private void showBottomBar() {

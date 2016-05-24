@@ -56,7 +56,7 @@
 			android:id="@+id/iv_add_min"
 			style="@style/timer_buttons"
 			android:contentDescription="@string/add_min_content_description"
-			android:src="@drawable/ic_add_min_circle"/>
+			android:src="@drawable/ic_plus_circle"/>
 
 		<ImageView
 			android:id="@+id/iv_pause_timer"

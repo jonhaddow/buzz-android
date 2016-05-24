@@ -5,18 +5,21 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Icon;
+import android.media.session.MediaSession;
 
 import com.jon.buzz.R;
 import com.jon.buzz.activities.MainActivity;
+import com.jon.buzz.services.BackgroundCountdown;
 
 /**
  * Created by Jon Haddow on 20/04/2016
  */
 public class Notifications {
 
-	public static Notification.Builder setupRunningNotification(Context context, TimeConverter myTimer) {
+	public static Notification.Builder setupRunningNotification(Context context, TimeConverter myTimer, int mMilliseconds2Start) {
 
 		// Create notification that shows while countdown is running
+		MediaSession.Token mySession;
 		return new Notification.Builder(context)
 				.setSmallIcon(R.drawable.ic_notification)
 				.setContentTitle(context.getString(R.string.notification_header))
@@ -34,6 +37,7 @@ public class Notifications {
 						context.getString(R.string.cancel_timer),
 						createStopTimerIntent(context)).build()
 				)
+				.setProgress(mMilliseconds2Start, myTimer.getMilli(),false)
 				.setContentIntent(createRegularIntent(context))
 				.setOngoing(true);
 	}
