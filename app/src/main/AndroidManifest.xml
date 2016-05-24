@@ -12,6 +12,7 @@
 		android:supportsRtl="true"
 		android:theme="@style/AppTheme"
 		tools:ignore="GoogleAppIndexingWarning">
+
 		<service android:name=".services.BackgroundCountdown"/>
 
 		<activity
@@ -19,8 +20,11 @@
 			android:screenOrientation="portrait">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
-
 				<category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+			<intent-filter>
+				<action android:name="android.intent.action.SET_TIMER"/>
+				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</activity>
 
@@ -31,6 +35,7 @@
 				<action android:name="com.jon.buzz.utils.CustomBroadcasts.BROADCAST"/>
 			</intent-filter>
 		</receiver>
+
 	</application>
 
 </manifest>

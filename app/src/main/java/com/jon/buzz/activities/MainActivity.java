@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 			}
 
 		};
+
 	}
 
 	private void hideBottomBar() {
