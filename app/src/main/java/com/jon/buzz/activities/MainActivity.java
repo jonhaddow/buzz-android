@@ -13,7 +13,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -187,6 +189,13 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 
 		getMenuInflater().inflate(R.menu.main_activity_menu, menu);
 		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		startActivity(new Intent(this, SettingsActivity.class));
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override

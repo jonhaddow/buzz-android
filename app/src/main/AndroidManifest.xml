@@ -4,7 +4,8 @@
           package="com.jon.buzz">
 
 	<uses-permission android:name="android.permission.WAKE_LOCK"/>
-	<permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
+
+	<permission android:name="android.permission.MEDIA_CONTENT_CONTROL"/>
 
 	<application
 		android:allowBackup="false"
@@ -14,20 +15,32 @@
 		android:theme="@style/AppTheme"
 		tools:ignore="GoogleAppIndexingWarning">
 
-		<service android:name=".services.BackgroundCountdown"/>
-
 		<activity
 			android:name=".activities.MainActivity"
-			android:screenOrientation="portrait">
+			android:screenOrientation="portrait"
+			android:theme="@style/MainTheme">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
+
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 			<intent-filter>
 				<action android:name="android.intent.action.SET_TIMER"/>
+
 				<category android:name="android.intent.category.DEFAULT"/>
 			</intent-filter>
 		</activity>
+
+		<activity
+			android:name=".activities.SettingsActivity"
+			android:label="@string/title_activity_settings"
+			android:parentActivityName=".activities.MainActivity">
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value="com.jon.buzz.activities.MainActivity"/>
+		</activity>
+
+		<service android:name=".services.BackgroundCountdown"/>
 
 		<receiver
 			android:name=".utils.NotificationBroadcastReceiver"
@@ -36,7 +49,5 @@
 				<action android:name="com.jon.buzz.utils.CustomBroadcasts.BROADCAST"/>
 			</intent-filter>
 		</receiver>
-
 	</application>
-
 </manifest>

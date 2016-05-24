@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<PreferenceCategory android:title="General"/>
+	<CheckBoxPreference
+		android:defaultValue="true"
+		android:key="pref_notification"
+		android:summary="Show notification while timer is running"
+		android:title="Notification"/>
+	<ListPreference
+		android:defaultValue="@string/pref_syncConnectionTypes_default"
+		android:dialogTitle="Choose a colour"
+		android:entries="@array/pref_color_names"
+		android:entryValues="@array/pref_color_values"
+		android:key="pref_colour_picker"
+		android:summary="%s"
+		android:title="Theme Colour"/>
+</PreferenceScreen>
