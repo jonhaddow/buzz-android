@@ -30,6 +30,21 @@ public class TimeConverter {
 		milli = 1000 * (seconds + (minutes * 60) + (hours * 3600));
 	}
 
+	public int getHours() {
+
+		return (int) hours;
+	}
+
+	public int getMinutes() {
+
+		return (int) minutes;
+	}
+
+	public int getSeconds() {
+
+		return (int) seconds;
+	}
+
 	public int getMilli() {
 
 		return milli;
@@ -41,8 +56,5 @@ public class TimeConverter {
 		return String.format(Locale.getDefault(), "%02d:%02d:%02d", hours, minutes, seconds);
 	}
 
-	public Object getSecs() {
 
-		return seconds;
-	}
 }

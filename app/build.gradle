@@ -31,4 +31,5 @@ dependencies {
     compile 'com.android.support:design:24.0.0-beta1'
     compile 'com.android.support:support-v4:24.0.0-beta1'
     compile 'org.apache.directory.studio:org.apache.commons.io:2.4'
+    compile 'com.vanniktech:vntnumberpickerpreference:1.0.0'
 }

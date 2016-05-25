@@ -1,0 +1,73 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/LinearLayout1"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="15dp">
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:paddingBottom="5dp">
+
+		<TextView
+			android:id="@+id/TextView01"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:gravity="center"
+			android:text="Hours"
+			android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+		<TextView
+			android:id="@+id/textView1"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:gravity="center"
+			android:text="Minutes"
+			android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+		<TextView
+			android:id="@+id/textView2"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:gravity="center"
+			android:text="Seconds"
+			android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+	</LinearLayout>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
+
+		<NumberPicker
+			android:id="@+id/pickerHours"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="5dp"
+			android:layout_marginEnd="3dp"
+			android:layout_weight="1"/>
+
+		<NumberPicker
+			android:id="@+id/pickerMinutes"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="2dp"
+			android:layout_marginEnd="3dp"
+			android:layout_weight="1"/>
+
+		<NumberPicker
+			android:id="@+id/pickerSeconds"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="2dp"
+			android:layout_marginEnd="5dp"
+			android:layout_weight="1"/>
+	</LinearLayout>
+
+</LinearLayout>

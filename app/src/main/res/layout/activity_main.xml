@@ -10,7 +10,7 @@
 		android:id="@+id/mainToolbar"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:background="@color/colorPrimary"
+		android:background="@color/color_primary"
 		android:elevation="6dp"
 		android:minHeight="?attr/actionBarSize"
 		android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
@@ -20,7 +20,7 @@
 		android:id="@+id/tab_layout"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:background="@color/colorPrimary"
+		android:background="@color/color_primary"
 		android:elevation="6dp"
 		android:minHeight="?attr/actionBarSize"
 		android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"/>
@@ -36,7 +36,7 @@
 		android:id="@+id/RunningTimerBottomBar"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:background="@color/colorPrimary"
+		android:background="@color/color_primary"
 		android:gravity="center_vertical"
 		android:orientation="horizontal"
 		android:paddingTop="5dp"
@@ -48,7 +48,7 @@
 			android:layout_height="wrap_content"
 			android:layout_weight="1"
 			android:gravity="center"
-			android:textColor="@color/textColour"
+			android:textColor="@color/text_colour"
 			android:textSize="40sp"
 			tools:text="06:45:03"/>
 

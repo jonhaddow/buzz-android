@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.Animatable;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
@@ -47,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		// Set default settings values.
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 		// Support toolbar.
 		Toolbar toolbar = (Toolbar) findViewById(R.id.mainToolbar);

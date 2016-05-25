@@ -39,5 +39,10 @@
 
 	<!-- TODO: Remove or change this placeholder text -->
 	<string name="hello_blank_fragment">Hello blank fragment</string>
+	<string name="orange">Orange</string>
+	<string name="green">green</string>
+	<string name="blue">Blue</string>
+	<string name="grey">Grey</string>
+	<string name="yellow">Yellow</string>
 
 </resources>
