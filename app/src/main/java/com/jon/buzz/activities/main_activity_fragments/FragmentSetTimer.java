@@ -95,29 +95,20 @@ public class FragmentSetTimer extends Fragment implements View.OnClickListener, 
 			return;
 		}
 
-		// Collect current display values and convert to int[].
+		// Collect current display values and convert to milliseconds.
 		TextView[] displayNumbers = UISetTimer.collectDisplayData(mRootView);
-		int[] displayIntegers = new int[6];
-		for (int i = 0; i < 6; i++) {
-			displayIntegers[i] = Integer.parseInt(String.valueOf(displayNumbers[i].getText()));
-		}
+		int hours = Integer.parseInt(String.valueOf(displayNumbers[0].getText()) + String.valueOf(displayNumbers[1].getText()));
+		int minutes = Integer.parseInt(String.valueOf(displayNumbers[2].getText() + String.valueOf(displayNumbers[3].getText())));
+		int seconds = Integer.parseInt(String.valueOf(displayNumbers[4].getText() + String.valueOf(displayNumbers[5].getText())));
+		TimeConverter myTimer = new TimeConverter(hours,minutes,seconds);
+		int milliseconds = myTimer.getMilli();
 
 		// Clear Display.
 		UISetTimer.clearDisplay(UISetTimer.collectDisplayData(mRootView));
 
-		// Calculate length of timer in seconds.
-		int overallSeconds = displayIntegers[5]
-				+ displayIntegers[4] * 10
-
-				+ displayIntegers[3] * 60
-				+ displayIntegers[2] * 600
-
-				+ displayIntegers[1] * 3600
-				+ displayIntegers[0] * 36000;
-
 		// Check if user wants to run default timer.
 		boolean runDefault = prefs.getBoolean(getString(R.string.pref_key_default_timer), false);
-		if (overallSeconds == 0) {
+		if (milliseconds == 0) {
 			if (!runDefault) {
 
 				// No input and no default timer set. Send toast to inform user.
@@ -126,15 +117,12 @@ public class FragmentSetTimer extends Fragment implements View.OnClickListener, 
 
 				// No input but default timer is set. Get default timer value from preferences
 				// and start timer.
-				int milliseconds = prefs.getInt(getString(R.string.pref_key_time_picker), 0);
-				if (milliseconds == 0) return;
-				TimeConverter myTimer = new TimeConverter(milliseconds);
-				mMainActivityCallback.startNewTimer(myTimer);
+				int defaultMilli = prefs.getInt(getString(R.string.pref_key_time_picker), 0);
+				if (defaultMilli == 0) return;
+				TimeConverter defaultTimer = new TimeConverter(defaultMilli);
+				mMainActivityCallback.startNewTimer(defaultTimer);
 			}
 		} else {
-
-			// Pass the number of milliseconds into TimeConverter class
-			TimeConverter myTimer = new TimeConverter(overallSeconds * 1000);
 
 			// Pass time to main activity to create new timer
 			mMainActivityCallback.startNewTimer(myTimer);
