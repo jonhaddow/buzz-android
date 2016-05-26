@@ -1,13 +1,21 @@
-package com.jon.buzz.utils;
+package com.jon.buzz.Preferences;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.NumberPicker;
 
 import com.jon.buzz.R;
+import com.jon.buzz.utils.TimeConverter;
+
+import java.util.Map;
+import java.util.Set;
 
 public class TripleNumberPickerPreference extends DialogPreference {
 
@@ -25,7 +33,16 @@ public class TripleNumberPickerPreference extends DialogPreference {
 		setDialogLayoutResource(R.layout.triple_number_picker);
 		setPositiveButtonText(android.R.string.ok);
 		setNegativeButtonText(android.R.string.cancel);
+
+
 		setDialogTitle(null);
+	}
+
+	@Override
+	protected void onPrepareDialogBuilder(AlertDialog.Builder builder) {
+
+		super.onPrepareDialogBuilder(builder);
+		builder.setNeutralButton("Reset to 0", this);
 	}
 
 	@Override
@@ -37,7 +54,6 @@ public class TripleNumberPickerPreference extends DialogPreference {
 				(NumberPicker) dialog.findViewById(R.id.pickerMinutes),
 				(NumberPicker) dialog.findViewById(R.id.pickerSeconds)
 		};
-
 		for (NumberPicker picker : pickers) {
 			picker.setMinValue(0);
 			picker.setMaxValue(24);
@@ -51,14 +67,31 @@ public class TripleNumberPickerPreference extends DialogPreference {
 	}
 
 	@Override
-	protected void onDialogClosed(boolean positiveResult) {
+	public void onClick(DialogInterface dialog, int which) {
 
-		super.onDialogClosed(positiveResult);
-		if (positiveResult) {
-
-			// TODO: 25/05/2016 Get value from pickers and set as new mCurrentTime.
-			persistInt(mCurrentTime);
+		super.onClick(dialog, which);
+		switch (which) {
+			case DialogInterface.BUTTON_POSITIVE:
+				saveData();
+				break;
+			case DialogInterface.BUTTON_NEUTRAL:
+				for (NumberPicker picker : pickers) {
+					picker.setValue(0);
+				}
+				saveData();
+				break;
 		}
+	}
+
+	private void saveData() {
+
+		TimeConverter myTimer = new TimeConverter(
+				pickers[0].getValue(),
+				pickers[1].getValue(),
+				pickers[2].getValue()
+		);
+		mCurrentTime = myTimer.getMilli();
+		persistInt(mCurrentTime);
 	}
 
 	@Override

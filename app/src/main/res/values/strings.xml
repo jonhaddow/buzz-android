@@ -37,12 +37,24 @@
 	<string name="pref_syncConnectionTypes_default">Default</string>
 	<string name="title_activity_settings">Settings</string>
 
-	<!-- TODO: Remove or change this placeholder text -->
-	<string name="hello_blank_fragment">Hello blank fragment</string>
-	<string name="orange">Orange</string>
-	<string name="green">green</string>
-	<string name="blue">Blue</string>
-	<string name="grey">Grey</string>
-	<string name="yellow">Yellow</string>
+	<string name="pref_notification_true">Show notification while timer is running</string>
+	<string name="pref_notification_false">Don\'t show notification while timer is running</string>
+	<string name="pref_key_time_picker">pref_number_picker</string>
+	<string name="pref_default_timer_true">Give a default time when no time is set</string>
+	<string name="pref_default_timer_false">No timer is set without your input.</string>
+	<string name="pref_time_picker">Select a default timer</string>
+	<string name="pref_title_time_picker">Default timer</string>
+	<string name="pref_title_default_timer">Set default</string>
+	<string name="pref_key_default_timer">pref_default_timer</string>
+	<string name="pref_title_notification">Notification</string>
+	<string name="pref_key_notification">pref_notification</string>
+	<string name="pref_category_default_timer">Default Timer</string>
+	<string name="pref_key_replace_timer">pref_replace_timer</string>
+	<string name="pref_title_replace_timer">Replace old timer</string>
+	<string name="pref_replace_timer_false">Don\'t replace old timer when a new timer is set</string>
+	<string name="pref_replace_timer_true">Replace old timer when a new timer is set</string>
+	<string name="toast_no_input">No time has been entered</string>
+	<string name="toast_timer_running">Timer already running</string>
+
 
 </resources>

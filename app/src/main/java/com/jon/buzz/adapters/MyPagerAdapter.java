@@ -9,8 +9,8 @@ import android.util.SparseArray;
 import android.view.ViewGroup;
 
 import com.jon.buzz.R;
-import com.jon.buzz.recentTimers.FragmentRecentTimers;
-import com.jon.buzz.setTimer.FragmentSetTimer;
+import com.jon.buzz.activities.main_activity_fragments.FragmentRecentTimers;
+import com.jon.buzz.activities.main_activity_fragments.FragmentSetTimer;
 
 import java.lang.ref.WeakReference;
 

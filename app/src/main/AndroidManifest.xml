@@ -32,8 +32,9 @@
 		</activity>
 
 		<activity
-			android:name=".activities.SettingsActivity"
+			android:name=".Preferences.SettingsActivity"
 			android:label="@string/title_activity_settings"
+			android:screenOrientation="portrait"
 			android:parentActivityName=".activities.MainActivity">
 			<meta-data
 				android:name="android.support.PARENT_ACTIVITY"

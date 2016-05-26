@@ -3,11 +3,24 @@
 	xmlns:android="http://schemas.android.com/apk/res/android">
 	<CheckBoxPreference
 		android:defaultValue="true"
-		android:key="pref_notification"
-		android:summary="Show notification while timer is running"
-		android:title="Notification"/>
-	<com.jon.buzz.utils.TripleNumberPickerPreference
-		android:key="preference_number_picker"
-		android:summary="Select a default timer when no time is set"
-		android:title="Default Timer"/>
+		android:key="@string/pref_key_notification"
+		android:summary="@string/pref_notification_true"
+		android:title="@string/pref_title_notification"/>
+	<CheckBoxPreference
+		android:defaultValue="false"
+	    android:key="@string/pref_key_replace_timer"
+	    android:summary="@string/pref_replace_timer_false"
+	    android:title="@string/pref_title_replace_timer"/>
+	<PreferenceCategory
+		android:title="@string/pref_category_default_timer"/>
+	<CheckBoxPreference
+		android:defaultValue="false"
+	    android:key="@string/pref_key_default_timer"
+		android:title="@string/pref_title_default_timer"
+		android:summary="@string/pref_default_timer_false"/>
+	<com.jon.buzz.Preferences.TripleNumberPickerPreference
+		android:dependency="@string/pref_key_default_timer"
+		android:key="@string/pref_key_time_picker"
+		android:summary="@string/pref_time_picker"
+		android:title="@string/pref_title_time_picker"/>
 </PreferenceScreen>

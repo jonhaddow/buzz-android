@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.drawable.Animatable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
@@ -16,14 +15,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.jon.buzz.Preferences.SettingsActivity;
 import com.jon.buzz.R;
 import com.jon.buzz.adapters.MyPagerAdapter;
 import com.jon.buzz.interfaces.StartNewTimerListener;
-import com.jon.buzz.recentTimers.FragmentRecentTimers;
+import com.jon.buzz.activities.main_activity_fragments.FragmentRecentTimers;
 import com.jon.buzz.services.BackgroundCountdown;
 import com.jon.buzz.utils.CustomBroadcasts;
 import com.jon.buzz.utils.TimeConverter;
@@ -31,7 +31,7 @@ import com.jon.buzz.utils.TimeConverter;
 public class MainActivity extends AppCompatActivity implements StartNewTimerListener, View.OnClickListener {
 
 	// Manage broadcasts
-	private LocalBroadcastManager broadcastManager;
+	private LocalBroadcastManager mBroadcastManager;
 	private BroadcastReceiver mBroadcastReceiver;
 
 	// Reference to pages
@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		mIvCancelTimer.setOnClickListener(this);
 
 		// Manage local broadcasts from this activity.
-		broadcastManager = LocalBroadcastManager.getInstance(this);
+		mBroadcastManager = LocalBroadcastManager.getInstance(this);
 		mBroadcastReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 	protected void onPause() {
 
 		// Unregister receiver
-		broadcastManager.unregisterReceiver(mBroadcastReceiver);
+		mBroadcastManager.unregisterReceiver(mBroadcastReceiver);
 
 		super.onPause();
 	}
@@ -217,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 		super.onResume();
 
 		// Register receivers
-		broadcastManager.registerReceiver((mBroadcastReceiver),
+		mBroadcastManager.registerReceiver((mBroadcastReceiver),
 				new IntentFilter(CustomBroadcasts.BROADCAST));
 
 
@@ -244,6 +244,13 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 	 */
 	@Override
 	public void startNewTimer(TimeConverter myTimer) {
+
+		// Check if service is running. If so, stop it.
+		if (BackgroundCountdown.isRunning) {
+			Intent cancelIntent = new Intent(CustomBroadcasts.BROADCAST);
+			cancelIntent.putExtra("type", CustomBroadcasts.CANCEL_TIMER);
+			mBroadcastManager.sendBroadcastSync(cancelIntent);
+		}
 
 		// Start a new countdown service.
 		Intent countdownIntent = new Intent(this, BackgroundCountdown.class);
@@ -278,6 +285,6 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 			case R.id.iv_cancel_timer:
 				broadcastIntent.putExtra("type", CustomBroadcasts.CANCEL_TIMER);
 		}
-		broadcastManager.sendBroadcast(broadcastIntent);
+		mBroadcastManager.sendBroadcast(broadcastIntent);
 	}
 }

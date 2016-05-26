@@ -1,7 +1,9 @@
-package com.jon.buzz.setTimer;
+package com.jon.buzz.activities.main_activity_fragments;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +16,6 @@ import com.jon.buzz.R;
 import com.jon.buzz.interfaces.StartNewTimerListener;
 import com.jon.buzz.services.BackgroundCountdown;
 import com.jon.buzz.utils.TimeConverter;
-
 
 public class FragmentSetTimer extends Fragment implements View.OnClickListener, View.OnLongClickListener {
 
@@ -64,15 +65,15 @@ public class FragmentSetTimer extends Fragment implements View.OnClickListener, 
 
 		switch (v.getId()) {
 			case R.id.ib_delete:
-				// If delete button is clicked, collect current display data and shift all digits to the right
+				// When delete button is clicked, collect current display data and shift all digits to the right.
 				UISetTimer.removeNumberFromDisplay(UISetTimer.collectDisplayData(mRootView));
 				break;
 			case R.id.fab_start_timer:
-				// If FAB button is clicked
+				// When FAB button is clicked.
 				onStartTimer();
 				break;
 			default:
-				//When a digit is selected, the value is added to the display
+				//When a digit is selected, the value is added to the display.
 				UISetTimer.addNumberToDisplay(
 						String.valueOf(((Button) v).getText()),
 						UISetTimer.collectDisplayData(mRootView.findViewById(R.id.content)));
@@ -80,27 +81,31 @@ public class FragmentSetTimer extends Fragment implements View.OnClickListener, 
 	}
 
 	/**
-	 * Called when the FAB start timer button is selected
+	 * Called when the FAB start timer button is selected.
 	 */
 	private void onStartTimer() {
 
-		// Check that service isn't already running
-		if (BackgroundCountdown.isRunning) {
-			Toast.makeText(getContext(), "Timer already running", Toast.LENGTH_SHORT).show();
+		// Check if user wants to replace current running timer.
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		boolean replaceTimer = prefs.getBoolean(getString(R.string.pref_key_replace_timer), false);
+
+		// Check that service isn't already running.
+		if (BackgroundCountdown.isRunning && !replaceTimer) {
+			Toast.makeText(getActivity(), R.string.toast_timer_running, Toast.LENGTH_SHORT).show();
 			return;
 		}
 
-		// Collect current display values and convert to int[]
+		// Collect current display values and convert to int[].
 		TextView[] displayNumbers = UISetTimer.collectDisplayData(mRootView);
 		int[] displayIntegers = new int[6];
 		for (int i = 0; i < 6; i++) {
 			displayIntegers[i] = Integer.parseInt(String.valueOf(displayNumbers[i].getText()));
 		}
 
-		// Clear Display
+		// Clear Display.
 		UISetTimer.clearDisplay(UISetTimer.collectDisplayData(mRootView));
 
-		// Calculate length of timer in seconds
+		// Calculate length of timer in seconds.
 		int overallSeconds = displayIntegers[5]
 				+ displayIntegers[4] * 10
 
@@ -110,15 +115,30 @@ public class FragmentSetTimer extends Fragment implements View.OnClickListener, 
 				+ displayIntegers[1] * 3600
 				+ displayIntegers[0] * 36000;
 
+		// Check if user wants to run default timer.
+		boolean runDefault = prefs.getBoolean(getString(R.string.pref_key_default_timer), false);
 		if (overallSeconds == 0) {
-			return;
+			if (!runDefault) {
+
+				// No input and no default timer set. Send toast to inform user.
+				Toast.makeText(getActivity(), R.string.toast_no_input, Toast.LENGTH_SHORT).show();
+			} else {
+
+				// No input but default timer is set. Get default timer value from preferences
+				// and start timer.
+				int milliseconds = prefs.getInt(getString(R.string.pref_key_time_picker), 0);
+				if (milliseconds == 0) return;
+				TimeConverter myTimer = new TimeConverter(milliseconds);
+				mMainActivityCallback.startNewTimer(myTimer);
+			}
+		} else {
+
+			// Pass the number of milliseconds into TimeConverter class
+			TimeConverter myTimer = new TimeConverter(overallSeconds * 1000);
+
+			// Pass time to main activity to create new timer
+			mMainActivityCallback.startNewTimer(myTimer);
 		}
-
-		// Pass the number of milliseconds into TimeConverter class
-		TimeConverter myTimer = new TimeConverter(overallSeconds * 1000);
-
-		// Pass seconds to main activity to create new timer
-		mMainActivityCallback.startNewTimer(myTimer);
 	}
 
 	@Override

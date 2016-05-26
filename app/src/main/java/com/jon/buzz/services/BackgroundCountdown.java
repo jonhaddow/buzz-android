@@ -6,12 +6,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.jon.buzz.R;
 import com.jon.buzz.utils.CustomBroadcasts;
 import com.jon.buzz.utils.Notifications;
 import com.jon.buzz.utils.TimeConverter;
@@ -84,11 +87,6 @@ public class BackgroundCountdown extends Service {
 		super.onCreate();
 	}
 
-	private void replayTimer() {
-
-		startCountdownTimer(mMilliseconds2Start);
-	}
-
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
@@ -111,9 +109,17 @@ public class BackgroundCountdown extends Service {
 
 				TimeConverter myTimer = new TimeConverter(mMilliRemaining);
 
+				// Check that user wants notification to be shown.
+				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+				boolean showNotification = prefs.getBoolean(getString(R.string.pref_key_notification), true);
+
 				// Start foreground notification with time remaining
-				startForeground(1,
-						Notifications.setupRunningNotification(getApplicationContext(), myTimer, mMilliseconds2Start).build());
+				if (showNotification) {
+					startForeground(1,
+							Notifications.setupRunningNotification(getApplicationContext(), myTimer, mMilliseconds2Start).build());
+				} else {
+					stopForeground(true);
+				}
 
 				// Send remaining milliseconds to main activity to update UI
 				sendResult(mMilliRemaining);
@@ -166,6 +172,11 @@ public class BackgroundCountdown extends Service {
 	public IBinder onBind(Intent intent) {
 
 		return null;
+	}
+
+	private void replayTimer() {
+
+		startCountdownTimer(mMilliseconds2Start);
 	}
 
 	private void addMin() {

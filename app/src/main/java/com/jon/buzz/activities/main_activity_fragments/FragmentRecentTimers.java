@@ -1,4 +1,4 @@
-package com.jon.buzz.recentTimers;
+package com.jon.buzz.activities.main_activity_fragments;
 
 import android.content.Context;
 import android.content.DialogInterface;
