@@ -1,4 +1,4 @@
-package com.jon.buzz.Preferences;
+package com.jon.buzz.preferences;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

@@ -1,21 +1,16 @@
-package com.jon.buzz.Preferences;
+package com.jon.buzz.preferences;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.NumberPicker;
 
 import com.jon.buzz.R;
 import com.jon.buzz.utils.TimeConverter;
-
-import java.util.Map;
-import java.util.Set;
 
 public class TripleNumberPickerPreference extends DialogPreference {
 

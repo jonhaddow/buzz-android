@@ -17,9 +17,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.jon.buzz.Preferences.SettingsActivity;
+import com.jon.buzz.preferences.SettingsActivity;
 import com.jon.buzz.R;
 import com.jon.buzz.adapters.MyPagerAdapter;
 import com.jon.buzz.interfaces.StartNewTimerListener;
@@ -136,7 +135,6 @@ public class MainActivity extends AppCompatActivity implements StartNewTimerList
 			}
 
 		};
-
 	}
 
 	private void hideBottomBar() {

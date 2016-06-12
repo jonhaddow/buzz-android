@@ -18,7 +18,7 @@
 	    android:key="@string/pref_key_default_timer"
 		android:title="@string/pref_title_default_timer"
 		android:summary="@string/pref_default_timer_false"/>
-	<com.jon.buzz.Preferences.TripleNumberPickerPreference
+	<com.jon.buzz.preferences.TripleNumberPickerPreference
 		android:dependency="@string/pref_key_default_timer"
 		android:key="@string/pref_key_time_picker"
 		android:summary="@string/pref_time_picker"

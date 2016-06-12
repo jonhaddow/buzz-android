@@ -1,7 +1,5 @@
-package com.jon.buzz.Preferences;
+package com.jon.buzz.preferences;
 
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.Preference;
